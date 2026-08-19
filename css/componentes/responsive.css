@@ -1,0 +1,1038 @@
+
+/* =========================
+   SEGURANÇA GERAL
+========================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  word-break: normal;
+}
+
+/* Evita que textos grandes estourem os cards */
+p,
+h1,
+h2,
+h3,
+h4,
+span,
+a {
+  overflow-wrap: break-word;
+}
+
+/* =========================================================
+   DESKTOP GRANDE - ≥ 1300px
+========================================================= */
+
+@media (min-width: 1300px) {
+  .cabecalho,
+  .home__hero,
+  .home__intro,
+  .home__steps,
+  .home__points,
+  .home__ranking,
+  .sobre-hero,
+  .sobre-content,
+  .sobre-flow,
+  .faq-hero,
+  .faq-list,
+  .faq-cta,
+  .contato-hero,
+  .contato-content,
+  .integrantes-page {
+    max-width: 128rem;
+  }
+
+  .home__hero,
+  .sobre-hero,
+  .faq-hero,
+  .contato-hero {
+    margin-top: 3rem;
+  }
+
+  .integrantes {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   DESKTOP PADRÃO - ≥ 992px
+========================================================= */
+
+@media (min-width: 992px) {
+  .cabecalho {
+    flex-wrap: nowrap;
+  }
+
+  .cabecalho__nav {
+    width: auto;
+  }
+
+  .home__steps-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .home__points {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home__ranking,
+  .home__hero,
+  .sobre-hero,
+  .sobre-content,
+  .sobre-flow__header,
+  .contato-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sobre-flow__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .faq-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   TABLET - até 992px
+   Serve para telas próximas de 768px também
+========================================================= */
+
+@media (max-width: 992px) {
+  /* HEADER */
+  .cabecalho {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .cabecalho__nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cabecalho__cta {
+    flex-shrink: 0;
+  }
+
+  /* HOME */
+  .home__hero,
+  .home__intro-content,
+  .home__points,
+  .home__ranking {
+    grid-template-columns: 1fr;
+  }
+
+  .home__hero {
+    min-height: auto;
+  }
+
+  .home__hero-content,
+  .home__ranking-content {
+    text-align: left;
+  }
+
+  .home__hero-image,
+  .home__ranking-image {
+    margin: 0 auto;
+  }
+
+  .home__steps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* INTEGRANTES */
+  .integrantes-page {
+    padding: 5rem 3rem;
+  }
+
+  .integrantes-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .integrantes-intro__title {
+    font-size: var(--text-headline-lg);
+    line-height: var(--line-headline-lg);
+  }
+
+  .integrantes-intro__description {
+    max-width: 100%;
+    font-size: var(--text-body-lg);
+  }
+
+  .integrantes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem;
+  }
+
+  /* SOBRE */
+  .sobre-hero,
+  .sobre-content,
+  .sobre-flow__header {
+    grid-template-columns: 1fr;
+  }
+
+  .sobre-flow__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sobre-hero__card {
+    max-width: 100%;
+  }
+
+  /* FAQ */
+  .faq-list {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* CONTATO */
+  .contato-content {
+    grid-template-columns: 1fr;
+  }
+
+  .contato-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* FOOTER */
+  .rodape__geral {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* =========================================================
+   TABLET MENOR - até 768px
+========================================================= */
+
+@media (max-width: 768px) {
+  /* GERAL */
+  .home__hero,
+  .home__intro,
+  .home__steps,
+  .home__points,
+  .home__ranking,
+  .sobre-hero,
+  .sobre-content,
+  .sobre-flow,
+  .faq-hero,
+  .faq-list,
+  .faq-cta,
+  .contato-hero,
+  .contato-content {
+    width: min(100% - 2.4rem, 120rem);
+    margin: 1.6rem auto;
+  }
+
+  /* HEADER */
+  .cabecalho {
+    justify-content: center;
+    padding: 2rem 1.6rem;
+  }
+
+  .cabecalho__logo-link,
+  .cabecalho__cta {
+    margin: 0 auto;
+  }
+
+  .cabecalho__nav {
+    gap: 1.4rem;
+  }
+
+  /* HOME */
+  .home__hero,
+  .home__points,
+  .home__ranking,
+  .sobre-hero,
+  .sobre-flow,
+  .faq-hero,
+  .faq-cta,
+  .contato-hero {
+    padding: 2.4rem;
+  }
+
+  .home__intro {
+    padding-top: 3rem;
+  }
+
+  .home__hero-actions {
+    align-items: stretch;
+  }
+
+  .home__points-card,
+  .home__missions-card {
+    align-items: flex-start;
+  }
+
+  /* INTEGRANTES */
+  .integrantes-page {
+    padding: 4rem 2rem;
+  }
+
+  .integrantes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.4rem;
+  }
+
+  .integrantes__card {
+    min-height: auto;
+  }
+
+  .integrantes__links {
+    flex-wrap: wrap;
+  }
+
+  /* SOBRE */
+  .sobre-content {
+    padding-top: 3rem;
+  }
+
+  .sobre-highlight {
+    align-items: flex-start;
+  }
+
+  /* FAQ */
+  .faq-list {
+    padding-top: 2.4rem;
+  }
+
+  .faq-item {
+    padding: 2.2rem;
+  }
+
+  .faq-item__question {
+    font-size: var(--text-body-lg);
+  }
+
+  /* CONTATO */
+  .contato-content {
+    padding-top: 2.4rem;
+  }
+
+  .contato-info {
+    grid-template-columns: 1fr;
+  }
+
+  /* FOOTER */
+  .rodape {
+    padding-inline: 2rem;
+  }
+
+  .rodape__geral {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+}
+
+/* =========================================================
+   MOBILE - até 480px
+========================================================= */
+
+@media (max-width: 480px) {
+  /* GERAL */
+  .home__hero,
+  .home__intro,
+  .home__steps,
+  .home__points,
+  .home__ranking,
+  .sobre-hero,
+  .sobre-content,
+  .sobre-flow,
+  .faq-hero,
+  .faq-list,
+  .faq-cta,
+  .contato-hero,
+  .contato-content {
+    width: min(100% - 2rem, 120rem);
+    margin: 1.2rem auto;
+    border-radius: var(--radius-md);
+  }
+
+  /* HEADER */
+  .cabecalho {
+    padding: 1.6rem 1rem;
+    gap: 1.6rem;
+  }
+
+  .cabecalho__logo {
+    width: 13rem;
+  }
+
+  .cabecalho__nav {
+    gap: 0.8rem 1.2rem;
+  }
+
+  .cabecalho__nav-link {
+    font-size: 1.4rem;
+  }
+
+  .cabecalho__cta {
+    width: 100%;
+    min-height: 4.4rem;
+    font-size: 1.4rem;
+  }
+
+  /* HOME */
+  .home__hero,
+  .home__points,
+  .home__ranking,
+  .sobre-hero,
+  .sobre-flow,
+  .faq-hero,
+  .faq-cta,
+  .contato-hero {
+    padding: 2rem;
+  }
+
+  .home__hero-title,
+  .sobre-hero__title,
+  .faq-hero__title,
+  .contato-hero__title {
+    font-size: var(--text-headline-lg);
+    line-height: var(--line-headline-lg);
+  }
+
+  .home__intro-title,
+  .home__ranking-title,
+  .sobre-content__title,
+  .sobre-flow__title,
+  .faq-cta__title {
+    font-size: var(--text-title-lg);
+    line-height: var(--line-title-lg);
+  }
+
+  .home__hero-description,
+  .home__intro-description,
+  .home__ranking-description,
+  .sobre-hero__description,
+  .sobre-content__paragraphs p,
+  .sobre-flow__description,
+  .faq-hero__description,
+  .faq-cta__text,
+  .contato-hero__description {
+    font-size: var(--text-body-md);
+  }
+
+  .home__hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .home__hero-button {
+    width: 100%;
+  }
+
+  .home__hero-button--icon {
+    width: 4.8rem;
+    align-self: flex-start;
+  }
+
+  .home__steps-grid,
+  .sobre-flow__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home__step-card,
+  .sobre-flow__card,
+  .faq-item,
+  .contato-info__card,
+  .contato-form {
+    padding: 2rem;
+  }
+
+  .home__points-card,
+  .home__missions-card,
+  .home__ranking-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home__points-value,
+  .home__missions-value {
+    margin-left: 0;
+  }
+
+  .home__points-card-image,
+  .home__missions-card-image {
+    width: 4.8rem;
+    height: 4.8rem;
+  }
+
+  /* INTEGRANTES */
+  .integrantes-page {
+    padding: 3rem 1.2rem;
+  }
+
+  .integrantes-label {
+    font-size: var(--text-body-sm);
+  }
+
+  .integrantes-intro {
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .integrantes-intro__title {
+    font-size: var(--text-title-lg);
+    line-height: var(--line-title-lg);
+  }
+
+  .integrantes-intro__description {
+    font-size: var(--text-body-md);
+  }
+
+  .integrantes {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .integrantes__card {
+    width: 100%;
+    min-height: auto;
+    padding: 2rem;
+  }
+
+  .integrantes__image {
+    max-width: 20rem;
+    height: 24rem;
+    margin-inline: auto;
+  }
+
+  .integrantes__name {
+    font-size: var(--text-title-md);
+  }
+
+  .integrantes__links {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .integrantes__link {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* SOBRE */
+  .sobre-highlight {
+    flex-direction: column;
+  }
+
+  .sobre-highlight__icon,
+  .sobre-flow__icon,
+  .contato-info__icon {
+    width: 5.2rem;
+    height: 5.2rem;
+    font-size: 2.2rem;
+  }
+
+  /* FAQ */
+  .faq-item__question {
+    align-items: flex-start;
+    gap: 1rem;
+    font-size: var(--text-body-lg);
+  }
+
+  .faq-item__question::after {
+    width: 2.8rem;
+    height: 2.8rem;
+    font-size: var(--text-body-md);
+  }
+
+  .faq-cta__button {
+    width: 100%;
+  }
+
+  /* CONTATO */
+  .contato-form__button {
+    width: 100%;
+  }
+
+  .contato-form__field {
+    font-size: var(--text-body-md);
+  }
+
+  /* FOOTER */
+  .rodape {
+    margin-top: 3rem;
+    padding: 3rem 1.6rem 2rem;
+  }
+
+  .rodape__logo {
+    width: 13rem;
+  }
+
+  .rodape__copy {
+    font-size: var(--text-body-sm);
+  }
+}
+
+/* =========================================================
+   MOBILE MUITO PEQUENO - até 360px
+   Só para garantir que nada estoure
+========================================================= */
+
+@media (max-width: 360px) {
+  .cabecalho__nav {
+    flex-direction: column;
+  }
+
+  .home__hero,
+  .home__points,
+  .home__ranking,
+  .sobre-hero,
+  .sobre-flow,
+  .faq-hero,
+  .faq-cta,
+  .contato-hero {
+    padding: 1.6rem;
+  }
+
+  .integrantes-page {
+    padding-inline: 1rem;
+  }
+
+  .integrantes__image {
+    max-width: 18rem;
+    height: 22rem;
+  }
+
+  .home__points-card,
+  .home__missions-card,
+  .home__ranking-card,
+  .sobre-highlight,
+  .faq-item,
+  .contato-info__card,
+  .contato-form {
+    padding: 1.6rem;
+  }
+}
+
+/* RESPONSIVIDADE - PAINEL SOULMOVE */
+
+/* =========================
+   SEGURANÇA GERAL
+   Sem quebra de layout
+========================= */
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.painel-page,
+.painel-dashboard,
+.painel-stats,
+.painel-missions,
+.painel-ranking,
+.painel-rewards {
+  max-width: 100%;
+}
+
+.painel-ranking__item,
+.painel-stat,
+.painel-mission,
+.painel-reward {
+  min-width: 0;
+}
+
+.painel-ranking__item *,
+.painel-stat *,
+.painel-mission *,
+.painel-reward * {
+  overflow-wrap: break-word;
+}
+
+/* =========================================================
+   DESKTOP GRANDE - ≥ 1300px
+========================================================= */
+
+@media (min-width: 1300px) {
+  .painel-dashboard {
+    width: min(100% - 3.2rem, 96rem);
+    margin: 4rem auto 8rem;
+  }
+
+  .painel-stats {
+    grid-template-columns: 1.1fr 1fr 1fr 1fr;
+  }
+
+  .painel-missions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .painel-rewards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .painel-ranking__item {
+    grid-template-columns: 4rem 4rem 1fr 1fr auto;
+  }
+
+  .painel-ranking__city {
+    display: inline;
+  }
+}
+
+/* =========================================================
+   DESKTOP PADRÃO - ≥ 992px
+========================================================= */
+
+@media (min-width: 992px) {
+  .painel-dashboard {
+    width: min(100% - 3.2rem, 96rem);
+  }
+
+  .painel-stats {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr 1fr;
+    gap: 1.2rem;
+  }
+
+  .painel-missions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+
+  .painel-rewards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .painel-ranking__item {
+    display: grid;
+    grid-template-columns: 4rem 4rem 1fr 1fr auto;
+    align-items: center;
+  }
+}
+
+/* =========================================================
+   TABLET - 768px até 991px
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .painel-dashboard {
+    width: min(100% - 2.4rem, 96rem);
+    margin: 3rem auto 6rem;
+  }
+
+  .painel-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+  }
+
+  .painel-stat {
+    min-height: 12rem;
+  }
+
+  .painel-missions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+  }
+
+  .painel-ranking__item {
+    grid-template-columns: 3rem 4rem 1fr auto;
+    gap: 1rem;
+  }
+
+  .painel-ranking__city {
+    display: none;
+  }
+
+  .painel-rewards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+  }
+
+  .painel-section__header {
+    align-items: center;
+  }
+}
+
+/* =========================================================
+   TABLET MENOR / CELULAR GRANDE - até 767px
+========================================================= */
+
+@media (max-width: 767px) {
+  .painel-dashboard {
+    width: min(100% - 2.4rem, 96rem);
+    margin: 3rem auto 6rem;
+  }
+
+  .painel-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+
+  .painel-stat {
+    min-height: 11rem;
+    padding: 1.6rem;
+  }
+
+  .painel-stat__bottom strong {
+    font-size: 2.6rem;
+  }
+
+  .painel-section {
+    margin-top: 2.4rem;
+  }
+
+  .painel-section__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .painel-section__header a {
+    font-size: 1.3rem;
+  }
+
+  .painel-missions {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .painel-mission {
+    padding: 1.8rem;
+  }
+
+  .painel-ranking__item {
+    grid-template-columns: 3rem 3.6rem 1fr auto;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .painel-ranking__city {
+    display: none;
+  }
+
+  .painel-ranking__item strong,
+  .painel-ranking__points {
+    font-size: 1.4rem;
+  }
+
+  .painel-rewards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+
+  .painel-reward {
+    min-height: 14rem;
+    padding: 2rem;
+  }
+
+  .painel-reward__brand {
+    font-size: 2.6rem;
+  }
+}
+
+/* =========================================================
+   MOBILE - até 480px
+========================================================= */
+
+@media (max-width: 480px) {
+  .painel-page {
+    background-color: #f3f3f3;
+  }
+
+  .painel-dashboard {
+    width: min(100% - 2rem, 96rem);
+    margin: 2.4rem auto 5rem;
+  }
+
+  .painel-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .painel-stat {
+    min-height: 10.5rem;
+    padding: 1.6rem;
+    border-radius: 1rem;
+  }
+
+  .painel-stat__top {
+    font-size: 1.2rem;
+  }
+
+  .painel-stat__bottom {
+    align-items: center;
+  }
+
+  .painel-stat__bottom strong {
+    font-size: 2.6rem;
+  }
+
+  .painel-stat__bottom span {
+    font-size: 1.3rem;
+  }
+
+  .painel-stat__growth {
+    padding: 0.5rem 0.8rem;
+  }
+
+  .painel-section {
+    margin-top: 2.4rem;
+  }
+
+  .painel-section__header {
+    margin-bottom: 1rem;
+  }
+
+  .painel-section__header h2 {
+    font-size: 1.2rem;
+  }
+
+  .painel-section__header a {
+    font-size: 1.3rem;
+  }
+
+  .painel-missions {
+    grid-template-columns: 1fr;
+  }
+
+  .painel-mission {
+    padding: 1.6rem;
+    border-radius: 0.8rem;
+  }
+
+  .painel-mission__top {
+    align-items: flex-start;
+  }
+
+  .painel-mission__top h3 {
+    font-size: 1.4rem;
+  }
+
+  .painel-mission__top strong {
+    font-size: 1.4rem;
+  }
+
+  .painel-mission__bottom {
+    font-size: 1.1rem;
+  }
+
+  .painel-ranking__item {
+    min-height: auto;
+    grid-template-columns: 3rem 3.4rem 1fr;
+    gap: 0.8rem;
+    padding: 1.2rem;
+  }
+
+  .painel-ranking__position {
+    font-size: 1.4rem;
+  }
+
+  .painel-ranking__avatar {
+    width: 3.2rem;
+    height: 3.2rem;
+    font-size: 1rem;
+  }
+
+  .painel-ranking__item strong {
+    font-size: 1.4rem;
+  }
+
+  .painel-ranking__points {
+    grid-column: 3;
+    font-size: 1.4rem;
+  }
+
+  .painel-rewards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .painel-reward {
+    min-height: 13rem;
+    padding: 1.8rem;
+    border-radius: 0.8rem;
+  }
+
+  .painel-reward__brand {
+    font-size: 2.4rem;
+  }
+
+  .painel-reward__brand--green,
+  .painel-reward__brand--light,
+  .painel-reward__brand--colorful {
+    font-size: 2.2rem;
+  }
+
+  .painel-reward strong {
+    font-size: 1.3rem;
+  }
+
+  .painel-reward p {
+    font-size: 1.2rem;
+  }
+}
+
+/* =========================================================
+   MOBILE MUITO PEQUENO - até 360px
+   Garantia extra para não ter scroll lateral
+========================================================= */
+
+@media (max-width: 360px) {
+  .painel-dashboard {
+    width: min(100% - 1.6rem, 96rem);
+  }
+
+  .painel-stat,
+  .painel-mission,
+  .painel-reward {
+    padding: 1.4rem;
+  }
+
+  .painel-ranking__item {
+    grid-template-columns: 2.6rem 3rem 1fr;
+    gap: 0.7rem;
+  }
+
+  .painel-ranking__avatar {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .painel-stat__bottom strong {
+    font-size: 2.3rem;
+  }
+
+  .painel-reward__brand {
+    font-size: 2.2rem;
+  }
+}

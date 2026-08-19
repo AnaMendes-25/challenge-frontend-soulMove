@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--Página para entrar em contato com a equipe SoulMove-->
+  <title>Contato | SoulMove</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="../../css/style.css" />
+
+  <link rel="icon" type="image/x-icon" href="../img/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon/favicon-32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../img/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="../img/favicon/site.webmanifest" />
+
+  <script defer src="../../js/scriptFormValidacao.js"></script>
+</head>
+
+<body>
+
+  <!-- Cabeçalho com logo e menu de navegação entre as páginas-->
+  <header class="cabecalho">
+    <a class="cabecalho__logo-link" href="../../index.html" aria-label="Página inicial da SoulMove">
+      <img class="cabecalho__logo" src="../../img/logo/LogoSoulMoveIndigo.png" alt="Logotipo da SoulMove" />
+    </a>
+
+    <nav class="cabecalho__nav" aria-label="Menu principal">
+      <a class="cabecalho__nav-link" href="../../index.html">home</a>
+      <a class="cabecalho__nav-link" href="../obrigatorias/sobre.html">sobre</a>
+      <a class="cabecalho__nav-link" href="../obrigatorias/integrantes.html">integrantes</a>
+      <a class="cabecalho__nav-link" href="../obrigatorias/faq.html">perguntas</a>
+      <a class="cabecalho__nav-link" href="../obrigatorias/contato.html" aria-current="page">contato</a>
+    </nav>
+
+    <a class="cabecalho__cta" href="../funcionais/validar.html">Começar agora</a>
+  </header>
+
+  <main class="contato-page">
+
+    <!--Seção hero com título, descrição breve do objetivo da página-->
+    <section class="contato-hero" aria-labelledby="contato-title">
+      <span class="section-label section-label--light">[ CONTATO ]</span>
+
+      <h1 class="contato-hero__title" id="contato-title">Fale com a equipe SoulMove</h1>
+
+      <p class="contato-hero__description">
+        Dúvidas sobre o projeto ou a solução? A equipe responde.
+      </p>
+    </section>
+
+    <!-- Seção com formulário para envio dos dados necessários para entrar em contato com a equipe -->
+    <section class="contato-content" aria-label="Formulário e informações de contato">
+      <aside class="contato-info" aria-label="Informações rápidas">
+        <article class="contato-info__card">
+          <i class="contato-info__icon fa-solid fa-circle-question" aria-hidden="true"></i>
+          <h2 class="contato-info__title">Dúvidas sobre o projeto</h2>
+          <p class="contato-info__text">
+            Pergunte sobre funcionalidades, a proposta ou os próximos passos do projeto.
+          </p>
+        </article>
+
+        <article class="contato-info__card contato-info__card--dark">
+          <i class="contato-info__icon fa-solid fa-seedling" aria-hidden="true"></i>
+          <h2 class="contato-info__title">SoulMove</h2>
+          <p class="contato-info__text">
+            Sistema de Gamificação Sustentável em parceria com a SoulUp by Prospera.
+          </p>
+        </article>
+      </aside>
+
+      <form class="contato-form" id="contatoForm" action="#" method="get" novalidate
+        aria-label="Formulário de contato para dúvidas e mensagens">
+        <div class="contato-form__group">
+          <label class="contato-form__label" for="nome">Nome</label>
+          <input class="contato-form__field" type="text" id="nome" name="nome" placeholder="Digite seu nome"
+            autocomplete="name" required maxlength="120" minlength="10" />
+          <span class="contato-form__error"></span>
+        </div>
+
+        <div class="contato-form__group">
+          <label class="contato-form__label" for="email">E-mail</label>
+          <input class="contato-form__field" type="email" id="email" name="email" placeholder="Digite seu e-mail"
+            autocomplete="email" required maxlength="120" minlength="10" />
+          <span class="contato-form__error"></span>
+        </div>
+
+        <div class="contato-form__group">
+          <label class="contato-form__label" for="assunto">Assunto</label>
+          <input class="contato-form__field" type="text" id="assunto" name="assunto" placeholder="Digite o assunto"
+            required maxlength="200" minlength="5" />
+          <span class="contato-form__error"></span>
+        </div>
+
+        <div class="contato-form__group">
+          <label class="contato-form__label" for="mensagem">Mensagem</label>
+          <textarea class="contato-form__field contato-form__field--textarea" id="mensagem" name="mensagem" rows="6"
+            placeholder="Escreva sua mensagem" required maxlength="500" minlength="20"></textarea>
+          <span class="contato-form__error"></span>
+        </div>
+
+        <button class="contato-form__button" type="submit" id="enviarBtn">
+          Enviar mensagem
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Rodapé com informações institucionais, links para páginas internas e parceiros -->
+  <footer class="rodape">
+    <div class="rodape__geral">
+      <div class="rodape__info">
+        <img class="rodape__logo" src="../img/logo/LogoSoulMoveWhite.png" alt="Logotipo da SoulMove em branco" />
+        <h3 class="rodape__subtitulo">BitLab</h3>
+        <p>Sistema de Gamificação Sustentável</p>
+        <p>FIAP Challenge 2026, Desafio 1.</p>
+        <p>Parceria com SoulUp by Prospera.</p>
+      </div>
+
+      <div class="rodape__paginas">
+        <span class="rodape__titulo">[ PÁGINAS ]</span>
+        <nav class="rodape__nav" aria-label="Menu do rodapé">
+          <a class="rodape__nav-link" href="../index.html">Home</a>
+          <a class="rodape__nav-link" href="sobre.html">Sobre</a>
+          <a class="rodape__nav-link" href="integrantes.html">Integrantes</a>
+          <a class="rodape__nav-link" href="faq.html">Perguntas</a>
+          <a class="rodape__nav-link" href="contato.html">Contato</a>
+        </nav>
+      </div>
+
+      <div class="rodape__parceiros">
+        <span class="rodape__titulo">[ PARCEIROS ]</span>
+        <p>SoulUp</p>
+        <p>FIAP</p>
+      </div>
+    </div>
+
+    <p class="rodape__copy">&copy; 2026 SoulMove • Projeto acadêmico</p>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+/* Estilos globais */
+@import url("./base/reset.css");
+@import url("./base/variaveis.css");
+
+/* Componentes */
+@import url("./componentes/header.css");
+@import url("./componentes/footer.css");
+@import url("./componentes/main.css");
+@import url("./componentes/button.css");
+@import url("./componentes/menulateral.css");
+
+/*===== Páginas ===== */
+/* Obrigatórias */
+@import url("./paginas/obrigatorias/home.css");
+@import url("./paginas/obrigatorias/sobre.css");
+@import url("./paginas/obrigatorias/integrantes.css");
+@import url("./paginas/obrigatorias/faq.css");
+@import url("./paginas/obrigatorias/contato.css");
+/* Funcionais */
+@import url("./paginas/funcionais/metricas.css");
+@import url("./paginas/funcionais/solucao.css");
+@import url("./paginas/funcionais/validar.css");
+
+/* Responsividade */
+@import url("./componentes/responsive.css");
+
+

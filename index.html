@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="./css/style.css" />
+
+  <!-- Favicons SoulMove -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/img/favicon/site.webmanifest">
+
+
+  <script defer src="./js/script.js"></script>
+  <title>SoulMove</title>
+</head>
+
+<body>
+
+  <!--Botões de navegação no menu superior-->
+  <header class="cabecalho">
+    <a class="cabecalho__logo-link" href="index.html" aria-label="Página inicial da SoulMove">
+      <img class="cabecalho__logo" src="./img/logo/LogoSoulMoveIndigo.png" alt="Logotipo SoulMove na cor azul" />
+    </a>
+
+    <nav class="cabecalho__nav" aria-label="Menu principal">
+      <a class="cabecalho__nav-link" href="index.html" aria-current="page">home</a>
+      <a class="cabecalho__nav-link" href="./paginas/obrigatorias/sobre.html">sobre</a>
+      <a class="cabecalho__nav-link" href="./paginas/obrigatorias/integrantes.html">integrantes</a>
+      <a class="cabecalho__nav-link" href="./paginas/obrigatorias/faq.html">perguntas</a>
+      <a class="cabecalho__nav-link" href="./paginas/obrigatorias/contato.html">contato</a>
+    </nav>
+
+    <a class="cabecalho__cta" href="./paginas/funcionais/validar.html">Começar agora</a>
+  </header>
+
+  <main class="home">
+
+    <!-- Seção de apresentação com título e descrição breve da SoulMove -->
+    <section class="home__hero" aria-labelledby="hero-title">
+      <div class="home__hero-content">
+        <span class="section-label--light">[ SOULMOVE ]</span>
+
+        <h1 class="home__hero-title" id="hero-title">
+          Boas ações merecem recompensa de verdade.
+        </h1>
+
+        <p class="home__hero-description">
+          O SoulScore transforma ações sustentáveis em recompensas reais,
+          incluindo conta de energia subsidiada.
+        </p>
+
+        <div class="home__hero-community">
+          <img class="home__hero-community-image" src="./img/banners/Avatar group.png"
+            alt="Avatares de participantes da comunidade SoulMove" />
+          <span class="home__hero-community-text">Já somos milhares de movers</span>
+        </div>
+
+        <div class="home__hero-actions">
+          <a class="home__hero-button" href="./paginas/funcionais/validar.html">Começar agora</a>
+          <a class="home__hero-button home__hero-button--icon" href="./paginas/funcionais/validar.html"
+            aria-label="Ir para a seção de ações pontuadas">
+            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="home__hero-image-box">
+        <img class="home__hero-image" src="./img/banners/img-header-homem.png"
+          alt="Ilustração de homem usando celular para acompanhar pontos sustentáveis" />
+      </div>
+    </section>
+
+    <!-- Seção explicando o funcionamento da SoulMove-->
+    <section class="home__intro" aria-labelledby="intro-title">
+      <span class="section-label">[ COMO FUNCIONA ]</span>
+
+      <div class="home__intro-content">
+        <h2 class="home__intro-title" id="intro-title">
+          Quatro passos. Uma missão.
+        </h2>
+        <p class="home__intro-description">
+          Cada ação sustentável vira ponto. Cada ponto te aproxima do topo.
+        </p>
+      </div>
+    </section>
+
+    <!-- Seção detalhando as etapas de funcionamento da SoulMove com ícones e descrições -->
+    <section class="home__steps" aria-label="Etapas de funcionamento da SoulMove">
+      <div class="home__steps-grid">
+        <article class="home__step-card">
+          <i class="home__step-icon fa-regular fa-face-smile" aria-hidden="true"></i>
+          <span class="home__step-badge">Passo 01</span>
+          <h3 class="home__step-title">Escolha</h3>
+          <p class="home__step-description">
+            Lista pré-definida ou missão do dia proposta pela plataforma.
+          </p>
+        </article>
+
+        <article class="home__step-card">
+          <i class="home__step-icon fa-regular fa-camera" aria-hidden="true"></i>
+          <span class="home__step-badge">Passo 02</span>
+          <h3 class="home__step-title">Comprove</h3>
+          <p class="home__step-description">
+            Foto, vídeo ou app parceiro, como Google Fit, Apple Health ou Strava.
+          </p>
+        </article>
+
+        <article class="home__step-card">
+          <i class="home__step-icon fa-regular fa-thumbs-up" aria-hidden="true"></i>
+          <span class="home__step-badge">Passo 03</span>
+          <h3 class="home__step-title">Valide</h3>
+          <p class="home__step-description">
+            Algoritmo atribui pontuação de 0 a 100 pelo impacto ambiental.
+          </p>
+        </article>
+
+        <article class="home__step-card">
+          <i class="home__step-icon fa-solid fa-ranking-star" aria-hidden="true"></i>
+          <span class="home__step-badge">Passo 04</span>
+          <h3 class="home__step-title">Pontue</h3>
+          <p class="home__step-description">
+            Top 1 global tem conta de energia 100% subsidiada.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Seção detalhando as ações e missões pontuadas, com cards para cada ação e missão -->
+    <section class="home__points" id="registrar-acoes" aria-label="Ações e missões pontuadas">
+      <div class="home__points-column">
+        <span class="section-label section-label--light">[ AÇÕES ]</span>
+        <h2 class="home__points-title">O que vale pontos</h2>
+        <p class="home__points-description">Quanto maior o impacto, maior a pontuação.</p>
+
+        <div class="home__points-list">
+          <article class="home__points-card">
+            <img class="home__points-card-image" src="./img/icones/transporte-publico.png"
+              alt="Ilustração de transporte público para ação sustentável" />
+            <div class="home__points-card-content">
+              <h3 class="home__points-card-title">Usar transporte público</h3>
+              <p class="home__points-card-text">GPS automático ou foto</p>
+            </div>
+            <span class="home__points-value">+30pts</span>
+          </article>
+
+          <article class="home__points-card">
+            <img class="home__points-card-image" src="./img/icones/reciclagem-correta.png"
+              alt="Ilustração de reciclagem correta" />
+            <div class="home__points-card-content">
+              <h3 class="home__points-card-title">Reciclagem correta</h3>
+              <p class="home__points-card-text">Foto obrigatória</p>
+            </div>
+            <span class="home__points-value">+30pts</span>
+          </article>
+
+          <article class="home__points-card">
+            <img class="home__points-card-image" src="./img/icones/bike.png"
+              alt="Ilustração de bicicleta para mobilidade sustentável" />
+            <div class="home__points-card-content">
+              <h3 class="home__points-card-title">Andar de bike (mín. 5km)</h3>
+              <p class="home__points-card-text">GPS automático ou foto</p>
+            </div>
+            <span class="home__points-value">+30pts</span>
+          </article>
+
+          <article class="home__points-card">
+            <img class="home__points-card-image" src="./img/icones/andando-pé.png"
+              alt="Ilustração de pessoa caminhando" />
+            <div class="home__points-card-content">
+              <h3 class="home__points-card-title">Andar a pé (mín. 2km)</h3>
+              <p class="home__points-card-text">GPS automático ou foto</p>
+            </div>
+            <span class="home__points-value">+30pts</span>
+          </article>
+
+          <article class="home__points-card">
+            <img class="home__points-card-image" src="./img/icones/plantacao.png"
+              alt="Ilustração de planta representando cuidado com o meio ambiente" />
+            <div class="home__points-card-content">
+              <h3 class="home__points-card-title">Plantar ou cuidar</h3>
+              <p class="home__points-card-text">Foto obrigatória</p>
+            </div>
+            <span class="home__points-value">+30pts</span>
+          </article>
+        </div>
+      </div>
+
+      <div class="home__missions-column">
+        <span class="section-label section-label--light">[ MISSÕES ]</span>
+        <h2 class="home__missions-title">Desafios da semana</h2>
+        <p class="home__missions-description">Complete o desafio e ganhe pontos em dobro.</p>
+
+        <div class="home__missions-list">
+          <article class="home__missions-card">
+            <img class="home__missions-card-image" src="./img/icones/reciclagem-correta.png"
+              alt="Ilustração de reciclagem para missão semanal" />
+            <div class="home__missions-card-content">
+              <h3 class="home__missions-card-title">Semana da reciclagem</h3>
+              <p class="home__missions-card-text">Recicle 5 dias seguidos</p>
+              <span class="home__missions-tag">Missão especial</span>
+            </div>
+            <span class="home__missions-value">+200pts</span>
+          </article>
+
+          <article class="home__missions-card">
+            <img class="home__missions-card-image" src="./img/icones/transporte-publico.png"
+              alt="Ilustração de transporte público para missão semanal" />
+            <div class="home__missions-card-content">
+              <h3 class="home__missions-card-title">Semana do transporte público</h3>
+              <p class="home__missions-card-text">Transporte público 3× essa semana</p>
+              <span class="home__missions-tag">Missão especial</span>
+            </div>
+            <span class="home__missions-value">+200pts</span>
+          </article>
+
+          <article class="home__missions-card">
+            <img class="home__missions-card-image" src="./img/icones/plantacao.png"
+              alt="Ilustração de planta para missão semanal" />
+            <div class="home__missions-card-content">
+              <h3 class="home__missions-card-title">Semana do verde na janela</h3>
+              <p class="home__missions-card-text">Foto obrigatória</p>
+              <span class="home__missions-tag">Missão especial</span>
+            </div>
+            <span class="home__missions-value">+200pts</span>
+          </article>
+
+          <article class="home__missions-card">
+            <img class="home__missions-card-image" src="./img/icones/andando-pé.png"
+              alt="Ilustração de caminhada para missão semanal" />
+            <div class="home__missions-card-content">
+              <h3 class="home__missions-card-title">Semana da caminhada</h3>
+              <p class="home__missions-card-text">Caminhada 3× essa semana</p>
+              <span class="home__missions-tag">Missão especial</span>
+            </div>
+            <span class="home__missions-value">+200pts</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Seção de ranking detalhando o sistema de pontuação e recompensas, com cards para cada aspecto do ranking -->
+    <section class="home__ranking" aria-labelledby="ranking-title">
+      <div class="home__ranking-content">
+        <span class="section-label">[ SISTEMA DE RANKING ]</span>
+        <h2 class="home__ranking-title" id="ranking-title">
+          Dispute com amigos. Dispute com o Brasil.
+        </h2>
+        <p class="home__ranking-description">
+          No grupo você compete de igual pra igual. No nacional, você representa sua cidade.
+        </p>
+
+        <div class="home__ranking-list">
+          <article class="home__ranking-card">
+            <i class="home__ranking-icon fa-solid fa-ranking-star" aria-hidden="true"></i>
+            <div class="home__ranking-card-content">
+              <h3 class="home__ranking-card-title">Ranking global</h3>
+              <p class="home__ranking-card-text">Compare seus pontos com movers de todo o país.</p>
+            </div>
+          </article>
+
+          <article class="home__ranking-card">
+            <i class="home__ranking-icon fa-solid fa-gift" aria-hidden="true"></i>
+            <div class="home__ranking-card-content">
+              <h3 class="home__ranking-card-title">Recompensas escalonadas</h3>
+              <p class="home__ranking-card-text">
+                Top 1: energia grátis. Top 10: descontos. Top 100: Pontos ECOA bônus.
+              </p>
+            </div>
+          </article>
+
+          <article class="home__ranking-card">
+            <i class="home__ranking-icon fa-solid fa-fire" aria-hidden="true"></i>
+            <div class="home__ranking-card-content">
+              <h3 class="home__ranking-card-title">Streak de engajamento</h3>
+              <p class="home__ranking-card-text">
+                Dias consecutivos multiplicam seus pontos. Não quebre o streak!
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="home__ranking-image-box">
+        <img class="home__ranking-image" src="./img/banners/ranking-global.png"
+          alt="Interface ilustrativa do ranking global da SoulMove" />
+      </div>
+    </section>
+  </main>
+  <!-- Rodapé com informações institucionais, links para páginas internas e parceiros -->
+  <footer class="rodape">
+    <div class="rodape__geral">
+      <div class="rodape__info">
+        <img class="rodape__logo" src="./img/logo/LogoSoulMoveWhite.png" alt="Logotipo SoulMove na cor branca" />
+        <h3 class="rodape__subtitulo">BitLab</h3>
+        <p>Sistema de Gamificação Sustentável</p>
+        <p>FIAP Challenge 2026, Desafio 1.</p>
+        <p>Parceria com SoulUp by Prospera.</p>
+      </div>
+
+      <div class="rodape__paginas">
+        <span class="rodape__titulo">[ PÁGINAS ]</span>
+        <nav class="rodape__nav" aria-label="Menu do rodapé">
+          <a class="rodape__nav-link" href="index.html">Home</a>
+          <a class="rodape__nav-link" href="./paginas/sobre.html">Sobre</a>
+          <a class="rodape__nav-link" href="./paginas/integrantes.html">Integrantes</a>
+          <a class="rodape__nav-link" href="./paginas/faq.html">Perguntas</a>
+          <a class="rodape__nav-link" href="./paginas/contato.html">Contato</a>
+        </nav>
+      </div>
+
+      <div class="rodape__parceiros">
+        <span class="rodape__titulo">[ PARCEIROS ]</span>
+        <p>SoulUp</p>
+        <p>FIAP</p>
+      </div>
+    </div>
+
+    <p class="rodape__copy">&copy; 2026 SoulMove • Projeto acadêmico</p>
+  </footer>
+</body>
+
+</html>

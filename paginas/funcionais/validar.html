@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulMove | Registrar ações</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+  <link rel="stylesheet" href="../../css/style.css" />
+
+  <!-- Favicons SoulMove -->
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="../../img/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../img/favicon/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../img/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="../../img/favicon/site.webmanifest">
+
+
+  <script defer src="../../js/scriptValidar.js"></script>
+</head>
+
+<body class="site-com-sidebar">
+  <aside class="sidebar" aria-label="Menu lateral principal">
+    <a href="../../index.html" class="sidebar__logo" aria-label="Página inicial SoulMove">
+      <img src="../../img/logo/LogoSWhite.png" alt="Logo SoulMove">
+    </a>
+
+    <!-- Área de navegação com os links principais do sistema -->
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="./solucao.html" class="sidebar__link" aria-label="Home">
+        <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+      </a>
+
+      <a href="./metricas.html" class="sidebar__link" aria-label="Métricas">
+        <i class="fa-solid fa-chart-simple" aria-hidden="true"></i>
+      </a>
+
+      <a href="./validar.html" class="sidebar__link sidebar__link--button" aria-label="Registrar ação">
+        <i class="fa-regular fa-plus" aria-hidden="true"></i>
+      </a>
+    </nav>
+
+  </aside>
+
+  <main class="registro">
+
+    <!-- Seção que agrupa os formulários de registro e o painel lateral -->
+    <section class="registro__conteudo">
+
+      <!-- Área principal onde ficam os cards das ações sustentáveis -->
+      <div class="registro__area-principal">
+
+        <!-- Card da ação sustentável de reciclagem -->
+        <article class="registro__opcao-card">
+
+          <!-- Botão clicável do card, usado para abrir ou fechar o formulário -->
+          <button type="button" class="registro__opcao-header">
+            <div class="registro__opcao-icone">♻</div>
+
+            <div class="registro__opcao-info">
+              <h2>Reciclagem</h2>
+
+              <div class="registro__opcao-detalhes">
+
+                <strong class="registro__pontos">+50pts</strong>
+              </div>
+            </div>
+
+            <span class="registro__opcao-seta">›</span>
+          </button>
+
+          <!-- Conteúdo interno do card com o formulário da atividade -->
+          <div class="registro__opcao-conteudo">
+
+            <!-- Formulário para envio das informações da ação sustentável -->
+            <form class="registro__formulario-opcao">
+              <div class="registro__upload">
+
+                <!-- Campo para selecionar uma imagem como comprovante -->
+                <input type="file" class="registro__upload-input" accept="image/png, image/jpeg"
+                  id="uploadReciclagem" />
+
+                <label for="uploadReciclagem" class="registro__upload-label">
+                  <span class="registro__upload-icon">⇧</span>
+
+                  <span class="registro__upload-texto">
+                    <strong>Clique para subir</strong> ou arraste e solte
+                  </span>
+
+                  <span class="registro__upload-formato">
+                    PNG ou JPG (max. 800x400px)
+                  </span>
+                </label>
+
+                <div class="registro__preview" hidden>
+                  <img src="" alt="Prévia do comprovante enviado" class="registro__preview-img" />
+
+                  <div class="registro__preview-info">
+                    <p class="registro__arquivo"></p>
+
+                    <button type="button" class="registro__remover-img">
+                      Remover imagem
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <article class="registro__comprovacoes">
+                <div class="registro__comprovacoes-icon">!</div>
+
+                <div>
+                  <h3 class="registro__comprovacoes-titulo">Comprovações</h3>
+                  <p class="registro__comprovacoes-texto">
+                    Envie uma foto ou comprovante mostrando a separação correta dos resíduos,
+                    reciclagem ou descarte consciente.
+                  </p>
+                </div>
+              </article>
+
+              <div class="registro__campo">
+                <label for="nomeReciclagem" class="registro__label">
+                  Nome da atividade <span>*</span>
+                </label>
+
+                <input type="text" id="nomeReciclagem" class="registro__input"
+                  placeholder="Ex.: Separei o lixo reciclável" />
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <div class="registro__campo">
+                <label for="comentarioReciclagem" class="registro__label">
+                  Comentário sobre a atividade <span>*</span>
+                  <button type="button" class="registro__ajuda">?</button>
+                </label>
+
+                <textarea id="comentarioReciclagem" class="registro__textarea"
+                  placeholder="Insira uma descrição"></textarea>
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <button type="submit" class="registro__botao">
+                Enviar para avaliação
+              </button>
+            </form>
+          </div>
+        </article>
+
+        <!-- Card da ação sustentável de economia de energia -->
+        <article class="registro__opcao-card">
+          <button type="button" class="registro__opcao-header">
+            <div class="registro__opcao-icone">💡</div>
+
+            <div class="registro__opcao-info">
+              <h2>Economia de energia</h2>
+
+              <div class="registro__opcao-detalhes">
+                <strong class="registro__pontos">+50pts</strong>
+              </div>
+            </div>
+
+            <span class="registro__opcao-seta">›</span>
+          </button>
+
+          <div class="registro__opcao-conteudo">
+            <form class="registro__formulario-opcao">
+              <div class="registro__upload">
+                <input type="file" class="registro__upload-input" accept="image/png, image/jpeg" id="uploadEnergia" />
+
+                <label for="uploadEnergia" class="registro__upload-label">
+                  <span class="registro__upload-icon">⇧</span>
+
+                  <span class="registro__upload-texto">
+                    <strong>Clique para subir</strong> ou arraste e solte
+                  </span>
+
+                  <span class="registro__upload-formato">
+                    PNG ou JPG (max. 800x400px)
+                  </span>
+                </label>
+
+                <div class="registro__preview" hidden>
+                  <img src="" alt="Prévia do comprovante enviado" class="registro__preview-img" />
+
+                  <div class="registro__preview-info">
+                    <p class="registro__arquivo"></p>
+
+                    <button type="button" class="registro__remover-img">
+                      Remover imagem
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bloco com orientações sobre quais comprovantes são aceitos -->
+              <article class="registro__comprovacoes">
+                <div class="registro__comprovacoes-icon">!</div>
+
+                <div>
+                  <h3 class="registro__comprovacoes-titulo">Comprovações</h3>
+                  <p class="registro__comprovacoes-texto">
+                    Envie prints, fotos ou relatos mostrando ações como apagar luzes,
+                    desligar aparelhos ou reduzir o consumo de energia.
+                  </p>
+                </div>
+              </article>
+
+              <!-- Campo para preencher o nome da atividade realizada -->
+              <div class="registro__campo">
+                <label for="nomeEnergia" class="registro__label">
+                  Nome da atividade <span>*</span>
+                </label>
+
+                <input type="text" id="nomeEnergia" class="registro__input"
+                  placeholder="Ex.: Desliguei aparelhos da tomada" />
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <div class="registro__campo">
+                <label for="comentarioEnergia" class="registro__label">
+                  Comentário sobre a atividade <span>*</span>
+                  <button type="button" class="registro__ajuda">?</button>
+                </label>
+
+                <textarea id="comentarioEnergia" class="registro__textarea"
+                  placeholder="Insira uma descrição"></textarea>
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <button type="submit" class="registro__botao">
+                Enviar para avaliação
+              </button>
+            </form>
+          </div>
+        </article>
+
+        <!-- Card da ação sustentável relacionada ao uso de transporte público -->
+        <article class="registro__opcao-card">
+          <button type="button" class="registro__opcao-header">
+            <div class="registro__opcao-icone">🚊</div>
+
+            <div class="registro__opcao-info">
+              <h2>Transporte público</h2>
+
+              <div class="registro__opcao-detalhes">
+                <strong class="registro__pontos">+35pts</strong>
+              </div>
+            </div>
+
+            <span class="registro__opcao-seta">›</span>
+          </button>
+
+          <div class="registro__opcao-conteudo">
+            <form class="registro__formulario-opcao">
+              <div class="registro__upload">
+                <input type="file" class="registro__upload-input" accept="image/png, image/jpeg"
+                  id="uploadTransporte" />
+
+                <label for="uploadTransporte" class="registro__upload-label">
+                  <span class="registro__upload-icon">⇧</span>
+
+                  <span class="registro__upload-texto">
+                    <strong>Clique para subir</strong> ou arraste e solte
+                  </span>
+
+                  <span class="registro__upload-formato">
+                    PNG ou JPG (max. 800x400px)
+                  </span>
+                </label>
+
+                <div class="registro__preview" hidden>
+                  <img src="" alt="Prévia do comprovante enviado" class="registro__preview-img" />
+
+                  <div class="registro__preview-info">
+                    <p class="registro__arquivo"></p>
+
+                    <button type="button" class="registro__remover-img">
+                      Remover imagem
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <article class="registro__comprovacoes">
+                <div class="registro__comprovacoes-icon">!</div>
+
+                <div>
+                  <h3 class="registro__comprovacoes-titulo">Comprovações</h3>
+                  <p class="registro__comprovacoes-texto">
+                    Envie foto, print do trajeto, bilhete ou comprovante mostrando
+                    o uso de ônibus, metrô, trem ou outro transporte público.
+                  </p>
+                </div>
+              </article>
+
+              <div class="registro__campo">
+                <label for="nomeTransporte" class="registro__label">
+                  Nome da atividade <span>*</span>
+                </label>
+
+                <input type="text" id="nomeTransporte" class="registro__input"
+                  placeholder="Ex.: Fui de metrô para a faculdade" />
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <div class="registro__campo">
+                <label for="comentarioTransporte" class="registro__label">
+                  Comentário sobre a atividade <span>*</span>
+                  <button type="button" class="registro__ajuda">?</button>
+                </label>
+
+                <textarea id="comentarioTransporte" class="registro__textarea"
+                  placeholder="Insira uma descrição"></textarea>
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <button type="submit" class="registro__botao">
+                Enviar para avaliação
+              </button>
+            </form>
+          </div>
+        </article>
+
+        <!-- Card da ação sustentável de trajeto feito de bicicleta -->
+        <article class="registro__opcao-card">
+          <button type="button" class="registro__opcao-header">
+            <div class="registro__opcao-icone">🗺</div>
+
+            <div class="registro__opcao-info">
+              <h2>Trajeto de bike</h2>
+
+              <div class="registro__opcao-detalhes">
+                <strong class="registro__pontos">+20pts</strong>
+              </div>
+            </div>
+
+            <span class="registro__opcao-seta">›</span>
+          </button>
+
+          <div class="registro__opcao-conteudo">
+            <form class="registro__formulario-opcao">
+              <div class="registro__upload">
+                <input type="file" class="registro__upload-input" accept="image/png, image/jpeg" id="uploadBike" />
+
+                <label for="uploadBike" class="registro__upload-label">
+                  <span class="registro__upload-icon">⇧</span>
+
+                  <span class="registro__upload-texto">
+                    <strong>Clique para subir</strong> ou arraste e solte
+                  </span>
+
+                  <span class="registro__upload-formato">
+                    PNG ou JPG (max. 800x400px)
+                  </span>
+                </label>
+
+                <div class="registro__preview" hidden>
+                  <img src="" alt="Prévia do comprovante enviado" class="registro__preview-img" />
+
+                  <div class="registro__preview-info">
+                    <p class="registro__arquivo"></p>
+
+                    <button type="button" class="registro__remover-img">
+                      Remover imagem
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <article class="registro__comprovacoes">
+                <div class="registro__comprovacoes-icon">!</div>
+
+                <div>
+                  <h3 class="registro__comprovacoes-titulo">Comprovações</h3>
+                  <p class="registro__comprovacoes-texto">
+                    O trajeto precisa ser de, no mínimo 3 km e você pode subir prints
+                    do mapa, aplicativos ou fotos como comprovante.
+                  </p>
+                </div>
+              </article>
+
+              <div class="registro__campo">
+                <label for="nomeBike" class="registro__label">
+                  Nome da atividade <span>*</span>
+                </label>
+
+                <input type="text" id="nomeBike" class="registro__input" placeholder="Ex.: Pedalada até o mercado" />
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <div class="registro__campo">
+                <label for="comentarioBike" class="registro__label">
+                  Comentário sobre a atividade <span>*</span>
+                  <button type="button" class="registro__ajuda">?</button>
+                </label>
+
+                <textarea id="comentarioBike" class="registro__textarea" placeholder="Insira uma descrição"></textarea>
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <button type="submit" class="registro__botao">
+                Enviar para avaliação
+              </button>
+            </form>
+          </div>
+        </article>
+
+        <!-- Card da ação sustentável de trajeto a pé, marcado como ativo inicialmente -->
+        <article class="registro__opcao-card ativo">
+          <button type="button" class="registro__opcao-header">
+            <div class="registro__opcao-icone">⌁</div>
+
+            <div class="registro__opcao-info">
+              <h2>Trajeto a pé</h2>
+
+              <div class="registro__opcao-detalhes">
+                <strong class="registro__pontos">+20pts</strong>
+              </div>
+            </div>
+
+            <span class="registro__opcao-seta">›</span>
+          </button>
+
+          <div class="registro__opcao-conteudo">
+            <form class="registro__formulario-opcao">
+              <div class="registro__upload">
+                <input type="file" class="registro__upload-input" accept="image/png, image/jpeg" id="uploadPe" />
+
+                <label for="uploadPe" class="registro__upload-label">
+                  <span class="registro__upload-icon">⇧</span>
+
+                  <span class="registro__upload-texto">
+                    <strong>Clique para subir</strong> ou arraste e solte
+                  </span>
+
+                  <span class="registro__upload-formato">
+                    PNG ou JPG (max. 800x400px)
+                  </span>
+                </label>
+
+                <div class="registro__preview" hidden>
+                  <img src="" alt="Prévia do comprovante enviado" class="registro__preview-img" />
+
+                  <div class="registro__preview-info">
+                    <p class="registro__arquivo"></p>
+
+                    <button type="button" class="registro__remover-img">
+                      Remover imagem
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <article class="registro__comprovacoes">
+                <div class="registro__comprovacoes-icon">!</div>
+
+                <div>
+                  <h3 class="registro__comprovacoes-titulo">Comprovações</h3>
+                  <p class="registro__comprovacoes-texto">
+                    O trajeto precisa ser de, no mínimo 3 km e você pode subir links,
+                    prints e fotos como comprovante.
+                  </p>
+                </div>
+              </article>
+
+              <div class="registro__campo">
+                <label for="nomePe" class="registro__label">
+                  Nome da atividade <span>*</span>
+                </label>
+
+                <input type="text" id="nomePe" class="registro__input" placeholder="Ex.: Caminhada para o trabalho" />
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <div class="registro__campo">
+                <label for="comentarioPe" class="registro__label">
+                  Comentário sobre a atividade <span>*</span>
+                  <button type="button" class="registro__ajuda">?</button>
+                </label>
+
+                <textarea id="comentarioPe" class="registro__textarea" placeholder="Insira uma descrição"></textarea>
+
+                <small class="registro__erro"></small>
+              </div>
+
+              <button type="submit" class="registro__botao">
+                Enviar para avaliação
+              </button>
+            </form>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Painel lateral com pontos, ranking e missões do usuário -->
+      <aside class="registro__lateral">
+
+        <!-- Card que exibe a pontuação atual do usuário -->
+        <section class="registro__card-pontos">
+          <div>
+            <span class="registro__card-label">MOVE POINTS</span>
+            <strong class="registro__card-total">1.000 pts</strong>
+          </div>
+
+          <span class="registro__card-subida"> 6°</span>
+        </section>
+
+        <!-- Seção que mostra os cinco primeiros colocados no ranking -->
+        <section class="registro__ranking">
+          <h2 class="registro__secao-titulo">Ranking Top 5</h2>
+
+          <!-- Lista ordenada dos usuários melhor posicionados -->
+          <ol class="registro__ranking-lista">
+
+            <!-- Item do ranking com posição, avatar, nome, cidade e pontuação -->
+            <li class="registro__ranking-item">
+              <span class="registro__posicao">1º</span>
+              <span class="registro__avatar">CM</span>
+
+              <div class="registro__ranking-info">
+                <strong>Carlos Melo</strong>
+                <span>Curitiba, PR</span>
+              </div>
+
+              <strong class="registro__ranking-pontos">1250pts</strong>
+            </li>
+
+            <li class="registro__ranking-item">
+              <span class="registro__posicao">2º</span>
+              <span class="registro__avatar">CM</span>
+
+              <div class="registro__ranking-info">
+                <strong>Carlos Melo</strong>
+                <span>Curitiba, PR</span>
+              </div>
+
+              <strong class="registro__ranking-pontos">1250pts</strong>
+            </li>
+
+            <li class="registro__ranking-item">
+              <span class="registro__posicao">3º</span>
+              <span class="registro__avatar">CM</span>
+
+              <div class="registro__ranking-info">
+                <strong>Carlos Melo</strong>
+                <span>Curitiba, PR</span>
+              </div>
+
+              <strong class="registro__ranking-pontos">1250pts</strong>
+            </li>
+
+            <li class="registro__ranking-item">
+              <span class="registro__posicao">4º</span>
+              <span class="registro__avatar">CM</span>
+
+              <div class="registro__ranking-info">
+                <strong>Carlos Melo</strong>
+                <span>Curitiba, PR</span>
+              </div>
+
+              <strong class="registro__ranking-pontos">1250pts</strong>
+            </li>
+
+            <li class="registro__ranking-item">
+              <span class="registro__posicao">5º</span>
+              <span class="registro__avatar">CM</span>
+
+              <div class="registro__ranking-info">
+                <strong>Carlos Melo</strong>
+                <span>Curitiba, PR</span>
+              </div>
+
+              <strong class="registro__ranking-pontos">1250pts</strong>
+            </li>
+          </ol>
+
+          <!-- Link para acessar o ranking completo -->
+          <a href="#" class="registro__link">Ver ranking completo →</a>
+        </section>
+
+        <!-- Seção com as missões sustentáveis disponíveis para o usuário -->
+        <section class="registro__missoes">
+          <h2 class="registro__secao-titulo">Missões ativas</h2>
+
+          <!-- Card de uma missão ativa com recompensa e progresso -->
+          <article class="registro__missao">
+            <div class="registro__missao-topo">
+              <strong>♻️ Semana da reciclagem</strong>
+              <span>+200</span>
+            </div>
+
+            <!-- Barra visual que representa o progresso da missão -->
+            <div class="registro__barra">
+              <span class="registro__barra-progresso"></span>
+            </div>
+
+            <!-- Rodapé da missão com progresso numérico e prazo restante -->
+            <div class="registro__missao-rodape">
+              <span>3/5</span>
+              <span>termina em 5 dias</span>
+            </div>
+          </article>
+
+          <!-- Segundo card de missão ativa -->
+          <article class="registro__missao">
+            <div class="registro__missao-topo">
+              <strong>🚃 Semana do transporte</strong>
+              <span>+200</span>
+            </div>
+
+            <div class="registro__barra">
+              <span class="registro__barra-progresso"></span>
+            </div>
+
+            <div class="registro__missao-rodape">
+              <span>3/5</span>
+              <span>termina em 5 dias</span>
+            </div>
+          </article>
+
+          <!-- Link para visualizar outras missões disponíveis -->
+          <a href="#" class="registro__link">Ver mais missões →</a>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <div class="modal" id="modalSucesso">
+    <div class="modal__conteudo">
+      <div class="modal__icone">✓</div>
+
+      <h2 class="modal__titulo">
+        Atividade enviada!
+      </h2>
+
+      <p class="modal__texto">
+        Sua atividade foi enviada para avaliação com sucesso.
+      </p>
+
+      <button class="modal__botao" id="fecharModal">
+        Fechar
+      </button>
+    </div>
+  </div>
+
+
+</body>
+
+</html>
