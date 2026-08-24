@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  /* Define a Inter como a fonte padrão (font-sans) */
+  --font-sans: "Inter", sans-serif;
+}
 
 * {
   box-sizing: border-box;
