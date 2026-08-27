@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router';
 import ButtonBase from '../ButtonBase/ButtonBase'; 
 import logoSoulMove from '../../assets/logo/LogoSoulMoveIndigo.png';
 
