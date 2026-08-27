@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Home from './pages/Home/Home.tsx';
-import Contato from './pages/Contato/Contato.tsx';
-import Faq from './pages/Faq/Faq.tsx';
+import Home from './routes/Home/index.tsx';
+import Contato from './routes/Contato/index.tsx';
+import Faq from './routes/Faq/Faq.tsx';
 import App from './App.tsx';
-import Sobre from './pages/Sobre/Sobre.tsx';
-import Integrantes from './pages/Integrantes/Integrantes.tsx';
+import Sobre from './routes/Sobre/index.tsx';
+import Integrantes from './routes/Integrantes/index.tsx';
 
 export const router = createBrowserRouter([
     {path: '/', element: <App />,
