@@ -42,7 +42,7 @@ function Header() {
         <NavItem to="/">home</NavItem>
         <NavItem to="/sobre">sobre</NavItem>
         <NavItem to="/integrantes">integrantes</NavItem>
-        <NavItem to="/perguntas">perguntas</NavItem>
+        <NavItem to="/faq">perguntas</NavItem>
         <NavItem to="/contato">contato</NavItem>
       </nav>
 

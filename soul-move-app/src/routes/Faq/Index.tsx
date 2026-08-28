@@ -1,9 +1,12 @@
+import Footer from "../../components/Footer/Footer";
+import Header from "../../components/Header/Header";
 
 
 export default function Faq() {
   return (
     <div>
-      <h1>FAQ</h1>
+      <Header/>
+      <Footer/>
     </div>
   )
 }
