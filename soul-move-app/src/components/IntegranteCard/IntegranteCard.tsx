@@ -5,12 +5,12 @@ import type { IntegranteCardProps } from "../../types/IntegranteCardProps";
 
 
 export const IntegranteCard: React.FC<IntegranteCardProps> = ({
-  nome = 'Alexandre',
-  rm = 'RM',
-  skills = 'Python · Computational Thinking',
-  fotoUrl = 'https://placehold.co/362x362',
-  linkedinUrl = '#',
-  githubUrl = '#',
+  nome,
+  rm,
+  skills,
+  fotoUrl,
+  linkedinUrl,
+  githubUrl
 }) => {
   return (
     <article className="w-96 p-6 bg-blue-950 rounded-3xl flex flex-col justify-start items-start gap-6 shadow-xl">
