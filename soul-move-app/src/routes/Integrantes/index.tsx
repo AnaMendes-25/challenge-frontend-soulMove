@@ -9,28 +9,14 @@ export default function Integrantes() {
   return (
     <div>
       <Header />
-
-      <IntegranteCard {
-        ...listaIntegrantes[0]
-      }
-      />
-      <IntegranteCard {
-        ...listaIntegrantes[1]
-      }
-      />
-      <IntegranteCard {
-        ...listaIntegrantes[2]
-      }
-      />
-      <IntegranteCard {
-        ...listaIntegrantes[3]
-      }
-      />
-      <IntegranteCard {
-        ...listaIntegrantes[4]
-      }
-      />
-
+      
+      <div className="w-full flex flex-wrap justify-center gap-3">
+        <IntegranteCard { ...listaIntegrantes[0] } />
+        <IntegranteCard { ...listaIntegrantes[1] } />
+        <IntegranteCard { ...listaIntegrantes[2] } />
+        <IntegranteCard { ...listaIntegrantes[3] } />
+        <IntegranteCard { ...listaIntegrantes[4] } />
+      </div>
 
       <Footer />
     </div>
