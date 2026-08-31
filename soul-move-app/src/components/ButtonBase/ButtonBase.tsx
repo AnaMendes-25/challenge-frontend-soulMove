@@ -18,7 +18,7 @@ export default function Button({
 }: ButtonProps) {
   
   //  Classes base (juntando o que o Figma separou em várias divs)
-  const baseClasses = "font-['Inter'] font-semibold flex justify-center items-center gap-2 overflow-hidden rounded-3xl transition-colors duration-200";
+  const baseClasses = "font-['Inter'] font-semibold flex justify-center items-center gap-2 overflow-hidden rounded-3xl transition-colors duration-200 cursor-pointer";
   
   //  Classes dinâmicas baseadas nas props (simulando as variantes do Figma)
   const variantClasses = variant === 'primary' 

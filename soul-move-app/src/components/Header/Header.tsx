@@ -10,7 +10,7 @@ interface NavItemProps {
 
 
 function NavItem({ to, children }: NavItemProps) {
-  const baseClasses = "px-3.5 py-2 rounded-3xl flex justify-center items-center gap-2 overflow-hidden text-sm font-semibold leading-5 transition-colors duration-200 cursor-pointer";
+  const baseClasses = "px-3.5 py-2 rounded-3xl flex justify-center items-center gap-2 overflow-hidden text-sm font-semibold leading-5 transition-all duration-300 cursor-pointer";
   
   return (
     <NavLink 
@@ -18,7 +18,7 @@ function NavItem({ to, children }: NavItemProps) {
       className={({ isActive }) => 
         `${baseClasses} ${
           isActive
-            ? "bg-blue-600 text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] outline outline-1 outline-offset-[-1px] outline-blue-600"
+            ? "bg-[#2563eb] text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] outline outline-1 outline-offset-[-1px] outline-[#2563eb]"
             : "text-neutral-600 hover:bg-blue-200 hover:text-blue-800"
         }`
       }
@@ -31,19 +31,19 @@ function NavItem({ to, children }: NavItemProps) {
 
 function Header() {
   return (
-    <header className="flex justify-between items-center p-4 w-full">
+    <header className="flex items-center justify-around w-4/5 justify-self-center py-6 mb-5">
       {/* Usando Link para a logo voltar à home sem dar F5 */}
       <Link to="/" className="flex items-center">
-        <img src={logoSoulMove} alt="Logotipo SoulMove na cor azul" className="h-7 w-auto" />
+        <img src={logoSoulMove} alt="Logotipo SoulMove na cor azul" className="w-auto" />
       </Link>
         
       {/* MOLÉCULA: Menu de Navegação com rotas internas */}
-      <nav className="px-2.5 py-2 bg-blue-100 rounded-3xl inline-flex justify-start items-center gap-6">
-        <NavItem to="/">home</NavItem>
-        <NavItem to="/sobre">sobre</NavItem>
-        <NavItem to="/integrantes">integrantes</NavItem>
-        <NavItem to="/faq">perguntas</NavItem>
-        <NavItem to="/contato">contato</NavItem>
+      <nav className="px-2.5 py-3 bg-blue-100 rounded-3xl inline-flex justify-start items-center gap-5">
+        <NavItem to="/">Home</NavItem>
+        <NavItem to="/sobre">Sobre</NavItem>
+        <NavItem to="/integrantes">Integrantes</NavItem>
+        <NavItem to="/faq">Perguntas</NavItem>
+        <NavItem to="/contato">Contato</NavItem>
       </nav>
 
       {/* ÁTOMO: Botão Principal */}

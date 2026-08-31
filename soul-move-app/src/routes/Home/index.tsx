@@ -16,7 +16,7 @@ export default function Home() {
         {/* Títulos e Descrição */}
         <div className="w-full flex flex-col gap-4">
           <span className="text-blue-300 text-base font-normal tracking-wide uppercase">
-            [ SOBRE SOUL MOVE ]
+            [ SOULMOVE ]
           </span>
           
           {/* 2. SEMÂNTICA: O título principal da página DEVE ser um <h1> */}
