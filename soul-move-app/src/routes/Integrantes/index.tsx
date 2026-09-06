@@ -10,28 +10,14 @@ export default function Integrantes() {
 
     <div className="self-stretch inline-flex justify-start items-center gap-6 flex-wrap content-center">
       <Header />
-
-      <IntegranteCard {
-        ...listaIntegrantes[0]
-      }
-      />
-      <IntegranteCard {
-        ...listaIntegrantes[1]
-      }
-      />
-      <IntegranteCard {
-        ...listaIntegrantes[2]
-      }
-      />
-      <IntegranteCard {
-        ...listaIntegrantes[3]
-      }
-      />
-      <IntegranteCard {
-        ...listaIntegrantes[4]
-      }
-      />
-
+      
+      <div className="w-full flex flex-wrap justify-center gap-3">
+        <IntegranteCard { ...listaIntegrantes[0] } />
+        <IntegranteCard { ...listaIntegrantes[1] } />
+        <IntegranteCard { ...listaIntegrantes[2] } />
+        <IntegranteCard { ...listaIntegrantes[3] } />
+        <IntegranteCard { ...listaIntegrantes[4] } />
+      </div>
 
       <Footer />
     </div>

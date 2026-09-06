@@ -8,7 +8,7 @@ export default function Home() {
     <div>
       <Header/>
       <main>
-        <section className="w-full max-w-7xl mx-auto p-8 md:p-12 bg-blue-950 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-12">
+        <section className="w-full max-w-6xl mx-auto p-8 md:p-12 bg-blue-950 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-12">
       
       {/* Bloco de Texto (Esquerda no desktop, Topo no mobile) */}
       <div className="w-full md:w-1/2 flex flex-col justify-start items-start gap-12">
@@ -16,16 +16,16 @@ export default function Home() {
         {/* Títulos e Descrição */}
         <div className="w-full flex flex-col gap-4">
           <span className="text-blue-300 text-base font-normal tracking-wide uppercase">
-            [ SOBRE SOUL MOVE ]
+            [ SOULMOVE ]
           </span>
           
           {/* 2. SEMÂNTICA: O título principal da página DEVE ser um <h1> */}
-          <h1 className="text-indigo-50 text-4xl md:text-5xl font-medium font-['Poppins'] leading-tight">
-            Sustentabilidade que vale pontos
+          <h1 className="text-indigo-50 text-5xl font-semibold leading-tight">
+            Boas ações merecem recompensa de verdade.
           </h1>
           
           {/* 3. SEMÂNTICA: Textos descritivos devem ser parágrafos <p> */}
-          <p className="text-indigo-50 text-xl md:text-2xl font-normal leading-relaxed">
+          <p className="text-indigo-50 text-lg md:text-xl font-normal leading-relaxed">
             O SoulScore transforma ações sustentáveis em recompensas reais, incluindo conta de energia subsidiada.
           </p>
         </div>
@@ -56,7 +56,7 @@ export default function Home() {
           {/* O Figma desenhou um ícone com divs. O ideal é usar a tag <button> e colocar um SVG real dentro. */}
           <button 
             aria-label="Ver mais informações"
-            className="w-12 h-12 flex justify-center items-center bg-neutral-100 rounded-full hover:bg-neutral-200 transition-colors"
+            className="w-12 h-12 flex justify-center items-center bg-neutral-100 rounded-full hover:bg-neutral-200 transition-colors cursor-pointer"
           >
             {/* Exemplo de um ícone SVG real de seta em vez da "sopa de divs" do Figma */}
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-blue-700 stroke-2">
