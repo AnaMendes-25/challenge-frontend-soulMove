@@ -16,7 +16,7 @@ export const IntegranteCard: React.FC<IntegranteCardProps> = ({
 }) => {
   return (
     
-    <article className="w-96 p-6 bg-blue-950 rounded-3xl flex flex-col justify-start items-start gap-6 shadow-xl">
+
     <article className="w-60 p-2 bg-blue-950 rounded-2xl flex flex-col justify-start items-start gap-3 shadow-xl hover:-translate-y-[5px] transition-all duration-200">
       <img
         className="w-full h-80 object-cover rounded-2xl"
