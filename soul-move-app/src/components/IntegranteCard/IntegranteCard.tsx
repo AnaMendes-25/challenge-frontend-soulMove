@@ -13,6 +13,7 @@ export const IntegranteCard: React.FC<IntegranteCardProps> = ({
   githubUrl
 }) => {
   return (
+    
     <article className="w-96 p-6 bg-blue-950 rounded-3xl flex flex-col justify-start items-start gap-6 shadow-xl">
       <img
         className="w-full h-96 object-cover rounded-lg"
@@ -68,6 +69,7 @@ export const IntegranteCard: React.FC<IntegranteCardProps> = ({
         </footer>
       </header>
     </article>
+    
   );
 };
 
