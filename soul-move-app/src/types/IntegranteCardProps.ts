@@ -3,6 +3,7 @@ import fotoAna from '../assets/integrantes/ana-mendes-profissional.png';
 //import fotoEnzo from '#';
 import fotoGustavo from '../assets/integrantes/gustavo-borba-profissional.png';
 import fotoOto from '../assets/integrantes/oto-mendes-profissional.png';
+import fotoEnzo from '../assets/integrantes/enzo-negrao-profissional.png';
 
 
 export type IntegranteCardProps = {
@@ -35,7 +36,7 @@ export const listaIntegrantes: IntegranteCardProps[] = [
     nome: 'Enzo Negrão Freitas',
     rm: 'RM568857',
     skills: 'Banco de Dados · Java',
-    fotoUrl: "#",
+    fotoUrl: fotoEnzo,
     githubUrl: 'https://github.com/Enzo-N-Freitas',
     linkedinUrl: 'https://www.linkedin.com/in/enzo-negrão-freitas-1b24a3348?utm_source=share_via&utm_content=profile&utm_medium=member_android',
   },
