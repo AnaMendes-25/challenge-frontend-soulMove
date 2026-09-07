@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import logoSoulMove from "../../../assets/logo/LogoSWhite.png";
+import logoSoulMove from "../../assets/logo/LogoSWhite.png";
 
 // Ícones em SVG evitam a necessidade de carregar Font Awesome por CDN.
 function IconeLampada() {
@@ -28,12 +28,10 @@ function IconeMais() {
 
 export default function AsideBar() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-500 md:pl-24">
-      {/* Barra lateral fixa no desktop e horizontal no celular. */}
-      <aside
-        className="fixed inset-x-0 bottom-0 z-40 flex h-20 items-center justify-around bg-blue-500 px-4 text-white shadow-2xl md:inset-y-0 md:left-0 md:right-auto md:h-auto md:w-24 md:flex-col md:justify-start md:gap-10 md:px-0 md:py-7"
-        aria-label="Menu lateral principal"
-      >
+    <aside
+      className="fixed inset-x-0 bottom-0 z-40 flex h-20 items-center justify-around bg-blue-500 px-4 text-white shadow-2xl md:inset-y-0 md:left-0 md:right-auto md:h-auto md:w-24 md:flex-col md:justify-start md:gap-10 md:px-0 md:py-7"
+      aria-label="Menu lateral principal"
+    >
         <Link
           to="/"
           className="hidden rounded-xl p-2 transition hover:bg-white/10 md:block"
@@ -68,7 +66,6 @@ export default function AsideBar() {
             <IconeMais />
           </Link>
         </nav>
-      </aside>
-    </div>
-  )
+    </aside>
+  );
 }
