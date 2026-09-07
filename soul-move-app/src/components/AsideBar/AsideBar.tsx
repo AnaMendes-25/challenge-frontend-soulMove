@@ -28,10 +28,10 @@ function IconeMais() {
 
 export default function AsideBar() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 md:pl-24">
+    <div className="min-h-screen bg-slate-50 text-slate-500 md:pl-24">
       {/* Barra lateral fixa no desktop e horizontal no celular. */}
       <aside
-        className="fixed inset-x-0 bottom-0 z-40 flex h-20 items-center justify-around bg-blue-950 px-4 text-white shadow-2xl md:inset-y-0 md:left-0 md:right-auto md:h-auto md:w-24 md:flex-col md:justify-start md:gap-10 md:px-0 md:py-7"
+        className="fixed inset-x-0 bottom-0 z-40 flex h-20 items-center justify-around bg-blue-500 px-4 text-white shadow-2xl md:inset-y-0 md:left-0 md:right-auto md:h-auto md:w-24 md:flex-col md:justify-start md:gap-10 md:px-0 md:py-7"
         aria-label="Menu lateral principal"
       >
         <Link
