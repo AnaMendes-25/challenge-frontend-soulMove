@@ -42,9 +42,9 @@ export default function AsideBar() {
 
         <nav className="flex items-center gap-4 md:flex-col" aria-label="Navegação principal">
           <Link
-            to="/"
+            to="/solucao"
             className="flex h-12 w-12 items-center justify-center rounded-2xl text-blue-200 transition hover:bg-white/10 hover:text-white"
-            aria-label="Home"
+            aria-label="Solução"
           >
             <IconeLampada />
           </Link>
