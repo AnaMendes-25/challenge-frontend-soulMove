@@ -109,7 +109,7 @@ export default function Contato() {
     <div className="min-h-screen bg-white font-sans text-slate-900">
       <Header />
 
-      <main className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <main className="w-full max-w-360 mx-auto min-h-screen relative bg-white overflow-x-hidden">
         {/* Hero: apresentação da página de contato. */}
         <section
           className="rounded-3xl bg-blue-950 px-6 py-14 text-indigo-50 sm:px-10 md:px-12 md:py-20"
