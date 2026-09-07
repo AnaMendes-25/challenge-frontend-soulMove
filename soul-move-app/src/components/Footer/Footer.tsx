@@ -44,7 +44,7 @@ export function Footer() {
     ];
 
     const parceirosLinks = [
-        { label: 'SoulUp', href: 'https://soulup.com.br' }, // Coloque os links reais depois
+        { label: 'SoulUp', href: 'https://soulup.io/' }, // Coloque os links reais depois
         { label: 'FIAP', href: 'https://fiap.com.br' },
     ];
 
