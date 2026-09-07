@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div>
       <Header/>
-      <main>
+      <main className="w-full max-w-360 mx-auto min-h-screen relative bg-white overflow-x-hidden">
         <section className="w-full max-w-6xl mx-auto p-8 md:p-12 bg-blue-950 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-12">
       
       {/* Bloco de Texto (Esquerda no desktop, Topo no mobile) */}

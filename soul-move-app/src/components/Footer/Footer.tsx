@@ -1,99 +1,123 @@
+import { Link } from 'react-router';
 import logoSoulMove from '../../assets/logo/LogoSoulMoveIndigo.png';
 // OBS: Substitua a logo acima por uma versão clara/branca da logo, se você tiver, 
 // já que o fundo do footer é azul escuro (bg-blue-950).
 
 // --- MOLÉCULA: Coluna de Links do Footer ---
+interface FooterLink {
+  label: string;
+  href: string;
+}
+
 interface FooterColumnProps {
-    title: string;
-    links: { label: string; href: string }[];
+  title: string;
+  links: FooterLink[];
 }
 
 function FooterColumn({ title, links }: FooterColumnProps) {
-    return (
-        <div className="flex-1 flex flex-col items-start gap-1">
-            {/* Título da coluna (ex: [ PÁGINAS ]) */}
-            <h3 className="w-full text-left text-blue-300 text-base font-normal leading-6 uppercase tracking-wider">
-                {title}
-            </h3>
-            {/* Lista de links */}
-            <ul className="flex flex-col w-full">
-                {links.map((link, index) => (
-                    <li key={index}>
-                        <a
-                            href={link.href}
-                            className="text-indigo-50 text-lh font-normal leading-8 hover:text-white hover:underline transition-colors duration-200"
-                        >
-                            {link.label}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    <div className="flex flex-col items-start gap-2 min-w-[140px]">
+      {/* Título da coluna (ex: [ PÁGINAS ]) */}
+      <h3 className="w-full text-left text-blue-300 text-sm md:text-base font-semibold leading-6 uppercase tracking-wider">
+        {title}
+      </h3>
+      {/* Lista de links */}
+      <ul className="flex flex-col w-full gap-1">
+        {links.map((link, index) => {
+          const isExternal = link.href.startsWith('http');
+
+          return (
+            <li key={index}>
+              {isExternal ? (
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-50 text-sm md:text-base font-normal leading-7 hover:text-white hover:underline transition-colors duration-200 block"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  to={link.href}
+                  className="text-indigo-50 text-sm md:text-base font-normal leading-7 hover:text-white hover:underline transition-colors duration-200 block"
+                >
+                  {link.label}
+                </Link>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
 
 // --- ORGANISMO: O Footer Completo ---
 export function Footer() {
-    // Dados dos links separados da estrutura visual
-    const paginasLinks = [
-        { label: 'Home', href: '/' },
-        { label: 'Sobre', href: '/sobre' },
-        { label: 'Integrantes', href: '/integrantes' },
-        { label: 'Perguntas', href: '/faq' },
-        { label: 'Contato', href: '/contato' },
-    ];
+  const paginasLinks = [
+    { label: 'Home', href: '/' },
+    { label: 'Sobre', href: '/sobre' },
+    { label: 'Integrantes', href: '/integrantes' },
+    { label: 'Perguntas', href: '/faq' },
+    { label: 'Contato', href: '/contato' },
+  ];
 
-    const parceirosLinks = [
-        { label: 'SoulUp', href: 'https://soulup.com.br' }, // Coloque os links reais depois
-        { label: 'FIAP', href: 'https://fiap.com.br' },
-    ];
+  const parceirosLinks = [
+    { label: 'SoulUp', href: 'https://soulup.com.br' },
+    { label: 'FIAP', href: 'https://fiap.com.br' },
+  ];
 
-    return (
-        // Removi a largura fixa (w-[1280px]) e coloquei w-full para se adaptar melhor a diferentes telas
-        <footer className="w-full p-12 bg-blue-950 flex flex-col justify-start items-center mt-5 pb-0">
+  return (
+    <footer className="w-full bg-blue-950 text-indigo-50 mt-10">
+      {/* Container Principal Centralizado */}
+      <div className="w-11/12 md:w-4/5 mx-auto pt-10 pb-6 flex flex-col justify-start items-center">
+        
+        {/* 1. SEÇÃO SUPERIOR */}
+        <div className="w-full flex flex-col md:flex-row justify-between items-start gap-8 md:gap-12 mb-8">
+          
+          {/* Bloco da Esquerda (Logo e Descrição) */}
+          <div className="w-full md:w-1/2 lg:w-96 flex flex-col items-start gap-3">
+            <Link to="/" className="flex items-center gap-3 shrink-0">
+              <img 
+                src={logoSoulMove} 
+                alt="Logotipo SoulMove" 
+                className="h-6 md:h-8 w-auto shrink-0 object-contain" 
+              />
+            </Link>
+            
+            <span className="text-white text-lg md:text-xl font-semibold leading-tight">
+              BitLab
+            </span>
 
-            {/* 1. SEÇÃO SUPERIOR (Logo + Texto vs Colunas de Links) */}
-            <div className="w-full flex justify-around items-start flex-wrap md:flex-nowrap mb-4">
+            <p className="text-indigo-100 text-sm md:text-base font-normal leading-relaxed max-w-sm">
+              Sistema de Gamificação Sustentável <br />
+              FIAP Challenge 2026, Desafio 1. <br />
+              Parceria com SoulUp by Prospera.
+            </p>
+          </div>
 
-                {/* Bloco da Esquerda (Logo e Descrição) */}
-                <div className="w-full md:w-96 flex flex-col justify-start items-start gap-3">
+          {/* Bloco da Direita (Colunas de Links) */}
+          <div className="w-full md:w-auto grid grid-cols-2 sm:flex sm:justify-start gap-8 md:gap-16">
+            <FooterColumn title="[ PÁGINAS ]" links={paginasLinks} />
+            <FooterColumn title="[ PARCEIROS ]" links={parceirosLinks} />
+          </div>
 
-                    {/* Logo da Marca (Usando o padrão que você já fez no Header) */}
-                    <a href="/" className="flex items-center gap-3">
-                        <img src={logoSoulMove} alt="Logotipo SoulMove" className="h-5 w-auto" />
-                    </a>
-                    <span className="text-indigo-50 text-xl font-semibold leading-8">
-                        BitLab
-                    </span>
+        </div>
 
-                    {/* Descrição do Projeto */}
-                    <p className="text-indigo-50 text-md font-normal max-w-[350px]">
-                        Sistema de Gamificação Sustentável <br />
-                        FIAP Challenge 2026, Desafio 1. <br />
-                        Parceria com SoulUp by Prospera.
-                    </p>
-                </div>
+        {/* 2. LINHA DIVISÓRIA */}
+        <div className="w-full h-px bg-blue-800/80 my-2" />
 
-                {/* Bloco da Direita (Colunas de Links) */}
-                <div className="w-full md:w-[560px] flex justify-start items-start gap-12">
-                    <FooterColumn title="[ PÁGINAS ]" links={paginasLinks} />
-                    <FooterColumn title="[ PARCEIROS ]" links={parceirosLinks} />
-                </div>
+        {/* 3. SEÇÃO INFERIOR (Copyright) */}
+        <div className="w-full text-center pt-4">
+          <p className="text-indigo-200 text-xs md:text-sm font-normal">
+            © 2026 SoulMove • Projeto Acadêmico
+          </p>
+        </div>
 
-            </div>
-
-            {/* 2. LINHA DIVISÓRIA */}
-            <div className="w-full h-px bg-blue-800" />
-
-            {/* 3. SEÇÃO INFERIOR (Copyright) */}
-            <div className="w-full text-center py-5">
-                <p className="text-indigo-50 text-md font-normal">
-                    © 2026 SoulMove • Projeto Acadêmico
-                </p>
-            </div>
-
-        </footer>
-    );
+      </div>
+    </footer>
+  );
 }
 
 export default Footer;

@@ -6,6 +6,7 @@ export default function Sobre() {
   return (
     <div>
       <Header/>
+      
       <Footer/>
     </div>
   )
