@@ -16,7 +16,7 @@ interface FooterColumnProps {
 
 function FooterColumn({ title, links }: FooterColumnProps) {
   return (
-    <div className="flex flex-col items-start gap-2 min-w-[140px]">
+    <div className="flex flex-col items-start gap-2 min-w-35">
       {/* Título da coluna (ex: [ PÁGINAS ]) */}
       <h3 className="w-full text-left text-blue-300 text-sm md:text-base font-semibold leading-6 uppercase tracking-wider">
         {title}
@@ -64,7 +64,7 @@ export function Footer() {
   ];
 
   const parceirosLinks = [
-    { label: 'SoulUp', href: 'https://soulup.com.br' },
+    { label: 'SoulUp', href: 'https://soulup.io' },
     { label: 'FIAP', href: 'https://fiap.com.br' },
   ];
 

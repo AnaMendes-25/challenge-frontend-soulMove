@@ -7,8 +7,7 @@ import { listaIntegrantes } from "../../types/IntegranteCardProps";
 
 export default function Integrantes() {
   return (
-
-    <div className="self-stretch inline-flex justify-start items-center gap-6 flex-wrap content-center">
+    <div className="flex min-h-screen w-full flex-col items-center">
       <Header />
       <main className="w-full max-w-360 mx-auto min-h-screen relative bg-white overflow-x-hidden"></main>
       <div className="w-full flex flex-wrap justify-center gap-3">
