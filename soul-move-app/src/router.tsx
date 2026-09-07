@@ -7,6 +7,8 @@ import Faq from "./routes/Faq/Index.tsx";
 import Sobre from "./routes/Sobre/index.tsx";
 import Integrantes from "./routes/Integrantes/index.tsx";
 import Solucao from "./routes/Pages Funcionais/Solucao/index.tsx";
+import Metricas from "./routes/Pages Funcionais/Metricas/index.tsx";
+//import Validacao from "./routes/Pages Funcionais/Validacao/index.tsx";
 // Adicionado tratamento de erro
 
 export const router = createBrowserRouter([
@@ -21,6 +23,8 @@ export const router = createBrowserRouter([
       { path: "/sobre", element: <Sobre /> },
       { path: "/integrantes", element: <Integrantes /> },
       { path: "/solucao", element: <Solucao /> },
+      { path: "/metricas", element: <Metricas /> },
+      //{ path: "/validacao", element: <Validacao /> },
     ],
   },
 ]);

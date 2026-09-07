@@ -79,36 +79,36 @@ export const missoes: Missao[] = [
 export const ranking: PessoaRanking[] = [
   {
     posicao: 1,
-    iniciais: "AG",
-    nome: "Amanda Gonçalves",
-    cidade: "São Paulo, SP",
+    iniciais: "AM",
+    nome: "Ana Mendes",
+    cidade: "Rio de Janeiro, RJ",
     pontos: 1000,
   },
   {
     posicao: 2,
-    iniciais: "CM",
-    nome: "Caio Mendes",
-    cidade: "Pernambuco, PE",
+    iniciais: "GB",
+    nome: "Gustavo Borba",
+    cidade: "Piauí, PI",
     pontos: 1000,
   },
   {
     posicao: 3,
-    iniciais: "LS",
-    nome: "Larissa Santos",
+    iniciais: "OM",
+    nome: "Oto Mendes",
     cidade: "Goiânia, GO",
     pontos: 1000,
   },
   {
     posicao: 4,
-    iniciais: "LS",
-    nome: "Lucas Silva",
+    iniciais: "AT",
+    nome: "Alexandre Teixeira",
     cidade: "Rio de Janeiro, RJ",
     pontos: 1000,
   },
   {
     posicao: 5,
-    iniciais: "AM",
-    nome: "Alexandre Melo",
+    iniciais: "EN",
+    nome: "Enzo Negrão",
     cidade: "São Paulo, SP",
     pontos: 1000,
   },
@@ -119,15 +119,5 @@ export const ranking: PessoaRanking[] = [
     cidade: "São Paulo, SP",
     pontos: 1000,
     usuarioAtual: true,
-  },
-];
-
-export const recompensas: Recompensa[] = [
-  {
-    id: 1,
-    marca: "enel",
-    titulo: "100% off na Enel",
-    empresa: "Enel",
-    pontos: 2000,
   },
 ];
