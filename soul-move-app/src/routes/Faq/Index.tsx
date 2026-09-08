@@ -11,7 +11,7 @@ export default function Faq() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
-      <main className="w-full max-w-360 mx-auto min-h-screen relative bg-white overflow-x-hidden">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 flex flex-col gap-16 md:gap-24">
         
         {/* Banner Superior */}
         <section className="w-full flex justify-center py-8">
