@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
+import ModalSucesso from "../../components/ModalSucesso/ModalSucesso";
 
 // Define o formato dos dados que serão guardados pelo formulário.
 interface FormularioContato {
@@ -29,7 +30,7 @@ export default function Contato() {
   // Este estado guarda as mensagens de erro exibidas abaixo dos campos.
   const [erros, setErros] = useState<ErrosFormulario>({});
 
-  // Controla a mensagem de sucesso mostrada depois de um envio válido.
+  // Controla a abertura e o fechamento do modal.
   const [enviado, setEnviado] = useState(false);
 
   // Uma única função atualiza qualquer input usando o atributo name do campo.
@@ -48,6 +49,7 @@ export default function Contato() {
       ...errosAnteriores,
       [name]: undefined,
     }));
+    
     setEnviado(false);
   }
 
@@ -326,47 +328,12 @@ export default function Contato() {
         </section>
       </main>
 
-      {/* O modal só aparece quando enviado for true. */}
-      {enviado && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-titulo"
-        >
-          {/* Conteúdo branco do modal. */}
-          <div className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-2xl">
-            {/* Ícone de sucesso. */}
-            <div
-              className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl text-emerald-700"
-              aria-hidden="true"
-            >
-              ✓
-            </div>
-
-            <h2
-              id="modal-titulo"
-              className="mt-5 text-2xl font-semibold text-blue-950"
-            >
-              Mensagem enviada!
-            </h2>
-
-            <p className="mt-3 leading-relaxed text-slate-600">
-              Sua mensagem foi enviada com sucesso. A equipe SoulMove responderá
-              em breve.
-            </p>
-
-            <button
-              type="button"
-              className="mt-7 w-full rounded-full bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
-              /* Ao clicar, enviado volta para false e o modal desaparece. */
-              onClick={() => setEnviado(false)}
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
-      )}
+      <ModalSucesso
+        aberto={enviado}
+        titulo="Mensagem enviada!"
+        texto="Sua mensagem foi enviada para a equipe SoulMove com sucesso."
+        fecharModal={() => setEnviado(false)}
+      />
 
       <Footer />
     </div>

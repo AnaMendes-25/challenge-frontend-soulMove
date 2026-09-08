@@ -13,7 +13,7 @@ import {
   missoesValidacao,
   type AcaoSustentavel,
 } from "../../../types/ValidacaoData";
-import ModalSucesso from "../../../components/ModalValidacao/ModalValidacao";
+import ModalSucesso from "../../../components/ModalSucesso/ModalSucesso";
 
 interface ErrosFormulario {
   nome?: string;
@@ -31,7 +31,7 @@ export default function Validacao() {
   const [arquivo, setArquivo] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [erros, setErros] = useState<ErrosFormulario>({});
-  const [modalAberto, setModalAberto] = useState(false);
+  const [enviado, setEnviado] = useState(false);
 
   useEffect(() => {
     document.title = "SoulMove | Registrar ações";
@@ -114,7 +114,7 @@ export default function Validacao() {
       return;
     }
 
-    setModalAberto(true);
+    setEnviado(true);
     limparFormulario();
   }
 
@@ -298,8 +298,10 @@ export default function Validacao() {
       </main>
 
       <ModalSucesso
-        aberto={modalAberto}
-        fecharModal={() => setModalAberto(false)}
+        aberto={enviado}
+        titulo="Atividade enviada!"
+        texto="Sua atividade foi enviada para avaliação com sucesso."
+        fecharModal={() => setEnviado(false)}
       />
     </div>
   );
