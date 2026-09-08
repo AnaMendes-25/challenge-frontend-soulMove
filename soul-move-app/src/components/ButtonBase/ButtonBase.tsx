@@ -1,7 +1,4 @@
-
-
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
-
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -17,13 +14,13 @@ export default function Button({
   ...props 
 }: ButtonProps) {
   
-  //  Classes base (juntando o que o Figma separou em várias divs)
-  const baseClasses = "font-['Inter'] font-semibold flex justify-center items-center gap-2 overflow-hidden rounded-3xl transition-colors duration-200 cursor-pointer";
+  // Classes base otimizadas sem shadow
+  const baseClasses = "font-['Inter'] font-semibold flex justify-center items-center gap-2 overflow-hidden rounded-3xl transition-all duration-300 ease-out cursor-pointer active:scale-95";
   
-  //  Classes dinâmicas baseadas nas props (simulando as variantes do Figma)
+  // Variantes sem sombras, apenas com transição de cor e leve elevação
   const variantClasses = variant === 'primary' 
-    ? "bg-blue-600 text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] outline outline-1 outline-offset-[-1px] outline-blue-600 hover:bg-blue-700" 
-    : "bg-transparent text-blue-600 outline outline-1 outline-blue-600 hover:bg-blue-50";
+    ? "bg-blue-600 text-white outline outline-1 outline-offset-[-1px] outline-blue-600 hover:bg-blue-700 hover:-translate-y-0.5" 
+    : "bg-transparent text-blue-600 outline outline-1 outline-blue-600 hover:bg-blue-50 hover:-translate-y-0.5";
 
   const sizeClasses = size === 'xl' 
     ? "px-5 py-3 text-base leading-6" 
