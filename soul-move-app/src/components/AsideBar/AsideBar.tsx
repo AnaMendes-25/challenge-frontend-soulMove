@@ -37,7 +37,7 @@ export default function AsideBar() {
           className="hidden rounded-xl p-2 transition hover:bg-white/10 md:block"
           aria-label="Página inicial SoulMove"
         >
-          <img src={logoSoulMove} alt="Logo SoulMove" className="h-11 w-11 object-contain" />
+          <img src={logoSoulMove} alt="Logo SoulMove" className="h-6 w-auto object-contain" width={100} height={100} />
         </Link>
 
         <nav className="flex items-center gap-4 md:flex-col" aria-label="Navegação principal">

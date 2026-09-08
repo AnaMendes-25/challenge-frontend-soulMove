@@ -45,6 +45,8 @@ export default function Header() {
             src={logoSoulMove}
             alt="Logotipo SoulMove na cor azul"
             className="w-32 md:w-40 max-w-[160px] h-auto shrink-0 object-contain"
+            width={50}
+            height={50}
           />
         </Link>
 
