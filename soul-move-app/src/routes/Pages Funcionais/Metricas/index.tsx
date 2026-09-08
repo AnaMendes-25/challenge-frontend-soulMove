@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import AsideBar from "../../../components/AsideBar/AsideBar";
-import {
-  estatisticas,
-  missoes,
-  ranking,
-} from "../../../types/MetricasData";
+import { estatisticas, missoes, ranking } from "../../../types/MetricasData";
+import { getCurrentRanking, getMovePoints } from "../../../utils/movePoints";
 
 interface NumeroAnimadoProps {
   valorFinal: number;
@@ -36,6 +33,9 @@ function NumeroAnimado({ valorFinal }: NumeroAnimadoProps) {
 }
 
 export default function Metricas() {
+  const [movePoints] = useState(getMovePoints);
+  const rankingAtual = getCurrentRanking(ranking);
+
   useEffect(() => {
     document.title = "Métricas";
   }, []);
@@ -78,7 +78,13 @@ export default function Metricas() {
                       estatistica.principal ? "text-white" : "text-[#111]"
                     }`}
                   >
-                    <NumeroAnimado valorFinal={estatistica.valor} />
+                    <NumeroAnimado
+                      valorFinal={
+                        estatistica.titulo === "MOVE POINTS"
+                          ? movePoints
+                          : estatistica.valor
+                      }
+                    />
                   </strong>
                 </div>
               </article>
@@ -90,7 +96,11 @@ export default function Metricas() {
             <div className="mb-[12px] flex items-center justify-between gap-[20px]">
               <h2
                 id="missions-title"
-                className="text-[13px] font-semibold text-[#444]"> MISSÕES ATIVAS </h2>
+                className="text-[13px] font-semibold text-[#444]"
+              >
+                {" "}
+                MISSÕES ATIVAS{" "}
+              </h2>
             </div>
 
             <div className="grid grid-cols-1 gap-[12px] min-[650px]:grid-cols-2">
@@ -144,7 +154,6 @@ export default function Metricas() {
               >
                 RANKING
               </h2>
-
             </div>
 
             <div className="w-full overflow-x-auto">
@@ -174,7 +183,7 @@ export default function Metricas() {
                 </thead>
 
                 <tbody>
-                  {ranking.map((pessoa) => (
+                  {rankingAtual.map((pessoa) => (
                     <tr
                       key={pessoa.posicao}
                       className={`h-[62px] transition hover:-translate-y-[2px] ${
@@ -208,7 +217,11 @@ export default function Metricas() {
                       </td>
 
                       <td className="rounded-r-[8px] px-[14px] py-[12px] align-middle text-[15px] font-extrabold text-[#2554d9]">
-                        <NumeroAnimado valorFinal={pessoa.pontos} />
+                        <NumeroAnimado
+                          valorFinal={
+                            pessoa.usuarioAtual ? movePoints : pessoa.pontos
+                          }
+                        />
                       </td>
                     </tr>
                   ))}
@@ -216,7 +229,6 @@ export default function Metricas() {
               </table>
             </div>
           </section>
-          
         </section>
       </main>
     </div>
