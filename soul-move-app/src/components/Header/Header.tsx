@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import ButtonBase from '../ButtonBase/ButtonBase';
 import logoSoulMove from '../../assets/logo/LogoSoulMoveIndigo.png';
 

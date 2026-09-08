@@ -59,7 +59,7 @@ export default function AsideBar() {
           </Link>
 
           <Link
-            to="/validar"
+            to="/validacao"
             className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-blue-950 shadow-lg transition hover:scale-105 hover:bg-blue-50"
             aria-label="Registrar ação"
           >

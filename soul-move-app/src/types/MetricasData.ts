@@ -36,7 +36,7 @@ export const estatisticas: Estatistica[] = [
   {
     id: 1,
     titulo: "MOVE POINTS",
-    valor: 1000,
+    valor: 500,
     principal: true,
   },
   {
@@ -47,7 +47,7 @@ export const estatisticas: Estatistica[] = [
   {
     id: 3,
     titulo: "Missões",
-    valor: 1,
+    valor: 4,
   },
   {
     id: 4,
@@ -72,7 +72,23 @@ export const missoes: Missao[] = [
     pontos: 200,
     progressoAtual: 3,
     progressoTotal: 5,
-    diasRestantes: 5,
+    diasRestantes: 2,
+  },
+  {
+    id: 2,
+    titulo: "🗺 Semana da reciclagem",
+    pontos: 150,
+    progressoAtual: 3,
+    progressoTotal: 3,
+    diasRestantes: 2,
+  },
+  {
+    id: 2,
+    titulo: "💡 EconoLuz",
+    pontos: 150,
+    progressoAtual: 1,
+    progressoTotal: 3,
+    diasRestantes: 4,
   },
 ];
 
@@ -89,35 +105,35 @@ export const ranking: PessoaRanking[] = [
     iniciais: "GB",
     nome: "Gustavo Borba",
     cidade: "Piauí, PI",
-    pontos: 1000,
+    pontos: 900,
   },
   {
     posicao: 3,
     iniciais: "OM",
     nome: "Oto Mendes",
     cidade: "Goiânia, GO",
-    pontos: 1000,
+    pontos: 800,
   },
   {
     posicao: 4,
     iniciais: "AT",
     nome: "Alexandre Teixeira",
     cidade: "Rio de Janeiro, RJ",
-    pontos: 1000,
+    pontos: 700,
   },
   {
     posicao: 5,
     iniciais: "EN",
     nome: "Enzo Negrão",
     cidade: "São Paulo, SP",
-    pontos: 1000,
+    pontos: 600,
   },
   {
     posicao: 6,
     iniciais: "AJ",
     nome: "Alexandre Jesus",
     cidade: "São Paulo, SP",
-    pontos: 1000,
+    pontos: 500,
     usuarioAtual: true,
   },
 ];
