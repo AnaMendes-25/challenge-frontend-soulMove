@@ -35,6 +35,7 @@ function NumeroAnimado({ valorFinal }: NumeroAnimadoProps) {
 export default function Metricas() {
   const [movePoints] = useState(getMovePoints);
   const rankingAtual = getCurrentRanking(ranking);
+  const usuarioAtual = rankingAtual.find((pessoa) => pessoa.usuarioAtual);
 
   useEffect(() => {
     document.title = "Métricas";
@@ -82,7 +83,9 @@ export default function Metricas() {
                       valorFinal={
                         estatistica.titulo === "MOVE POINTS"
                           ? movePoints
-                          : estatistica.valor
+                          : estatistica.titulo === "Ranking"
+                            ? (usuarioAtual?.posicao ?? estatistica.valor)
+                            : estatistica.valor
                       }
                     />
                   </strong>

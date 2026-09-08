@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import logoSoulMove from "../../assets/logo/LogoSWhite.png";
 
 // Ícones em SVG evitam a necessidade de carregar Font Awesome por CDN.
@@ -41,22 +41,33 @@ export default function AsideBar() {
         </Link>
 
         <nav className="flex items-center gap-4 md:flex-col" aria-label="Navegação principal">
-          <Link
+          <NavLink
             to="/solucao"
-            className="flex h-12 w-12 items-center justify-center rounded-2xl text-blue-200 transition hover:bg-white/10 hover:text-white"
+            className={({ isActive }) =>
+              `flex h-12 w-12 items-center justify-center rounded-2xl transition ${
+                isActive
+                  ? "bg-white text-blue-950 shadow-lg"
+                  : "text-blue-200 hover:bg-white/10 hover:text-white"
+              }`
+            }
             aria-label="Solução"
           >
             <IconeLampada />
-          </Link>
+          </NavLink>
 
-          <Link
+          <NavLink
             to="/metricas"
-            className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500 text-white shadow-lg shadow-blue-950/30"
+            className={({ isActive }) =>
+              `flex h-12 w-12 items-center justify-center rounded-2xl transition ${
+                isActive
+                  ? "bg-white text-blue-950 shadow-lg"
+                  : "text-blue-200 hover:bg-white/10 hover:text-white"
+              }`
+            }
             aria-label="Métricas"
-            aria-current="page"
           >
             <IconeGrafico />
-          </Link>
+          </NavLink>
 
           <Link
             to="/validacao"
