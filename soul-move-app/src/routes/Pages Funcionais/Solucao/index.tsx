@@ -223,7 +223,7 @@ export default function Solucao() {
                 aria-label="Demonstração da solução"
               >
                 <Link
-                  to="/validar"
+                  to="/validacao"
                   className="rounded-2xl bg-blue-600 px-6 py-3 text-center font-semibold text-white transition hover:bg-blue-700"
                 >
                   Registrar ações

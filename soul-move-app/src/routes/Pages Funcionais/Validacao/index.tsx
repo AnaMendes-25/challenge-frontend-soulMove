@@ -24,6 +24,7 @@ interface ErrosFormulario {
 export default function Validacao() {
   // O card de trajeto a pé começa aberto, como no layout original.
   const [acaoAberta, setAcaoAberta] = useState("pe");
+  const usuarioAtual = ranking.find((pessoa) => pessoa.usuarioAtual);
 
   const [nome, setNome] = useState("");
   const [comentario, setComentario] = useState("");
@@ -91,32 +92,31 @@ export default function Validacao() {
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const novosErros: ErrosFormulario = {};
+    const novosErros: ErrosFormulario = {};
 
-  if (!arquivo) {
-    novosErros.arquivo = "Envie uma imagem como comprovante.";
+    if (!arquivo) {
+      novosErros.arquivo = "Envie uma imagem como comprovante.";
+    }
+
+    if (!nome.trim()) {
+      novosErros.nome = "Digite o nome da atividade.";
+    }
+
+    if (!comentario.trim()) {
+      novosErros.comentario = "Insira um comentário sobre a atividade.";
+    }
+
+    setErros(novosErros);
+
+    if (Object.keys(novosErros).length > 0) {
+      return;
+    }
+
+    setModalAberto(true);
+    limparFormulario();
   }
-
-  if (!nome.trim()) {
-    novosErros.nome = "Digite o nome da atividade.";
-  }
-
-  if (!comentario.trim()) {
-    novosErros.comentario =
-      "Insira um comentário sobre a atividade.";
-  }
-
-  setErros(novosErros);
-
-  if (Object.keys(novosErros).length > 0) {
-    return;
-  }
-
-  setModalAberto(true);
-  limparFormulario();
-}
 
   return (
     <div className="min-h-screen bg-[#f5f5f5] text-[#111]">
@@ -191,7 +191,7 @@ export default function Validacao() {
                   </span>
 
                   <strong className="text-[24px] font-bold text-[#111] min-[601px]:text-[28px]">
-                    1.000 pts
+                    {usuarioAtual?.pontos ?? 0} pts
                   </strong>
                 </div>
 
@@ -250,8 +250,7 @@ export default function Validacao() {
                 </h2>
 
                 {missoesValidacao.map((missao) => {
-                  const progresso =
-                    (missao.progresso / missao.total) * 100;
+                  const progresso = (missao.progresso / missao.total) * 100;
 
                   return (
                     <article
@@ -280,9 +279,7 @@ export default function Validacao() {
                           {missao.progresso}/{missao.total}
                         </span>
 
-                        <span>
-                          termina em {missao.diasRestantes} dias
-                        </span>
+                        <span>termina em {missao.diasRestantes} dias</span>
                       </div>
                     </article>
                   );
@@ -370,9 +367,7 @@ function FormularioAcao({
                   ou arraste e solte
                 </span>
 
-                <span className="text-[12px]">
-                  PNG ou JPG (máx. 800x400px)
-                </span>
+                <span className="text-[12px]">PNG ou JPG (máx. 800x400px)</span>
               </label>
             </>
           ) : (
@@ -412,9 +407,7 @@ function FormularioAcao({
           </div>
 
           <div>
-            <h3 className="mb-[4px] text-[15px] font-bold">
-              Comprovações
-            </h3>
+            <h3 className="mb-[4px] text-[15px] font-bold">Comprovações</h3>
 
             <p className="text-[14px] leading-[1.4] text-[#616161]">
               {acao.comprovacao}
@@ -456,7 +449,6 @@ function FormularioAcao({
           >
             Comentário sobre a atividade
             <span className="text-[#673bdc]">*</span>
-
             <span
               className="grid h-[16px] w-[16px] place-items-center rounded-full border border-[#a9a9a9] text-[10px] text-[#777]"
               title="Descreva como a atividade foi realizada."
@@ -473,9 +465,7 @@ function FormularioAcao({
             }}
             placeholder="Insira uma descrição"
             className={`min-h-[140px] w-full resize-y rounded-[7px] border p-[12px] text-[14px] text-[#333] outline-none transition focus:border-[#2454de] focus:ring-[3px] focus:ring-[#2454de]/10 ${
-              erros.comentario
-                ? "border-[#d93025]"
-                : "border-[#ccc]"
+              erros.comentario ? "border-[#d93025]" : "border-[#ccc]"
             }`}
           />
 

@@ -47,7 +47,7 @@ export const estatisticas: Estatistica[] = [
   {
     id: 3,
     titulo: "Missões",
-    valor: 1,
+    valor: 4,
   },
   {
     id: 4,
@@ -72,7 +72,23 @@ export const missoes: Missao[] = [
     pontos: 200,
     progressoAtual: 3,
     progressoTotal: 5,
-    diasRestantes: 5,
+    diasRestantes: 2,
+  },
+  {
+    id: 2,
+    titulo: "🗺 Semana da reciclagem",
+    pontos: 150,
+    progressoAtual: 3,
+    progressoTotal: 3,
+    diasRestantes: 2,
+  },
+  {
+    id: 2,
+    titulo: "💡 EconoLuz",
+    pontos: 150,
+    progressoAtual: 1,
+    progressoTotal: 3,
+    diasRestantes: 4,
   },
 ];
 

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import ButtonBase from '../ButtonBase/ButtonBase';
 import logoSoulMove from '../../assets/logo/LogoSoulMoveIndigo.png';
 
@@ -27,6 +27,8 @@ function NavItem({ to, children }: NavItemProps) {
 }
 
 function Header() {
+  const navigate = useNavigate();
+
   return (
     <header className="flex flex-col md:flex-row items-center justify-between lg:justify-around w-11/12 md:w-4/5 mx-auto py-4 md:py-6 mb-5 gap-4 md:gap-6">
       {/* Logo com altura controlada para não distorcer */}
@@ -49,7 +51,7 @@ function Header() {
 
       {/* Botão com shrink-0 para não achatar */}
       <div className="shrink-0">
-        <ButtonBase onClick={() => console.log('Clicou no botão do Header!')}>
+        <ButtonBase onClick={() => navigate('/solucao')}>
           Começar agora
         </ButtonBase>
       </div>

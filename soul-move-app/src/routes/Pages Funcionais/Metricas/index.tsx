@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 import AsideBar from "../../../components/AsideBar/AsideBar";
 import {
   estatisticas,
@@ -91,18 +90,7 @@ export default function Metricas() {
             <div className="mb-[12px] flex items-center justify-between gap-[20px]">
               <h2
                 id="missions-title"
-                className="text-[13px] font-semibold text-[#444]"
-              >
-                MISSÕES ATIVAS
-              </h2>
-
-              <Link
-                to="/solucao#demonstracao"
-                className="inline-flex items-center gap-[8px] text-[14px] font-bold text-[#444]"
-              >
-                Ver todas as missões
-                <span aria-hidden="true">→</span>
-              </Link>
+                className="text-[13px] font-semibold text-[#444]"> MISSÕES ATIVAS </h2>
             </div>
 
             <div className="grid grid-cols-1 gap-[12px] min-[650px]:grid-cols-2">
@@ -157,13 +145,6 @@ export default function Metricas() {
                 RANKING
               </h2>
 
-              <a
-                href="#ranking-title"
-                className="inline-flex items-center gap-[8px] text-[14px] font-bold text-[#444]"
-              >
-                Ver ranking completo
-                <span aria-hidden="true">→</span>
-              </a>
             </div>
 
             <div className="w-full overflow-x-auto">
