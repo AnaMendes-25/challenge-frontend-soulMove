@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import ButtonBase from '../ButtonBase/ButtonBase';
 import logoSoulMove from '../../assets/logo/LogoSoulMoveIndigo.png';
 
@@ -11,7 +11,6 @@ interface NavItemProps {
 }
 
 function NavItem({ to, children, onClick }: NavItemProps) {
-  // Adicionado scale e transições refinadas
   const baseClasses = "px-4 py-2 lg:px-4 lg:py-2.5 rounded-3xl flex justify-center items-center gap-2 text-sm font-medium transition-all duration-300 ease-out cursor-pointer whitespace-nowrap w-full lg:w-auto";
 
   return (
@@ -45,8 +44,6 @@ export default function Header() {
             src={logoSoulMove}
             alt="Logotipo SoulMove na cor azul"
             className="w-32 md:w-40 max-w-[160px] h-auto shrink-0 object-contain"
-            width={50}
-            height={50}
           />
         </Link>
 
