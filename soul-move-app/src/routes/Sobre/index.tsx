@@ -4,10 +4,7 @@ import { FaLeaf } from "react-icons/fa6";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 
-import {
-  destaquesSobre,
-  etapasSobre,
-} from "../../types/SobreData";
+import { destaquesSobre, etapasSobre } from "../../types/SobreData";
 
 export default function Sobre() {
   useEffect(() => {
@@ -15,7 +12,7 @@ export default function Sobre() {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#faf8ff] font-['Poppins',sans-serif] text-[#131b2e]">
+    <div className="min-h-screen overflow-x-hidden bg-white text-[#131b2e]">
       <Header />
 
       <main className="w-full overflow-x-hidden">
@@ -33,8 +30,8 @@ export default function Sobre() {
               id="sobre-title"
               className="mb-5 max-w-[780px] text-[32px] font-semibold leading-tight text-[#f1f4ff] lg:text-[48px]"
             >
-              O SoulMove transforma mobilidade sustentável em pontos,
-              competição e recompensas.
+              O SoulMove transforma mobilidade sustentável em pontos, competição
+              e recompensas.
             </h1>
 
             <p className="max-w-[660px] text-[17px] leading-7 text-[#f1f4ff] md:text-xl">
@@ -59,8 +56,8 @@ export default function Sobre() {
             </h2>
 
             <p className="text-base leading-7 text-[#172554]">
-              Caminhada, bicicleta e transporte público viram pontuação e
-              ajudam a mostrar o impacto ambiental positivo de cada usuário.
+              Caminhada, bicicleta e transporte público viram pontuação e ajudam
+              a mostrar o impacto ambiental positivo de cada usuário.
             </p>
           </div>
         </section>
@@ -84,8 +81,8 @@ export default function Sobre() {
 
             <div className="flex flex-col gap-4">
               <p className="text-lg leading-7 text-[#3c4a42]">
-                O SoulMove é uma solução desenvolvida para o desafio SoulUp,
-                com o objetivo de incentivar práticas sustentáveis por meio de
+                O SoulMove é uma solução desenvolvida para o desafio SoulUp, com
+                o objetivo de incentivar práticas sustentáveis por meio de
                 gamificação. A ideia é simples: boas ações geram pontos, pontos
                 geram competição, e competição gera engajamento contínuo.
               </p>
@@ -93,18 +90,15 @@ export default function Sobre() {
               <p className="text-lg leading-7 text-[#3c4a42]">
                 Cada ação registrada — caminhar, reciclar, usar transporte
                 público ou plantar — é avaliada pelo seu impacto ambiental real
-                e convertida em pontuação. O resultado aparece no ranking e,
-                com ele, a chance de conquistar recompensas concretas dentro da
+                e convertida em pontuação. O resultado aparece no ranking e, com
+                ele, a chance de conquistar recompensas concretas dentro da
                 plataforma.
               </p>
             </div>
           </div>
 
           {/* Cards dos pilares */}
-          <div
-            className="grid gap-4"
-            aria-label="Pilares do SoulMove"
-          >
+          <div className="grid gap-4" aria-label="Pilares do SoulMove">
             {destaquesSobre.map((destaque) => {
               const Icone = destaque.icone;
 
@@ -154,8 +148,8 @@ export default function Sobre() {
 
             <p className="text-lg leading-7 text-[#3c4a42]">
               O usuário registra suas ações, acumula pontos, acompanha sua
-              posição no ranking e pode conquistar recompensas de acordo com
-              seu desempenho.
+              posição no ranking e pode conquistar recompensas de acordo com seu
+              desempenho.
             </p>
           </div>
 
