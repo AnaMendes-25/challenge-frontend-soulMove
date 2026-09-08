@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 
 import AsideBar from "../../../components/AsideBar/AsideBar";
 import FormularioAcao from "../../../components/FormularioAcao/FormularioAcao";
@@ -17,8 +17,16 @@ import {
 } from "../../../utils/movePoints";
 
 export default function Validacao() {
+  const navigate = useNavigate();
+  const { acaoId } = useParams<{ acaoId?: string }>();
+  const acaoInicial = acoesSustentaveis.some(
+    (acao) => acao.id === acaoId,
+  )
+    ? acaoId ?? "pe"
+    : "pe";
+
   // Define qual card de ação está aberto.
-  const [acaoAberta, setAcaoAberta] = useState("pe");
+  const [acaoAberta, setAcaoAberta] = useState(acaoInicial);
 
   // Controla a abertura e o fechamento do modal.
   const [enviado, setEnviado] = useState(false);
@@ -36,9 +44,14 @@ export default function Validacao() {
 
   // Abre o card selecionado e fecha os outros.
   function abrirOuFecharCard(id: string) {
-    setAcaoAberta((cardAtual) =>
-      cardAtual === id ? "" : id,
-    );
+    if (acaoAberta === id) {
+      setAcaoAberta("");
+      navigate("/validacao");
+      return;
+    }
+
+    setAcaoAberta(id);
+    navigate(`/validacao/${id}`);
   }
 
   return (
