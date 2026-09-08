@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
@@ -15,7 +15,7 @@ export default function Contato() {
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     reset,
     formState: { errors },
   } = useForm<FormularioContato>({
@@ -29,7 +29,11 @@ export default function Contato() {
   });
 
   // Observa a mensagem para atualizar o contador de caracteres.
-  const mensagem = watch("mensagem") ?? "";
+  const mensagem = useWatch({
+    control,
+    name: "mensagem",
+    defaultValue: "",
+  });
 
   // Executada somente quando todos os campos são válidos.
   function enviarFormulario() {
