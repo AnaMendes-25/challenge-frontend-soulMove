@@ -12,6 +12,9 @@ export default function Error() {
           <Link to="/" className="inline-flex min-h-10 items-center justify-center rounded-md bg-[#005FCC] px-4 py-2 text-sm font-semibold text-[#FFFFFF] transition-colors hover:bg-[#2563EB] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#0F172A] ">Voltar para o início</Link>
         </button>
       </div>
+      <div className="absolute bottom-0 w-full">
+        <Footer/>
+      </div>
     </section>
   )
 }
