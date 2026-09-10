@@ -10,6 +10,7 @@ import iconReciclagem from "../../assets/icones/reciclagem-correta.png";
 import iconBicicleta from "../../assets/icones/bike.png";
 import iconPlantar from "../../assets/icones/plantacao.png";
 import imgRanking from "../../assets/banners/ranking-global.png";
+import imgHeaderHomem from "../../assets/banners/img-header-homem.png";
 
 // Ícones SVG
 export function ZapIcon({
@@ -267,7 +268,7 @@ export default function Home() {
           {/* Imagem Principal */}
           <img
             className="w-full md:w-1/2 max-w-140 aspect-square object-cover rounded-2xl shadow-lg"
-            src="https://placehold.co/560x560"
+            src={imgHeaderHomem}
             alt="Demonstração do aplicativo SoulMove no celular"
           />
         </section>
