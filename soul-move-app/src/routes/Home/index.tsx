@@ -204,8 +204,7 @@ export default function Home() {
                 Boas ações merecem ser recompensadas.
               </h1>
               <p className="text-indigo-50 text-lg md:text-xl font-normal leading-relaxed">
-                O SoulScore transforma ações sustentáveis em recompensas reais,
-                incluindo conta de energia subsidiada.
+                O SoulScore transforma ações sustentáveis em recompensas de verdade.
               </p>
             </div>
 
@@ -224,7 +223,7 @@ export default function Home() {
             {/* Botões de Ação */}
             <div className="flex items-center gap-4">
               <ButtonBase onClick={() => navigate("/solucao")}>
-                Começar agora
+                Comece agora
               </ButtonBase>
 
               <button
@@ -266,10 +265,10 @@ export default function Home() {
 
             <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 lg:gap-12">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-poppins font-medium text-stone-900 leading-tight lg:max-w-[624px]">
-                É fácil transformar suas ações em pontos
+                É muito fácil transformar suas ações em pontos
               </h2>
               <p className="text-neutral-600 text-lg sm:text-xl lg:text-2xl font-normal leading-relaxed lg:max-w-[600px]">
-                O SoulScore transforma ações sustentáveis em recompensas reais,
+                O SoulScore transforma ações sustentáveis em recompensas de verdade,
                 incluindo conta de energia subsidiada.
               </p>
             </div>
