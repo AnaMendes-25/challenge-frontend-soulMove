@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import AsideBar from "../../../components/AsideBar/AsideBar";
-import { problemas, etapas } from "../../../types/SolucaoDatasTypes";
+import { problemas, etapas } from "../../../types/SolucaoTypes";
 
 export default function Solucao() {
   // Controla a exibição do fluxo completo.

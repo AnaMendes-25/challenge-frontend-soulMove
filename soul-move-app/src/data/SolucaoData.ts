@@ -1,4 +1,4 @@
-import type { Passo } from "../types/SolucaoDatasTypes";
+import type { Passo } from "../types/SolucaoTypes";
 
 export const problemas: Passo[] = [
   {

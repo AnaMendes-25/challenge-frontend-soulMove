@@ -1,4 +1,4 @@
-import type { AcaoSustentavel, MissaoValidacao } from "../types/ValidacaoDataTypes";
+import type { AcaoSustentavel, MissaoValidacao } from "../types/ValidacaoTypes";
 
 export const acoesSustentaveis: AcaoSustentavel[] = [
   {

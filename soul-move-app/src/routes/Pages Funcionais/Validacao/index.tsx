@@ -5,11 +5,11 @@ import AsideBar from "../../../components/AsideBar/AsideBar";
 import FormularioAcao from "../../../components/FormularioAcao/FormularioAcao";
 import ModalSucesso from "../../../components/ModalSucesso/ModalSucesso";
 
-import { ranking } from "../../../types/MetricasDataTypes";
+import { ranking } from "../../../types/MetricasTypes";
 import {
   acoesSustentaveis,
   missoesValidacao,
-} from "../../../types/ValidacaoDataTypes";
+} from "../../../types/ValidacaoTypes";
 import {
   addMovePoints,
   getCurrentRanking,

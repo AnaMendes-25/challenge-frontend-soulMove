@@ -1,4 +1,4 @@
-import type { PessoaRanking } from "../types/MetricasDataTypes";
+import type { PessoaRanking } from "../types/MetricasTypes";
 
 const MOVE_POINTS_STORAGE_KEY = "soulmove-move-points";
 const INITIAL_MOVE_POINTS = 500;

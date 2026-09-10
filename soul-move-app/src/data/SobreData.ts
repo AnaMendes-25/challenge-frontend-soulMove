@@ -1,4 +1,4 @@
-import type { DestaqueSobre, EtapaSobre } from "../types/SobreDataTypes";
+import type { DestaqueSobre, EtapaSobre } from "../types/SobreTypes";
 
 
 import {
