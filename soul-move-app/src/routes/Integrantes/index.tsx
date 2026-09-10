@@ -1,7 +1,7 @@
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import IntegranteCard from "../../components/IntegranteCard/IntegranteCard";
-import { listaIntegrantes } from "../../types/IntegranteCardPropsTypes";
+import { listaIntegrantes } from "../../data/IntegranteCardPropsData";
 
 export default function Integrantes() {
   return (
