@@ -8,6 +8,9 @@ export default function Error() {
         <h1 className="mb-3 text-4xl font-bold leading-none !text-blue-300 sm:text-5xl">404</h1>
         <h2 className="mb-3 text-2xl font-bold leading-tight tracking-tight !text-[#0F172A] sm:text-3xl">Página não encontrada</h2>
         <p className="mb-6 text-base leading-6 text-[#475569]">O endereço que você tentou acessar não existe ou foi alterado.</p>
+        <button title="Botão para retornar a página inicial">
+          <Link to="/" className="inline-flex min-h-10 items-center justify-center rounded-md bg-[#005FCC] px-4 py-2 text-sm font-semibold text-[#FFFFFF] transition-colors hover:bg-[#2563EB] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#0F172A] ">Voltar para o início</Link>
+        </button>
       </div>
     </section>
   )
