@@ -1,4 +1,4 @@
-import type { Estatistica, Missao, PessoaRanking } from "../types/MetricasData";
+import type { Estatistica, Missao, PessoaRanking } from "../types/MetricasDataTypes";
 
 export const estatisticas: Estatistica[] = [
   {

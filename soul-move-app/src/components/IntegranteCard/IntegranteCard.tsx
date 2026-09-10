@@ -1,4 +1,4 @@
-import type { IntegranteCardProps } from "../../types/IntegranteCardProps";
+import type { IntegranteCardProps } from "../../types/IntegranteCardPropsTypes";
 import githubIcon from "../../assets/logo/github.svg";
 import linkedinIcon from "../../assets/logo/linkedin.svg";
 

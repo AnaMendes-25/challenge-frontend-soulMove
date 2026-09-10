@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AsideBar from "../../../components/AsideBar/AsideBar";
-import { estatisticas, missoes, ranking } from "../../../types/MetricasData";
+import { estatisticas, missoes, ranking } from "../../../types/MetricasDataTypes";
 import { getCurrentRanking, getMovePoints } from "../../../utils/movePoints";
 
 interface NumeroAnimadoProps {

@@ -5,7 +5,7 @@ import { ItemSumary } from "../../components/ItemSumary/ItemSumary"; // Importe 
 import cuboDuvida from "../../assets/banners/cubo-duvidas.png";
 
 // Importe o faqData do arquivo onde você definiu as seções e tipos
-import { faqData } from "../../types/faq"; // (Ajuste o caminho caso esteja em outra pasta)
+import { faqData } from "../../types/FaqTypes"; // (Ajuste o caminho caso esteja em outra pasta)
 
 export default function Faq() {
   return (

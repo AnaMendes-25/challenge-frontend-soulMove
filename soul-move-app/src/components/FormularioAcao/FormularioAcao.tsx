@@ -5,7 +5,7 @@ import {
 } from "react";
 import { useForm } from "react-hook-form";
 
-import type { AcaoSustentavel } from "../../types/ValidacaoData";
+import type { AcaoSustentavel } from "../../types/ValidacaoDataTypes";
 
 interface FormularioValidacao {
   nome: string;

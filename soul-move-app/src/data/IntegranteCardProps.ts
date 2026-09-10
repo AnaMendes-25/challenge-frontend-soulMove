@@ -4,7 +4,7 @@ import fotoAna from '../assets/integrantes/ana-mendes-profissional.png';
 import fotoGustavo from '../assets/integrantes/gustavo-borba-profissional.png';
 import fotoOto from '../assets/integrantes/oto-mendes-profissional.png';
 import fotoEnzo from '../assets/integrantes/enzo-negrao-profissional.png';
-import type { IntegranteCardProps } from '../types/IntegranteCardProps';
+import type { IntegranteCardProps } from '../types/IntegranteCardPropsTypes';
 
 export const listaIntegrantes: IntegranteCardProps[] = [
   {

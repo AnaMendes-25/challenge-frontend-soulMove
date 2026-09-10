@@ -4,7 +4,7 @@ import { FaLeaf } from "react-icons/fa6";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 
-import { destaquesSobre, etapasSobre } from "../../types/SobreData";
+import { destaquesSobre, etapasSobre } from "../../types/SobreDataTypes";
 
 export default function Sobre() {
   useEffect(() => {
