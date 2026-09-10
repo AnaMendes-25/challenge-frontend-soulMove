@@ -11,6 +11,7 @@ import iconBicicleta from "../../assets/icones/bike.png";
 import iconPlantar from "../../assets/icones/plantacao.png";
 import imgRanking from "../../assets/banners/ranking-global.png";
 import imgHeaderHomem from "../../assets/banners/img-header-homem.png";
+import avatarGroup from "../../assets/banners/Avatar group.png";
 
 // Ícones SVG
 export function ZapIcon({
@@ -200,7 +201,7 @@ export default function Home() {
                 [ SOULMOVE ]
               </span>
               <h1 className="text-indigo-50 text-4xl sm:text-5xl font-semibold leading-tight">
-                Boas ações merecem recompensa de verdade.
+                Boas ações merecem ser recompensadas.
               </h1>
               <p className="text-indigo-50 text-lg md:text-xl font-normal leading-relaxed">
                 O SoulScore transforma ações sustentáveis em recompensas reais,
@@ -210,29 +211,12 @@ export default function Home() {
 
             {/* Prova Social */}
             <div className="flex flex-wrap items-center gap-3">
-              <div className="flex -space-x-3">
-                <img
-                  className="w-10 h-10 rounded-full border-2 border-blue-950 object-cover"
-                  src="https://placehold.co/40x40"
-                  alt=""
-                />
-                <img
-                  className="w-10 h-10 rounded-full border-2 border-blue-950 object-cover"
-                  src="https://placehold.co/40x40"
-                  alt=""
-                />
-                <img
-                  className="w-10 h-10 rounded-full border-2 border-blue-950 object-cover"
-                  src="https://placehold.co/40x40"
-                  alt=""
-                />
-                <img
-                  className="w-10 h-10 rounded-full border-2 border-blue-950 object-cover"
-                  src="https://placehold.co/40x40"
-                  alt=""
-                />
-              </div>
-              <span className="text-blue-200 text-sm font-normal">
+              <img
+                className="w-40 h-auto object-contain"
+                src={avatarGroup}
+                alt="Grupo de integrantes SoulMove"
+              />
+              <span className="text-blue-200 text-sm font-normal leading-relaxed">
                 junte-se a milhares de movers
               </span>
             </div>
