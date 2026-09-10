@@ -198,15 +198,23 @@ export default function Metricas() {
                       </td>
 
                       <td className="px-[14px] py-[12px] align-middle">
-                        <div
-                          className={`flex h-[34px] w-[34px] items-center justify-center rounded-full text-[11px] font-extrabold ${
-                            pessoa.usuarioAtual
-                              ? "bg-black/20 text-black"
-                              : "bg-[#e8e8e8] text-[#2554d9]"
-                          }`}
-                        >
-                          {pessoa.iniciais}
-                        </div>
+                        {pessoa.foto ? (
+                          <img
+                            src={pessoa.foto}
+                            alt={pessoa.nome}
+                            className="flex h-[34px] w-[34px] rounded-full object-cover"
+                          />
+                        ) : (
+                          <div
+                            className={`flex h-[34px] w-[34px] items-center justify-center rounded-full text-[11px] font-extrabold ${
+                              pessoa.usuarioAtual
+                                ? "bg-black/20 text-black"
+                                : "bg-[#e8e8e8] text-[#2554d9]"
+                            }`}
+                          >
+                            {pessoa.iniciais}
+                          </div>
+                        )}
                       </td>
 
                       <td className="px-[14px] py-[12px] align-middle">

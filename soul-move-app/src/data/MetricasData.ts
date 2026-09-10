@@ -1,4 +1,14 @@
-import type { Estatistica, Missao, PessoaRanking } from "../types/MetricasTypes";
+import fotoAlexandre from '../assets/integrantes/alexandre-teixeira-profissional.png';
+import fotoAna from '../assets/integrantes/ana-mendes-profissional.png';
+import fotoEnzo from '../assets/integrantes/enzo-negrao-profissional.png';
+import fotoFelipe from '../assets/integrantes/felipe-passos-profissional.png';
+import fotoGustavo from '../assets/integrantes/gustavo-borba-profissional.png';
+import fotoOto from '../assets/integrantes/oto-mendes-profissional.png';
+import type {
+  Estatistica,
+  Missao,
+  PessoaRanking,
+} from '../types/MetricasTypes';
 
 export const estatisticas: Estatistica[] = [
   {
@@ -52,7 +62,7 @@ export const missoes: Missao[] = [
   },
   {
     id: 2,
-    titulo: "💡 EconoLuz",
+    titulo: "💡 Semana da economia de energia",
     pontos: 150,
     progressoAtual: 1,
     progressoTotal: 3,
@@ -67,6 +77,7 @@ export const ranking: PessoaRanking[] = [
     nome: "Ana Mendes",
     cidade: "Rio de Janeiro, RJ",
     pontos: 1000,
+    foto: fotoAna,
   },
   {
     posicao: 2,
@@ -74,6 +85,7 @@ export const ranking: PessoaRanking[] = [
     nome: "Gustavo Borba",
     cidade: "Piauí, PI",
     pontos: 900,
+    foto: fotoGustavo,
   },
   {
     posicao: 3,
@@ -81,6 +93,7 @@ export const ranking: PessoaRanking[] = [
     nome: "Oto Mendes",
     cidade: "Goiânia, GO",
     pontos: 800,
+    foto: fotoOto,
   },
   {
     posicao: 4,
@@ -88,6 +101,7 @@ export const ranking: PessoaRanking[] = [
     nome: "Alexandre Teixeira",
     cidade: "Rio de Janeiro, RJ",
     pontos: 700,
+    foto: fotoAlexandre,
   },
   {
     posicao: 5,
@@ -95,13 +109,15 @@ export const ranking: PessoaRanking[] = [
     nome: "Enzo Negrão",
     cidade: "São Paulo, SP",
     pontos: 600,
+    foto: fotoEnzo,
   },
   {
     posicao: 6,
-    iniciais: "AJ",
-    nome: "Alexandre Jesus",
+    iniciais: "FP",
+    nome: "Filipe Passos",
     cidade: "São Paulo, SP",
     pontos: 500,
+    foto: fotoFelipe,
     usuarioAtual: true,
   },
 ];
