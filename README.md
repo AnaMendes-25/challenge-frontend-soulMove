@@ -217,52 +217,10 @@ O SoulMove tem como objetivo aplicar na prática conhecimentos relacionados a:
 
 A seguir, os membros que participaram do desenvolvimento do SoulMove:
 
-### Alexandre Teixeira
-
-<img src="./soul-move-app/src/assets/integrantes/alexandre-teixeira-profissional.png" width="120px" alt="Foto do integrante Alexandre Teixeira">
-
-- **Nome:** Alexandre Teixeira
-- **RM:** RM572658
-- **Turma:** 1TDSPO
-- **GitHub:** [github.com/AlexandreTeixeiraS](https://github.com/AlexandreTeixeiraS)
-- **LinkedIn:** [linkedin.com/in/alexandre-teixeira-dos-santos-35a579403](https://www.linkedin.com/in/alexandre-teixeira-dos-santos-35a579403/)
-
-### Ana Mendes
-
-<img src="./soul-move-app/src/assets/integrantes/ana-mendes-profissional.png" width="120px" alt="Foto da integrante Ana Mendes">
-
-- **Nome:** Ana Mendes
-- **RM:** RM571692
-- **Turma:** 1TDSPO
-- **GitHub:** [github.com/AnaMendes-25](https://github.com/AnaMendes-25)
-- **LinkedIn:** [linkedin.com/in/ana-mendes-65b95839a](https://www.linkedin.com/in/ana-mendes-65b95839a)
-
-### Enzo Negrão Freitas
-
-<img src="./soul-move-app/src/assets/integrantes/enzo-negrao-profissional.png" width="120px" alt="Foto do integrante Enzo Negrão Freitas">
-
-- **Nome:** Enzo Negrão Freitas
-- **RM:** RM568857
-- **Turma:** 1TDSPO
-- **GitHub:** [github.com/Enzo-N-Freitas](https://github.com/Enzo-N-Freitas)
-- **LinkedIn:** [linkedin.com/in/enzo-negrão-freitas-1b24a3348](https://www.linkedin.com/in/enzo-negrão-freitas-1b24a3348)
-
-### Gustavo Borba
-
-<img src="./soul-move-app/src/assets/integrantes/gustavo-borba-profissional.png" width="120px" alt="Foto do integrante Gustavo Borba">
-
-- **Nome:** Gustavo Borba
-- **RM:** RM559202
-- **Turma:** 1TDSPO
-- **GitHub:** [github.com/BorbaGustavo](https://github.com/BorbaGustavo)
-- **LinkedIn:** [linkedin.com/in/borbagustavo](https://www.linkedin.com/in/borbagustavo/)
-
-### Oto Mendes
-
-<img src="./soul-move-app/src/assets/integrantes/oto-mendes-profissional.png" width="120px" alt="Foto do integrante Oto Mendes">
-
-- **Nome:** Oto Mendes
-- **RM:** RM571625
-- **Turma:** 1TDSPO
-- **GitHub:** [github.com/otomendes](https://github.com/otomendes)
-- **LinkedIn:** [linkedin.com/in/otomendes](https://www.linkedin.com/in/otomendes/)
+| Foto | Integrante |
+| --- | --- |
+| <img src="./soul-move-app/src/assets/integrantes/alexandre-teixeira-profissional.png" width="120px" alt="Foto do integrante Alexandre Teixeira"> | **Alexandre Teixeira**<br>RM: RM572658<br>Turma: 1TDSPO<br>GitHub: [github.com/AlexandreTeixeiraS](https://github.com/AlexandreTeixeiraS)<br>LinkedIn: [linkedin.com/in/alexandre-teixeira-dos-santos-35a579403](https://www.linkedin.com/in/alexandre-teixeira-dos-santos-35a579403/) |
+| <img src="./soul-move-app/src/assets/integrantes/ana-mendes-profissional.png" width="120px" alt="Foto da integrante Ana Mendes"> | **Ana Mendes**<br>RM: RM571692<br>Turma: 1TDSPO<br>GitHub: [github.com/AnaMendes-25](https://github.com/AnaMendes-25)<br>LinkedIn: [linkedin.com/in/ana-mendes-65b95839a](https://www.linkedin.com/in/ana-mendes-65b95839a) |
+| <img src="./soul-move-app/src/assets/integrantes/enzo-negrao-profissional.png" width="120px" alt="Foto do integrante Enzo Negrão Freitas"> | **Enzo Negrão Freitas**<br>RM: RM568857<br>Turma: 1TDSPO<br>GitHub: [github.com/Enzo-N-Freitas](https://github.com/Enzo-N-Freitas)<br>LinkedIn: [linkedin.com/in/enzo-negrão-freitas-1b24a3348](https://www.linkedin.com/in/enzo-negrão-freitas-1b24a3348) |
+| <img src="./soul-move-app/src/assets/integrantes/gustavo-borba-profissional.png" width="120px" alt="Foto do integrante Gustavo Borba"> | **Gustavo Borba**<br>RM: RM559202<br>Turma: 1TDSPO<br>GitHub: [github.com/BorbaGustavo](https://github.com/BorbaGustavo)<br>LinkedIn: [linkedin.com/in/borbagustavo](https://www.linkedin.com/in/borbagustavo/) |
+| <img src="./soul-move-app/src/assets/integrantes/oto-mendes-profissional.png" width="120px" alt="Foto do integrante Oto Mendes"> | **Oto Mendes**<br>RM: RM571625<br>Turma: 1TDSPO<br>GitHub: [github.com/otomendes](https://github.com/otomendes)<br>LinkedIn: [linkedin.com/in/otomendes](https://www.linkedin.com/in/otomendes/) |
