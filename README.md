@@ -213,7 +213,7 @@ O SoulMove tem como objetivo aplicar na prática conhecimentos relacionados a:
 
 ---
 
-## 👥 Integrantes do Grupo
+## 👥 Contatos do Grupo
 
 A seguir, os membros que participaram do desenvolvimento do SoulMove:
 

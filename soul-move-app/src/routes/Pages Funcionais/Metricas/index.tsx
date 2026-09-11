@@ -45,7 +45,7 @@ export default function Metricas() {
     <div className="min-h-screen bg-[#f3f3f3] text-[#111]">
       <AsideBar />
 
-      <main className="min-h-screen overflow-x-hidden bg-[#f3f3f3] pb-[88px] min-[601px]:ml-[90px] min-[601px]:pb-0 min-[993px]:ml-[160px]">
+      <main className="min-h-screen overflow-x-hidden bg-[#f3f3f3] pb-[88px] min-[601px]:ml-[90px] min-[601px]:pb-0 min-[992px]:ml-[160px]">
         <section
           className="mx-auto mb-[50px] mt-[20px] w-[calc(100%-20px)] max-w-[960px] min-[426px]:mb-[80px] min-[426px]:mt-[40px] min-[426px]:w-[calc(100%-32px)]"
           aria-label="Painel de desempenho SoulMove"

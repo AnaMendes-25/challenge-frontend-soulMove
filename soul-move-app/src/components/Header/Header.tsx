@@ -38,7 +38,7 @@ export default function Header() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <header className="flex flex-col lg:flex-row items-center justify-between lg:justify-around w-11/12 md:w-4/5 mx-auto py-4 md:py-6 mb-5 gap-4 lg:gap-6 relative z-50">
+    <header className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 sm:w-11/12 sm:px-0 md:py-6 lg:flex-row lg:justify-around lg:gap-6 relative z-50">
       {/* Linha superior / Mobile & Tablet (< 1024px) */}
       <div className="w-full flex items-center justify-between lg:w-auto">
         <Link

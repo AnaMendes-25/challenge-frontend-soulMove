@@ -12,24 +12,25 @@ export default function Faq() {
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 flex flex-col gap-16 md:gap-24">
-        
         {/* Banner Superior */}
         <section className="w-full flex justify-center py-8">
-          <header className="w-full max-w-7xl mx-auto p-8 md:p-12 bg-blue-950 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-12">
+          <header className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-8 rounded-3xl bg-blue-950 p-5 sm:p-8 md:flex-row md:gap-12 md:p-12">
             <div className="w-full md:w-1/2 flex flex-col justify-start items-start gap-4">
               <p className="text-blue-300 text-base font-normal tracking-wide uppercase">
                 [ FAQ ]
               </p>
-              <h2 className="text-indigo-50 text-4xl sm:text-5xl font-semibold leading-tight">
+              <h2 className="text-3xl font-semibold leading-tight text-indigo-50 sm:text-5xl">
                 Perguntas frequentes
               </h2>
-              <p className="text-indigo-50 text-lg md:text-xl font-normal leading-relaxed">
-                Tire suas dúvidas sobre como o nosso sistema de pontuação e recompensas funciona. Caso a informação que você busca não esteja na lista, use o nosso chat para tirar dúvidas.
+              <p className="text-base font-normal leading-relaxed text-indigo-50 sm:text-lg md:text-xl">
+                Tire suas dúvidas sobre como o nosso sistema de pontuação e
+                recompensas funciona. Caso a informação que você busca não
+                esteja na lista, use o nosso chat para tirar dúvidas.
               </p>
             </div>
             <figure className="w-full md:w-1/2 shrink-0 flex justify-center">
               <img
-                className="w-full max-w-[567px] h-80 object-cover rounded-2xl"
+                className="h-64 w-full max-w-[567px] rounded-2xl object-cover sm:h-80"
                 src={cuboDuvida}
                 alt="Ilustração de um cubo com interrogações representando dúvidas e perguntas frequentes"
               />
@@ -40,21 +41,22 @@ export default function Faq() {
         {/* Seção de Perguntas Dinâmicas */}
         <section className="w-full flex justify-center py-8">
           <div className="w-full max-w-7xl mx-auto px-4 flex flex-col gap-10">
-            
             {/* 1º Map: Passa por cada Seção (Ex: "Sobre o Soul Move", "Sobre pontuação") */}
             {faqData.map((section) => (
-              <div key={section.id} className="flex flex-col items-start gap-4 w-full">
-                
+              <div
+                key={section.id}
+                className="flex flex-col items-start gap-4 w-full"
+              >
                 {/* Título da Seção */}
                 <h3 className="text-blue-950 text-2xl font-medium font-['Inter'] leading-8">
                   {section.title}
                 </h3>
-                
+
                 {/* Container das perguntas daquela seção */}
                 <div className="w-full flex flex-col gap-4">
                   {/* 2º Map: Passa por cada pergunta de dentro da seção */}
                   {section.items.map((item) => (
-                    <ItemSumary 
+                    <ItemSumary
                       key={item.id}
                       number={item.number}
                       question={item.question}
@@ -62,15 +64,12 @@ export default function Faq() {
                     />
                   ))}
                 </div>
-
               </div>
             ))}
-
           </div>
         </section>
-        
       </main>
       <Footer />
     </div>
-  )
+  );
 }

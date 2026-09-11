@@ -193,18 +193,19 @@ export default function Home() {
       {/* Estrutura central da página com gap uniforme de 64px no mobile e 96px em telas médias/grandes */}
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 flex flex-col gap-16 md:gap-24">
         {/* SEÇÃO 1: Hero Banner */}
-        <section className="w-full p-8 md:p-12 bg-blue-950 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-12">
+        <section className="w-full rounded-3xl bg-blue-950 p-5 sm:p-8 md:flex-row md:p-12 flex flex-col items-center justify-between gap-8 md:gap-12">
           {/* Bloco de Texto */}
           <div className="w-full md:w-1/2 flex flex-col justify-start items-start gap-8 md:gap-12">
             <div className="w-full flex flex-col gap-4">
               <span className="text-blue-300 text-base font-normal tracking-wide uppercase">
                 [ SOULMOVE ]
               </span>
-              <h1 className="text-indigo-50 text-4xl sm:text-5xl font-semibold leading-tight">
+              <h1 className="text-3xl font-semibold leading-tight text-indigo-50 sm:text-5xl">
                 Boas ações merecem ser recompensadas.
               </h1>
-              <p className="text-indigo-50 text-lg md:text-xl font-normal leading-relaxed">
-                O SoulScore transforma ações sustentáveis em recompensas de verdade.
+              <p className="text-base font-normal leading-relaxed text-indigo-50 sm:text-lg md:text-xl">
+                O SoulScore transforma ações sustentáveis em recompensas de
+                verdade.
               </p>
             </div>
 
@@ -250,7 +251,7 @@ export default function Home() {
 
           {/* Imagem Principal */}
           <img
-            className="w-full md:w-1/2 max-w-140 aspect-square object-cover rounded-2xl shadow-lg"
+            className="aspect-square w-full max-w-140 rounded-2xl object-cover shadow-lg md:w-1/2"
             src={imgHeaderHomem}
             alt="Demonstração do aplicativo SoulMove no celular"
           />
@@ -268,8 +269,8 @@ export default function Home() {
                 É muito fácil transformar suas ações em pontos
               </h2>
               <p className="text-neutral-600 text-lg sm:text-xl lg:text-2xl font-normal leading-relaxed lg:max-w-[600px]">
-                O SoulScore transforma ações sustentáveis em recompensas de verdade,
-                incluindo conta de energia subsidiada.
+                O SoulScore transforma ações sustentáveis em recompensas de
+                verdade, incluindo conta de energia subsidiada.
               </p>
             </div>
           </header>

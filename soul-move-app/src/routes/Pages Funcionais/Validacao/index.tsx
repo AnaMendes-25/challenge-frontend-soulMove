@@ -19,10 +19,8 @@ import {
 export default function Validacao() {
   const navigate = useNavigate();
   const { acaoId } = useParams<{ acaoId?: string }>();
-  const acaoInicial = acoesSustentaveis.some(
-    (acao) => acao.id === acaoId,
-  )
-    ? acaoId ?? "pe"
+  const acaoInicial = acoesSustentaveis.some((acao) => acao.id === acaoId)
+    ? (acaoId ?? "pe")
     : "pe";
 
   // Define qual card de ação está aberto.
@@ -34,9 +32,7 @@ export default function Validacao() {
   const rankingAtual = getCurrentRanking(ranking);
 
   // Encontra os dados do usuário atual no ranking.
-  const usuarioAtual = rankingAtual.find(
-    (pessoa) => pessoa.usuarioAtual,
-  );
+  const usuarioAtual = rankingAtual.find((pessoa) => pessoa.usuarioAtual);
 
   useEffect(() => {
     document.title = "SoulMove | Registrar ações";
@@ -58,9 +54,9 @@ export default function Validacao() {
     <div className="min-h-screen bg-[#f5f5f5] text-[#111]">
       <AsideBar />
 
-      <main className="pb-[88px] min-[601px]:ml-[90px] min-[601px]:pb-0 min-[993px]:ml-[160px]">
-        <section className="mx-auto w-[calc(100%-16px)] max-w-[960px] py-[20px] min-[426px]:w-[calc(100%-20px)] min-[426px]:py-[24px] min-[601px]:w-[calc(100%-24px)] min-[601px]:max-w-[760px] min-[601px]:py-[40px] min-[993px]:w-[calc(100%-32px)] min-[993px]:max-w-[960px] min-[993px]:py-[60px]">
-          <div className="grid grid-cols-1 items-start gap-[28px] min-[993px]:grid-cols-[minmax(0,600px)_minmax(280px,340px)]">
+      <main className="pb-[88px] min-[601px]:ml-[90px] min-[601px]:pb-0 min-[992px]:ml-[160px]">
+        <section className="mx-auto w-[calc(100%-16px)] max-w-[960px] py-[20px] min-[426px]:w-[calc(100%-20px)] min-[426px]:py-[24px] min-[601px]:w-[calc(100%-24px)] min-[601px]:max-w-[760px] min-[601px]:py-[40px] min-[992px]:w-[calc(100%-32px)] min-[992px]:max-w-[960px] min-[992px]:py-[60px]">
+          <div className="grid grid-cols-1 items-start gap-[28px] min-[992px]:grid-cols-[minmax(0,600px)_minmax(280px,340px)]">
             {/* Área principal com os cards das ações */}
             <div className="flex flex-col gap-[12px] min-[426px]:gap-[16px]">
               {acoesSustentaveis.map((acao) => (
@@ -142,7 +138,7 @@ export default function Validacao() {
             </div>
 
             {/* Painel lateral */}
-            <aside className="flex flex-col gap-[24px] min-[601px]:grid min-[601px]:grid-cols-2 min-[993px]:flex">
+            <aside className="flex flex-col gap-[24px] min-[601px]:grid min-[601px]:grid-cols-2 min-[992px]:flex">
               {/* Pontuação do usuário */}
               <section className="col-span-full flex items-center justify-between rounded-[8px] bg-[#bdd8fb] p-[18px] min-[601px]:p-[24px]">
                 <div>
@@ -151,10 +147,7 @@ export default function Validacao() {
                   </span>
 
                   <strong className="text-[24px] font-bold text-[#111] min-[601px]:text-[28px]">
-                    {movePoints.toLocaleString(
-                      "pt-BR",
-                    )}{" "}
-                    pts
+                    {movePoints.toLocaleString("pt-BR")} pts
                   </strong>
                 </div>
 
@@ -216,8 +209,7 @@ export default function Validacao() {
                 </h2>
 
                 {missoesValidacao.map((missao) => {
-                  const progresso =
-                    (missao.progresso / missao.total) * 100;
+                  const progresso = (missao.progresso / missao.total) * 100;
 
                   return (
                     <article
@@ -246,9 +238,7 @@ export default function Validacao() {
                           {missao.progresso}/{missao.total}
                         </span>
 
-                        <span>
-                          termina em {missao.diasRestantes} dias
-                        </span>
+                        <span>termina em {missao.diasRestantes} dias</span>
                       </div>
                     </article>
                   );
