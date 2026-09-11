@@ -61,7 +61,7 @@ export default function Header() {
           aria-label={isOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
         >
           <svg
-            className="size-6"
+            className="size-6 cursor-pointer"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
