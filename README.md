@@ -1,13 +1,14 @@
-# 🌱 Sobre o Projeto
+# 🌱 SoulMove
 
-O **SoulMove** é uma plataforma desenvolvida com foco em sustentabilidade, mobilidade consciente e gamificação.  
-A proposta do projeto é incentivar hábitos sustentáveis através de um sistema de pontuação e recompensas.
+## 📖 Sobre o Projeto
 
-Os usuários podem registrar atividades do dia a dia que geram impacto positivo no meio ambiente e acumular pontos por isso.
+O **SoulMove** é uma plataforma desenvolvida com foco em sustentabilidade, mobilidade consciente e gamificação.
+
+A proposta do projeto é incentivar hábitos sustentáveis por meio de um sistema de pontuação e recompensas, transformando pequenas ações do cotidiano em impactos positivos para o meio ambiente. Os usuários podem registrar atividades sustentáveis, participar de desafios e acumular pontos que podem ser convertidos em benefícios dentro da plataforma.
 
 ---
 
-# 🖥️ Como Funciona
+## 🖥️ Como Funciona
 
 Os usuários acumulam pontos ao realizar atividades sustentáveis, como:
 
@@ -20,18 +21,26 @@ Os usuários acumulam pontos ao realizar atividades sustentáveis, como:
 
 Cada atividade gera pontuações que podem ser convertidas em benefícios reais dentro da plataforma.
 
+Além do registro das atividades, os usuários podem acompanhar sua evolução, participar de desafios e comparar seu desempenho por meio do ranking.
+
 ---
 
-# 🏆 Sistema de Recompensas
+## 🏆 Sistema de Recompensas
 
-Através dos pontos acumulados, os usuários podem obter vantagens como:
+Os pontos acumulados dentro do SoulMove podem ser utilizados para obter benefícios relacionados à sustentabilidade.
 
-- Descontos na conta de luz
-- Benefícios sustentáveis
+Entre as possibilidades estão:
 
-# 🎯 Objetivo do Projeto
+- Descontos na conta de energia
+- Benefícios oferecidos por parceiros
+- Recompensas sustentáveis
+- Participação em desafios e campanhas especiais
 
-O principal objetivo do SoulMove é incentivar hábitos saudáveis e sustentáveis através da tecnologia e da gamificação.
+---
+
+## 🎯 Objetivo do Projeto
+
+O principal objetivo do **SoulMove** é incentivar hábitos saudáveis e sustentáveis por meio da tecnologia e da gamificação.
 
 A plataforma busca transformar pequenas ações do cotidiano em impactos positivos reais, promovendo:
 
@@ -39,36 +48,221 @@ A plataforma busca transformar pequenas ações do cotidiano em impactos positiv
 - Mobilidade sustentável
 - Engajamento social
 - Incentivo à participação contínua
+- Adoção de hábitos mais sustentáveis
 
 ---
 
-# ⚙️ Funcionalidades
+## ⚙️ Funcionalidades
 
 - Registro de atividades sustentáveis
+- Envio de evidências das atividades
 - Sistema de pontuação
 - Ranking global
+- Participação em desafios e missões
 - Validação de ações
+- Sistema de recompensas
+- Gamificação dos usuários
 - Interface responsiva
-- Gamificação de usuários
 
-# 🌍 Proposta da SoulMove
+---
+
+## 🌍 Proposta do SoulMove
 
 A ideia do SoulMove surgiu com o objetivo de expandir a proposta da plataforma SoulUp, criando uma área dedicada especificamente para ações sustentáveis realizadas pelos usuários.
 
 A solução permite que os usuários:
 
-V- Registrem atividades sustentáveis
-- Compartilhem evidências através de imagens
-- Participem de desafios
-- Acumulem pontos e recompensas
+- Registrem atividades sustentáveis
+- Compartilhem evidências por meio de imagens
+- Participem de desafios e missões
+- Acumulem pontos
+- Conquistem recompensas
+- Acompanhem sua posição no ranking
 
 O projeto utiliza elementos de gamificação para aumentar o engajamento e incentivar atitudes sustentáveis no dia a dia.
 
 ---
 
-# 🛠️ Tecnologias Utilizadas
+## 📁 Estrutura do Projeto
+
+A aplicação está organizada em uma estrutura atual com a pasta principal do app em `soul-move-app`, contendo os arquivos e pastas do frontend, além dos assets visuais e da configuração do Vite.
+
+```bash
+challenge-frontend-soulMove/
+├── README.md
+├── soul-move-app/
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── eslint.config.js
+│   ├── tsconfig.json
+│   ├── tsconfig.app.json
+│   ├── tsconfig.node.json
+│   ├── src/
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   ├── router.tsx
+│   │   ├── assets/
+│   │   │   ├── banners/
+│   │   │   ├── favicon/
+│   │   │   ├── icones/
+│   │   │   ├── integrantes/
+│   │   │   ├── logo/
+│   │   │   └── markdown-img/
+│   │   ├── components/
+│   │   ├── routes/
+│   │   ├── types/
+│   │   └── utils/
+│   └── public/ (quando necessário)
+└── ...
+```
+
+A estrutura atual reflete o estado real do projeto, com páginas, componentes e assets organizados dentro da aplicação frontend.
 
 ---
-# 🤖 Uso de Inteligência Artificial
 
-A IA foi utilizada como apoio durante o desenvolvimento do projeto para:
+## 🛠️ Tecnologias Utilizadas
+
+O projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
+
+- React 19 — construção da interface e dos componentes
+- TypeScript — tipagem e maior segurança no desenvolvimento
+- Vite — ferramenta de build e desenvolvimento
+- React Router — navegação entre páginas
+- Tailwind CSS — estilização da interface
+- React Hook Form — gerenciamento de formulários
+- React Icons — ícones reutilizáveis
+- ESLint — análise estática do código
+- Git e GitHub — versionamento e colaboração
+
+---
+
+## ▶️ Como Executar Localmente
+
+Para rodar o projeto em sua máquina, siga os passos abaixo:
+
+1. Clone o repositório
+
+```bash
+git clone https://github.com/AnaMendes-25/challenge-frontend-soulMove.git
+```
+
+2. Acesse a pasta do projeto
+
+```bash
+cd challenge-frontend-soulMove/soul-move-app
+```
+
+3. Instale as dependências
+
+```bash
+npm install
+```
+
+4. Execute o projeto
+
+```bash
+npm run dev
+```
+
+5. Acesse a aplicação
+
+```bash
+http://localhost:5173/
+```
+
+---
+
+## 🖼️ Imagens e Ícones do Projeto
+
+Os recursos visuais do SoulMove estão armazenados na pasta `src/assets`, organizados por categoria:
+
+- `banners/` — imagens destacadas da home e de campanhas
+- `favicon/` — ícone do site e manifest
+- `icones/` — ícones de interface
+- `integrantes/` — fotos dos integrantes do grupo
+- `logo/` — logo do projeto
+- `markdown-img/` — imagens utilizadas em conteúdos e documentação
+
+Esses ativos são utilizados diretamente pelos componentes e rotas da aplicação para manter a identidade visual do projeto.
+
+---
+
+## 🔗 Repositório
+
+O código-fonte do projeto está disponível no GitHub.
+
+- Repositório oficial: [github.com/AnaMendes-25/challenge-frontend-soulMove](https://github.com/AnaMendes-25/challenge-frontend-soulMove)
+
+---
+
+## 📚 Projeto Acadêmico
+
+Projeto desenvolvido como parte das atividades acadêmicas do curso de Tecnologia em Análise e Desenvolvimento de Sistemas.
+
+O SoulMove tem como objetivo aplicar na prática conhecimentos relacionados a:
+
+- Desenvolvimento Front-end
+- React
+- Componentização
+- Responsividade
+- Git e GitHub
+- Design de interfaces
+- Experiência do usuário
+- Desenvolvimento de produtos digitais
+
+---
+
+## 👥 Integrantes do Grupo
+
+A seguir, os membros que participaram do desenvolvimento do SoulMove:
+
+### Alexandre Teixeira
+
+<img src="./soul-move-app/src/assets/integrantes/alexandre-teixeira-profissional.png" width="120px" alt="Foto do integrante Alexandre Teixeira">
+
+- **Nome:** Alexandre Teixeira
+- **RM:** RM572658
+- **Turma:** 1TDSPO
+- **GitHub:** [github.com/AlexandreTeixeiraS](https://github.com/AlexandreTeixeiraS)
+- **LinkedIn:** [linkedin.com/in/alexandre-teixeira-dos-santos-35a579403](https://www.linkedin.com/in/alexandre-teixeira-dos-santos-35a579403/)
+
+### Ana Mendes
+
+<img src="./soul-move-app/src/assets/integrantes/ana-mendes-profissional.png" width="120px" alt="Foto da integrante Ana Mendes">
+
+- **Nome:** Ana Mendes
+- **RM:** RM571692
+- **Turma:** 1TDSPO
+- **GitHub:** [github.com/AnaMendes-25](https://github.com/AnaMendes-25)
+- **LinkedIn:** [linkedin.com/in/ana-mendes-65b95839a](https://www.linkedin.com/in/ana-mendes-65b95839a)
+
+### Enzo Negrão Freitas
+
+<img src="./soul-move-app/src/assets/integrantes/enzo-negrao-profissional.png" width="120px" alt="Foto do integrante Enzo Negrão Freitas">
+
+- **Nome:** Enzo Negrão Freitas
+- **RM:** RM568857
+- **Turma:** 1TDSPO
+- **GitHub:** [github.com/Enzo-N-Freitas](https://github.com/Enzo-N-Freitas)
+- **LinkedIn:** [linkedin.com/in/enzo-negrão-freitas-1b24a3348](https://www.linkedin.com/in/enzo-negrão-freitas-1b24a3348)
+
+### Gustavo Borba
+
+<img src="./soul-move-app/src/assets/integrantes/gustavo-borba-profissional.png" width="120px" alt="Foto do integrante Gustavo Borba">
+
+- **Nome:** Gustavo Borba
+- **RM:** RM559202
+- **Turma:** 1TDSPO
+- **GitHub:** [github.com/BorbaGustavo](https://github.com/BorbaGustavo)
+- **LinkedIn:** [linkedin.com/in/borbagustavo](https://www.linkedin.com/in/borbagustavo/)
+
+### Oto Mendes
+
+<img src="./soul-move-app/src/assets/integrantes/oto-mendes-profissional.png" width="120px" alt="Foto do integrante Oto Mendes">
+
+- **Nome:** Oto Mendes
+- **RM:** RM571625
+- **Turma:** 1TDSPO
+- **GitHub:** [github.com/otomendes](https://github.com/otomendes)
+- **LinkedIn:** [linkedin.com/in/otomendes](https://www.linkedin.com/in/otomendes/)
