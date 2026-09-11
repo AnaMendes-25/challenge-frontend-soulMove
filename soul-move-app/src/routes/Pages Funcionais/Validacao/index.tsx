@@ -94,14 +94,34 @@ export default function Validacao() {
                     </div>
 
                     <span
-                      className={`text-[32px] leading-none text-black transition-transform min-[601px]:text-[40px] ${
-                        acaoAberta === acao.id
-                          ? "rotate-90"
-                          : ""
-                      }`}
+                      className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[10px] bg-[#2454de] text-white transition-transform min-[601px]:h-[44px] min-[601px]:w-[44px]"
                       aria-hidden="true"
                     >
-                      ›
+                      {acaoAberta === acao.id ? (
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-[18px] w-[18px] min-[601px]:h-[22px] min-[601px]:w-[22px]"
+                        >
+                          <path d="M6 15l6-6 6 6" />
+                        </svg>
+                      ) : (
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-[18px] w-[18px] min-[601px]:h-[22px] min-[601px]:w-[22px]"
+                        >
+                          <path d="M6 9l6 6 6-6" />
+                        </svg>
+                      )}
                     </span>
                   </button>
 

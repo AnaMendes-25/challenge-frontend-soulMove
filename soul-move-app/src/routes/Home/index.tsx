@@ -241,7 +241,7 @@ export default function Home() {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M5 12h14M12 5l7 7-7 7"
+                    d="M7 10l5 5 5-5"
                   />
                 </svg>
               </button>
