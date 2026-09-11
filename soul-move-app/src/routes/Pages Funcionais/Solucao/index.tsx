@@ -219,8 +219,8 @@ export default function Solucao() {
             <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
               <div
                 className="flex flex-col gap-3 sm:flex-row"
-                role="tablist"
-                aria-label="Demonstração da solução"
+                role="group"
+                aria-label="Ações da demonstração da solução"
               >
                 <Link
                   to="/validacao"

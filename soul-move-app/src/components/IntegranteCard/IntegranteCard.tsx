@@ -24,8 +24,9 @@ export const IntegranteCard: React.FC<IntegranteCardProps> = ({
             {nome}
           </h3>
           <p className="text-white text-xs font-normal font-['Inter'] leading-8 opacity-90">
-            {rm}
+            {rm} - 1TDSPO 
           </p>
+          
         </div>
 
         <hr className="w-full border-t border-indigo-50/20 my-0" />

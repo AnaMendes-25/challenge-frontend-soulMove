@@ -56,7 +56,9 @@ export default function Header() {
         <button
           onClick={toggleMenu}
           className="lg:hidden p-2.5 rounded-2xl bg-blue-50 text-blue-900 focus:outline-none hover:bg-blue-100 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm"
-          aria-label="Abrir menu de navegação"
+          aria-expanded={isOpen}
+          aria-controls="navegacao-principal"
+          aria-label={isOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
         >
           <svg
             className="size-6"
@@ -85,6 +87,7 @@ export default function Header() {
 
       {/* Navegação */}
       <nav
+        id="navegacao-principal"
         className={`
         w-full lg:w-auto 
         ${isOpen ? "flex" : "hidden"} lg:flex 

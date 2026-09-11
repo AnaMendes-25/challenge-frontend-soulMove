@@ -53,7 +53,7 @@ export const missoes: Missao[] = [
     diasRestantes: 2,
   },
   {
-    id: 2,
+    id: 3,
     titulo: "🗺 Semana da reciclagem",
     pontos: 150,
     progressoAtual: 3,
@@ -61,7 +61,7 @@ export const missoes: Missao[] = [
     diasRestantes: 2,
   },
   {
-    id: 2,
+    id: 4,
     titulo: "💡 Semana da economia de energia",
     pontos: 150,
     progressoAtual: 1,

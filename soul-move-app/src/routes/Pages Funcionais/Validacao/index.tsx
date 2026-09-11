@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
 import AsideBar from "../../../components/AsideBar/AsideBar";
@@ -37,6 +37,16 @@ export default function Validacao() {
   useEffect(() => {
     document.title = "SoulMove | Registrar ações";
   }, []);
+
+  useEffect(() => {
+    startTransition(() => {
+      setAcaoAberta(
+        acaoId && acoesSustentaveis.some((acao) => acao.id === acaoId)
+          ? acaoId
+          : "",
+      );
+    });
+  }, [acaoId]);
 
   // Abre o card selecionado e fecha os outros.
   function abrirOuFecharCard(id: string) {
@@ -173,9 +183,17 @@ export default function Validacao() {
                         {pessoa.posicao}º
                       </span>
 
-                      <span className="grid h-[32px] w-[32px] place-items-center rounded-full bg-[#eaf2ff] text-[10px] font-bold text-[#2454de] min-[601px]:h-[36px] min-[601px]:w-[36px]">
-                        {pessoa.iniciais}
-                      </span>
+                      {pessoa.foto ? (
+                        <img
+                          src={pessoa.foto}
+                          alt={pessoa.nome}
+                          className="h-[32px] w-[32px] rounded-full object-cover min-[601px]:h-[36px] min-[601px]:w-[36px]"
+                        />
+                      ) : (
+                        <span className="grid h-[32px] w-[32px] place-items-center rounded-full bg-[#eaf2ff] text-[10px] font-bold text-[#2454de] min-[601px]:h-[36px] min-[601px]:w-[36px]">
+                          {pessoa.iniciais}
+                        </span>
+                      )}
 
                       <div>
                         <strong className="block text-[14px] font-bold">

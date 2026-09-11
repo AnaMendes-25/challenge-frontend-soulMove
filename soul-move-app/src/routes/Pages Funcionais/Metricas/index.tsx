@@ -11,6 +11,10 @@ function NumeroAnimado({ valorFinal }: NumeroAnimadoProps) {
   const [numero, setNumero] = useState(0);
 
   useEffect(() => {
+    if (valorFinal <= 0) {
+      return;
+    }
+
     let numeroAtual = 0;
     const incremento = valorFinal / 60;
 
@@ -29,7 +33,7 @@ function NumeroAnimado({ valorFinal }: NumeroAnimadoProps) {
     return () => window.clearInterval(intervalo);
   }, [valorFinal]);
 
-  return <>{numero.toLocaleString("pt-BR")}</>;
+  return <>{Math.max(0, numero).toLocaleString("pt-BR")}</>;
 }
 
 export default function Metricas() {

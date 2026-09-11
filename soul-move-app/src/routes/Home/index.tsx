@@ -193,9 +193,9 @@ export default function Home() {
       {/* Estrutura central da página com gap uniforme de 64px no mobile e 96px em telas médias/grandes */}
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 flex flex-col gap-16 md:gap-24">
         {/* SEÇÃO 1: Hero Banner */}
-        <section className="w-full rounded-3xl bg-blue-950 p-5 sm:p-8 md:flex-row md:p-12 flex flex-col items-center justify-between gap-8 md:gap-12">
+        <section className="flex w-full flex-col items-center justify-between gap-8 rounded-3xl bg-blue-950 p-5 sm:p-8 md:grid md:grid-cols-2 md:gap-8 md:p-10 lg:gap-12 lg:p-12">
           {/* Bloco de Texto */}
-          <div className="w-full md:w-1/2 flex flex-col justify-start items-start gap-8 md:gap-12">
+          <div className="flex w-full min-w-0 flex-col items-start justify-start gap-8 md:gap-10">
             <div className="w-full flex flex-col gap-4">
               <span className="text-blue-300 text-base font-normal tracking-wide uppercase">
                 [ SOULMOVE ]
@@ -251,7 +251,7 @@ export default function Home() {
 
           {/* Imagem Principal */}
           <img
-            className="aspect-square w-full max-w-140 rounded-2xl object-cover shadow-lg md:w-1/2"
+            className="aspect-square w-full min-w-0 max-w-140 rounded-2xl object-cover shadow-lg"
             src={imgHeaderHomem}
             alt="Demonstração do aplicativo SoulMove no celular"
           />
