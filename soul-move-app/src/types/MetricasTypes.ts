@@ -21,6 +21,7 @@ export interface PessoaRanking {
   nome: string;
   cidade: string;
   pontos: number;
+  foto?: string;
   usuarioAtual?: boolean;
 }
 
