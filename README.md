@@ -188,11 +188,12 @@ Esses ativos são utilizados diretamente pelos componentes e rotas da aplicaçã
 
 ---
 
-## 🔗 Repositório
+## 🔗 Nosso projeto
 
 O código-fonte do projeto está disponível no GitHub.
 
 - Repositório oficial: [github.com/AnaMendes-25/challenge-frontend-soulMove](https://github.com/AnaMendes-25/challenge-frontend-soulMove)
+- Link apresentando solução: [https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS](https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS)
 
 ---
 

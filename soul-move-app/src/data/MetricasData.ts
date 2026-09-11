@@ -114,7 +114,7 @@ export const ranking: PessoaRanking[] = [
   {
     posicao: 6,
     iniciais: "FP",
-    nome: "Filipe Passos",
+    nome: "Davi Passos",
     cidade: "São Paulo, SP",
     pontos: 500,
     foto: fotoFelipe,
