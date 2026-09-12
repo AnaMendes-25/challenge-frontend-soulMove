@@ -105,7 +105,7 @@ export default function Sobre() {
               return (
                 <article
                   key={destaque.id}
-                  className="flex items-start gap-4 rounded-2xl bg-white p-5 shadow-[0_4px_10px_rgba(0,0,0,0.08)]"
+                  className="flex items-start gap-4 rounded-2xl bg-white p-5 shadow-[0_4px_10px_rgba(0,0,0,0.08)] transition-transform hover:-translate-y-1"
                 >
                   <div
                     className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-2xl bg-[#172554] text-[22px] text-white"
@@ -161,7 +161,7 @@ export default function Sobre() {
               return (
                 <article
                   key={etapa.id}
-                  className="min-w-0 rounded-2xl bg-white p-6 shadow-[0_4px_10px_rgba(0,0,0,0.08)] lg:p-8"
+                  className="min-w-0 rounded-2xl bg-white p-6 shadow-[0_4px_10px_rgba(0,0,0,0.08)] lg:p-8 transition-transform hover:-translate-y-1"
                 >
                   <div
                     className="mb-5 flex h-[60px] w-[60px] items-center justify-center rounded-2xl bg-[#172554] text-2xl text-white"
