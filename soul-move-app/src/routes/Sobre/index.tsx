@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FaLeaf } from "react-icons/fa6";
+import { FaLeaf } from "react-icons/fa";
 
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
