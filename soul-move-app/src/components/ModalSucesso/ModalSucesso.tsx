@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 interface ModalSucessoProps {
   aberto: boolean;
   titulo: string;
@@ -11,20 +13,47 @@ export default function ModalSucesso({
   texto,
   fecharModal,
 }: ModalSucessoProps) {
-  if (!aberto) {
+  const [visivel, setVisivel] = useState(aberto);
+  const [animando, setAnimando] = useState(false);
+
+  useEffect(() => {
+    if (aberto) {
+      setVisivel(true);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setAnimando(true);
+        });
+      });
+    } else {
+      setAnimando(false);
+
+      const timer = setTimeout(() => {
+        setVisivel(false);
+      }, 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, [aberto]);
+
+  if (!visivel) {
     return null;
   }
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-5"
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-5 transition-opacity duration-200 ${animando ? "opacity-100" : "opacity-0"
+        }`}
       role="dialog"
       aria-modal="true"
       aria-labelledby="titulo-modal"
       onClick={fecharModal}
     >
       <div
-        className="w-full max-w-[380px] rounded-xl bg-white px-6 py-8 text-center"
+        className={`w-full max-w-[380px] rounded-xl bg-white px-6 py-8 text-center transition-all duration-200 ${animando
+          ? "translate-y-0 scale-100 opacity-100"
+          : "translate-y-2 scale-95 opacity-0"
+          }`}
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mx-auto mb-4 grid h-[60px] w-[60px] place-items-center rounded-full bg-[#e9f7ef] text-[28px] font-bold text-[#13b95e]">
