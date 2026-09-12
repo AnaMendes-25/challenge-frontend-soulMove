@@ -227,7 +227,7 @@ export default function Home() {
                 Comece agora
               </ButtonBase>
 
-              <button
+              <button onClick={() => navigate("/solucao")}
                 aria-label="Ver mais informações"
                 className="w-12 h-12 flex justify-center items-center bg-neutral-100 rounded-full hover:bg-neutral-200 transition-colors cursor-pointer"
               >
