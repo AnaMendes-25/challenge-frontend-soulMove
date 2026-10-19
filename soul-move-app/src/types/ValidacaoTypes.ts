@@ -1,5 +1,7 @@
+
+export type AcaoIdType = "reciclagem" | "energia" | "transporte" | "bike" | "pe";
 export interface AcaoSustentavel {
-  id: string;
+  id: AcaoIdType;
   icone: string;
   titulo: string;
   pontos: number;

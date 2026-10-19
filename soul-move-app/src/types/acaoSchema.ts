@@ -14,10 +14,10 @@ export const acaoSchema = z.object({
     .min(10, "O comentário deve ter pelo menos 10 caracteres.")
     .max(500, "O comentário deve ter no máximo 500 caracteres."),
   arquivo: z
-    .custom<File>((val) => val instanceof File, {
+    .custom<File | null>((val) => val === null || val instanceof File, {
       message: "Envie uma imagem como comprovante.",
     })
-    .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), {
+    .refine((file) => file === null || ACCEPTED_IMAGE_TYPES.includes(file.type), {
       message: "Por favor, envie uma imagem PNG ou JPG.",
     }),
 });
