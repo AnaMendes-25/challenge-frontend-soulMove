@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 import { FiX } from "react-icons/fi";
 
 export interface RecompensaResgate {
@@ -23,20 +23,69 @@ export default function ModalResgate({
 }: ModalResgateProps) {
   const tituloId = useId();
   const descricaoId = useId();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const cancelarRef = useRef<HTMLButtonElement>(null);
+  const temRecompensa = recompensa !== null;
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!aberto || !temRecompensa || !dialog) {
+      return;
+    }
+
+    const focoAnterior = document.activeElement;
+    const overflowAnterior = document.body.style.overflow;
+    dialog.showModal();
+    document.body.style.overflow = "hidden";
+    cancelarRef.current?.focus();
+
+    return () => {
+      dialog.close();
+      document.body.style.overflow = overflowAnterior;
+      if (focoAnterior instanceof HTMLElement && focoAnterior.isConnected) {
+        focoAnterior.focus();
+      }
+    };
+  }, [aberto, temRecompensa]);
 
   if (!aberto || !recompensa) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/45 px-4 py-6">
-      <section
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={tituloId}
-        aria-describedby={descricaoId}
-        className="relative max-h-[calc(100dvh-3rem)] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-6 text-slate-900 shadow-2xl sm:p-8"
-      >
+    <dialog
+      ref={dialogRef}
+      aria-labelledby={tituloId}
+      aria-describedby={descricaoId}
+      onCancel={(evento) => {
+        evento.preventDefault();
+        aoCancelar();
+      }}
+      onKeyDown={(evento) => {
+        if (evento.key !== "Tab") return;
+
+        const botoes = evento.currentTarget.querySelectorAll<HTMLButtonElement>(
+          "button:not(:disabled)",
+        );
+        const primeiro = botoes[0];
+        const ultimo = botoes[botoes.length - 1];
+
+        if (evento.shiftKey && document.activeElement === primeiro) {
+          evento.preventDefault();
+          ultimo?.focus();
+        } else if (!evento.shiftKey && document.activeElement === ultimo) {
+          evento.preventDefault();
+          primeiro?.focus();
+        }
+      }}
+      onClick={(evento) => {
+        if (evento.target === evento.currentTarget) {
+          aoCancelar();
+        }
+      }}
+      className="fixed inset-0 m-auto max-h-[calc(100dvh-3rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-2xl border-0 bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-slate-950/45"
+    >
+      <div className="p-6 sm:p-8">
         <header className="flex items-start justify-between gap-4">
           <div>
             <h2 id={tituloId} className="text-xl font-bold">Confirmar resgate</h2>
@@ -74,6 +123,7 @@ export default function ModalResgate({
         <footer className="mt-6 grid gap-3 sm:grid-cols-2">
           <button
             type="button"
+            ref={cancelarRef}
             onClick={aoCancelar}
             className="min-h-11 cursor-pointer rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
@@ -88,7 +138,7 @@ export default function ModalResgate({
             Confirmar resgate
           </button>
         </footer>
-      </section>
-    </div>
+      </div>
+    </dialog>
   );
 }
