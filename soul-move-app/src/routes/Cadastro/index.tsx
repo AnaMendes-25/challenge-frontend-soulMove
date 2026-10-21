@@ -8,6 +8,8 @@ import imagemMobilidade from "../../assets/banners/img-header-homem.png";
 type DadosCadastro = {
   nome: string;
   email: string;
+  senha: string;
+  confirmarSenha: string;
 };
 
 const estiloCampo =
@@ -18,10 +20,11 @@ export default function Cadastro() {
   const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
   const {
     register,
+    getValues,
     formState: { errors },
   } = useForm<DadosCadastro>({
     mode: "onTouched",
-    defaultValues: { nome: "", email: "" },
+    defaultValues: { nome: "", email: "", senha: "", confirmarSenha: "" },
   });
 
   useEffect(() => {
@@ -51,7 +54,7 @@ export default function Cadastro() {
           <h1 id="titulo-cadastro" className="text-3xl font-bold tracking-tight">Crie sua conta</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">É grátis. Comece a fazer a diferença hoje.</p>
 
-          {/* Senhas, aceite dos termos e envio serão implementados nas próximas etapas. */}
+          {/* Aceite dos termos e envio serão implementados nas próximas etapas. */}
           <form noValidate className="mt-7 space-y-5">
             <div>
               <label htmlFor="cadastro-nome" className="text-sm font-semibold">Nome completo</label>
@@ -106,7 +109,24 @@ export default function Cadastro() {
             <div>
               <label htmlFor="cadastro-senha" className="text-sm font-semibold">Senha</label>
               <div className="relative">
-                <input id="cadastro-senha" type={mostrarSenha ? "text" : "password"} autoComplete="new-password" placeholder="Crie uma senha" className={`${estiloCampo} pr-12`} aria-describedby="ajuda-cadastro-senha" />
+                <input
+                  id="cadastro-senha"
+                  type={mostrarSenha ? "text" : "password"}
+                  autoComplete="new-password"
+                  placeholder="Crie uma senha"
+                  className={`${estiloCampo} pr-12`}
+                  aria-invalid={Boolean(errors.senha)}
+                  aria-describedby={`ajuda-cadastro-senha${errors.senha ? " erro-cadastro-senha" : ""}`}
+                  {...register("senha", {
+                    required: "Crie uma senha.",
+                    // Regra indicada no Figma; confirmar com o contrato da API na integração.
+                    minLength: { value: 8, message: "Use pelo menos 8 caracteres." },
+                    validate: (valor) =>
+                      (/[a-zA-Z]/.test(valor) && /\d/.test(valor)) ||
+                      "Inclua letras e números na senha.",
+                    deps: ["confirmarSenha"],
+                  })}
+                />
                 <button
                   type="button"
                   onClick={() => setMostrarSenha((visivel) => !visivel)}
@@ -119,12 +139,30 @@ export default function Cadastro() {
                 </button>
               </div>
               <p id="ajuda-cadastro-senha" className="mt-2 text-xs leading-relaxed text-slate-500">Use ao menos 8 caracteres, com letras e números.</p>
+              {errors.senha && (
+                <p id="erro-cadastro-senha" className="mt-2 text-sm text-red-700">
+                  {errors.senha.message}
+                </p>
+              )}
             </div>
 
             <div>
               <label htmlFor="cadastro-confirmacao" className="text-sm font-semibold">Confirmar senha</label>
               <div className="relative">
-                <input id="cadastro-confirmacao" type={mostrarConfirmacao ? "text" : "password"} autoComplete="new-password" placeholder="Digite sua senha novamente" className={`${estiloCampo} pr-12`} />
+                <input
+                  id="cadastro-confirmacao"
+                  type={mostrarConfirmacao ? "text" : "password"}
+                  autoComplete="new-password"
+                  placeholder="Digite sua senha novamente"
+                  className={`${estiloCampo} pr-12`}
+                  aria-invalid={Boolean(errors.confirmarSenha)}
+                  aria-describedby={errors.confirmarSenha ? "erro-cadastro-confirmacao" : undefined}
+                  {...register("confirmarSenha", {
+                    required: "Confirme sua senha.",
+                    validate: (valor) =>
+                      valor === getValues("senha") || "As senhas precisam ser iguais.",
+                  })}
+                />
                 <button
                   type="button"
                   onClick={() => setMostrarConfirmacao((visivel) => !visivel)}
@@ -136,6 +174,11 @@ export default function Cadastro() {
                   {mostrarConfirmacao ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
                 </button>
               </div>
+              {errors.confirmarSenha && (
+                <p id="erro-cadastro-confirmacao" className="mt-2 text-sm text-red-700">
+                  {errors.confirmarSenha.message}
+                </p>
+              )}
             </div>
 
             <div className="flex items-start gap-3">
