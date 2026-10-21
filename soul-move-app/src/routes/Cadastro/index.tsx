@@ -10,6 +10,7 @@ type DadosCadastro = {
   email: string;
   senha: string;
   confirmarSenha: string;
+  termos: boolean;
 };
 
 const estiloCampo =
@@ -24,7 +25,7 @@ export default function Cadastro() {
     formState: { errors },
   } = useForm<DadosCadastro>({
     mode: "onTouched",
-    defaultValues: { nome: "", email: "", senha: "", confirmarSenha: "" },
+    defaultValues: { nome: "", email: "", senha: "", confirmarSenha: "", termos: false },
   });
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function Cadastro() {
           <h1 id="titulo-cadastro" className="text-3xl font-bold tracking-tight">Crie sua conta</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">É grátis. Comece a fazer a diferença hoje.</p>
 
-          {/* Aceite dos termos e envio serão implementados nas próximas etapas. */}
+          {/* O envio depende do cliente HTTP e do contrato da API. Os links dos termos ainda precisam ser definidos. */}
           <form noValidate className="mt-7 space-y-5">
             <div>
               <label htmlFor="cadastro-nome" className="text-sm font-semibold">Nome completo</label>
@@ -181,11 +182,27 @@ export default function Cadastro() {
               )}
             </div>
 
-            <div className="flex items-start gap-3">
-              <input id="cadastro-termos" type="checkbox" className="mt-1 h-4 w-4 shrink-0 accent-blue-700" />
-              <label htmlFor="cadastro-termos" className="text-sm leading-relaxed text-slate-600">
-                Li e aceito os <span className="text-blue-700">Termos de uso</span> e a <span className="text-blue-700">Política de privacidade</span>.
-              </label>
+            <div>
+              <div className="flex items-start gap-3">
+                <input
+                  id="cadastro-termos"
+                  type="checkbox"
+                  className="mt-1 h-4 w-4 shrink-0 accent-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  aria-invalid={Boolean(errors.termos)}
+                  aria-describedby={errors.termos ? "erro-cadastro-termos" : undefined}
+                  {...register("termos", {
+                    required: "É necessário aceitar os termos para continuar.",
+                  })}
+                />
+                <label htmlFor="cadastro-termos" className="text-sm leading-relaxed text-slate-600">
+                  Li e aceito os <span className="text-blue-700">Termos de uso</span> e a <span className="text-blue-700">Política de privacidade</span>.
+                </label>
+              </div>
+              {errors.termos && (
+                <p id="erro-cadastro-termos" className="mt-2 text-sm text-red-700">
+                  {errors.termos.message}
+                </p>
+              )}
             </div>
 
             <button type="button" disabled className="min-h-12 w-full cursor-not-allowed rounded-lg bg-[#2545ed] px-5 py-3 text-sm font-semibold text-white">
