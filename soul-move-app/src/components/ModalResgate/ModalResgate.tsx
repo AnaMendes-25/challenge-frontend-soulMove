@@ -23,6 +23,7 @@ export default function ModalResgate({
 }: ModalResgateProps) {
   const tituloId = useId();
   const descricaoId = useId();
+  const saldoId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const cancelarRef = useRef<HTMLButtonElement>(null);
   const temRecompensa = recompensa !== null;
@@ -52,11 +53,14 @@ export default function ModalResgate({
     return null;
   }
 
+  const pontosFaltantes = Math.max(0, recompensa.custoPontos - saldoPontos);
+  const saldoAposResgate = saldoPontos - recompensa.custoPontos;
+
   return (
     <dialog
       ref={dialogRef}
       aria-labelledby={tituloId}
-      aria-describedby={descricaoId}
+      aria-describedby={`${descricaoId} ${saldoId}`}
       onCancel={(evento) => {
         evento.preventDefault();
         aoCancelar();
@@ -119,6 +123,20 @@ export default function ModalResgate({
             </div>
           </dl>
         </div>
+
+        <p
+          id={saldoId}
+          role="status"
+          className={`mt-4 rounded-lg p-3 text-sm leading-relaxed ${
+            pontosFaltantes > 0
+              ? "bg-amber-50 text-amber-900"
+              : "bg-blue-50 text-blue-900"
+          }`}
+        >
+          {pontosFaltantes > 0
+            ? `Saldo insuficiente. Faltam ${pontosFaltantes.toLocaleString("pt-BR")} ${pontosFaltantes === 1 ? "ponto" : "pontos"} para resgatar esta recompensa.`
+            : `Após confirmar o resgate, seu saldo será de ${saldoAposResgate.toLocaleString("pt-BR")} ${saldoAposResgate === 1 ? "ponto" : "pontos"}.`}
+        </p>
 
         <footer className="mt-6 grid gap-3 sm:grid-cols-2">
           <button
