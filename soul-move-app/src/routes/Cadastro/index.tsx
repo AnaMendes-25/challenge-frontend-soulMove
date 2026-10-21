@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { FiEye } from "react-icons/fi";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import logoSoulMove from "../../assets/logo/LogoSoulMoveIndigo.png";
 import imagemMobilidade from "../../assets/banners/img-header-homem.png";
 
@@ -8,6 +8,9 @@ const estiloCampo =
   "mt-2 min-h-12 w-full rounded-lg border border-slate-200 bg-white px-3 py-3 text-sm text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100";
 
 export default function Cadastro() {
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
+
   useEffect(() => {
     document.title = "SoulMove | Cadastro";
   }, []);
@@ -35,7 +38,7 @@ export default function Cadastro() {
           <h1 id="titulo-cadastro" className="text-3xl font-bold tracking-tight">Crie sua conta</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">É grátis. Comece a fazer a diferença hoje.</p>
 
-          {/* Etapa 1: estrutura e aparência. Validação e envio entram nas próximas etapas. */}
+          {/* Validação e envio entram nas próximas etapas. */}
           <form noValidate className="mt-7 space-y-5">
             <div>
               <label htmlFor="cadastro-nome" className="text-sm font-semibold">Nome completo</label>
@@ -50,10 +53,17 @@ export default function Cadastro() {
             <div>
               <label htmlFor="cadastro-senha" className="text-sm font-semibold">Senha</label>
               <div className="relative">
-                <input id="cadastro-senha" type="password" autoComplete="new-password" placeholder="Crie uma senha" className={`${estiloCampo} pr-12`} aria-describedby="ajuda-cadastro-senha" />
-                <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-500">
-                  <FiEye />
-                </span>
+                <input id="cadastro-senha" type={mostrarSenha ? "text" : "password"} autoComplete="new-password" placeholder="Crie uma senha" className={`${estiloCampo} pr-12`} aria-describedby="ajuda-cadastro-senha" />
+                <button
+                  type="button"
+                  onClick={() => setMostrarSenha((visivel) => !visivel)}
+                  aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                  aria-pressed={mostrarSenha}
+                  aria-controls="cadastro-senha"
+                  className="absolute inset-y-0 right-0 flex w-12 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+                >
+                  {mostrarSenha ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+                </button>
               </div>
               <p id="ajuda-cadastro-senha" className="mt-2 text-xs leading-relaxed text-slate-500">Use ao menos 8 caracteres, com letras e números.</p>
             </div>
@@ -61,10 +71,17 @@ export default function Cadastro() {
             <div>
               <label htmlFor="cadastro-confirmacao" className="text-sm font-semibold">Confirmar senha</label>
               <div className="relative">
-                <input id="cadastro-confirmacao" type="password" autoComplete="new-password" placeholder="Digite sua senha novamente" className={`${estiloCampo} pr-12`} />
-                <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-500">
-                  <FiEye />
-                </span>
+                <input id="cadastro-confirmacao" type={mostrarConfirmacao ? "text" : "password"} autoComplete="new-password" placeholder="Digite sua senha novamente" className={`${estiloCampo} pr-12`} />
+                <button
+                  type="button"
+                  onClick={() => setMostrarConfirmacao((visivel) => !visivel)}
+                  aria-label={mostrarConfirmacao ? "Ocultar confirmação de senha" : "Mostrar confirmação de senha"}
+                  aria-pressed={mostrarConfirmacao}
+                  aria-controls="cadastro-confirmacao"
+                  className="absolute inset-y-0 right-0 flex w-12 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+                >
+                  {mostrarConfirmacao ? <FiEyeOff aria-hidden="true" /> : <FiEye aria-hidden="true" />}
+                </button>
               </div>
             </div>
 
