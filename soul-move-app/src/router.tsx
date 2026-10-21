@@ -26,6 +26,15 @@ export const router = createBrowserRouter([
       { path: "/metricas", element: <Metricas /> },
       { path: "/validacao", element: <Validacao /> },
       { path: "/validacao/:acaoId", element: <Validacao /> },
+      // Prévia visual disponível apenas no servidor de desenvolvimento.
+      ...(import.meta.env.DEV
+        ? [{
+            path: "/preview/resgate",
+            lazy: async () => ({
+              Component: (await import("./preview/ResgatePreview")).default,
+            }),
+          }]
+        : []),
     ],
   },
 ]);
