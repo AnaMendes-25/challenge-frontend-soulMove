@@ -18,7 +18,7 @@ export default function Solucao() {
 
       <main className="pb-24 md:ml-24 md:pb-0">
         {/* Apresentação principal da solução */}
-        <section className="mx-auto grid min-h-screen max-w-7xl items-center gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1.2fr_0.8fr] lg:px-12">
+        <section className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1.2fr_0.8fr] lg:px-12">
           <div>
             <span className="inline-flex rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">
               Solução SoulMove
@@ -39,14 +39,14 @@ export default function Solucao() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#problema"
-                className="rounded-2xl bg-blue-600 px-6 py-3 text-center font-semibold text-white transition hover:bg-blue-700"
+                className="rounded-lg bg-[#2545ed] px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
               >
                 Entender o problema
               </a>
 
               <a
                 href="#demonstracao"
-                className="rounded-2xl border border-blue-600 px-6 py-3 text-center font-semibold text-blue-600 transition hover:bg-blue-50"
+                className="rounded-lg border border-slate-200 bg-white px-6 py-3 text-center font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
               >
                 Ver demonstração
               </a>
@@ -55,10 +55,10 @@ export default function Solucao() {
 
           {/* Painel visual */}
           <aside
-            className="rounded-4xl bg-blue-950 p-5 shadow-2xl sm:p-7"
+            className="min-w-0 rounded-3xl bg-blue-950 p-5 shadow-2xl sm:p-6"
             aria-label="Resumo da solução"
           >
-            <div className="rounded-3xl bg-blue-600 p-6 text-white">
+            <div className="rounded-2xl bg-blue-600 p-6 text-white">
               <span className="text-sm font-semibold tracking-wider text-blue-100">
                 MOVE POINTS
               </span>
@@ -70,13 +70,15 @@ export default function Solucao() {
               </small>
             </div>
 
-            <div className="mt-4 rounded-3xl bg-white p-6">
+            <div className="mt-4 rounded-2xl bg-white p-6">
               <div className="flex items-center gap-3">
                 <span
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#6681d1] shadow-sm"
                   aria-hidden="true"
                 >
-                  +
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" focusable="false">
+                    <path d="m13 2-9 12h7l-1 8 10-12h-7l1-8Z" />
+                  </svg>
                 </span>
 
                 <strong className="text-blue-950">Registrar ações</strong>
@@ -88,7 +90,7 @@ export default function Solucao() {
               </p>
             </div>
 
-            <div className="mt-4 rounded-3xl bg-blue-50 p-6">
+            <div className="mt-4 rounded-2xl bg-blue-50 p-6">
               <div className="flex items-center justify-between gap-3">
                 <strong className="text-blue-950">Métricas</strong>
 
@@ -106,11 +108,11 @@ export default function Solucao() {
 
         {/* Problema identificado */}
         <section
-          className="scroll-mt-8 bg-white px-5 py-20 sm:px-8 lg:px-12"
+          className="scroll-mt-8 bg-white py-16 sm:py-20"
           id="problema"
         >
-          <div className="mx-auto max-w-7xl">
-            <div className="max-w-3xl">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+            <div className="max-w-4xl">
               <span className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-600">
                 Problema identificado
               </span>
@@ -128,17 +130,17 @@ export default function Solucao() {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {problemas.map((problema) => (
                 <article
                   key={problema.numero}
-                  className="rounded-3xl border border-slate-200 bg-slate-50 p-6 transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-lg"
+                  className="rounded-2xl border border-slate-100 bg-slate-50 p-6"
                 >
                   <span className="text-4xl font-bold text-blue-200">
                     {problema.numero}
                   </span>
 
-                  <h3 className="mt-8 text-xl font-bold text-blue-950">
+                  <h3 className="mt-6 text-xl font-bold text-blue-950">
                     {problema.titulo}
                   </h3>
 
@@ -153,10 +155,10 @@ export default function Solucao() {
 
         {/* Funcionamento da solução */}
         <section
-          className="scroll-mt-8 bg-blue-950 px-5 py-20 text-white sm:px-8 lg:px-12"
+          className="scroll-mt-8 bg-blue-950 py-16 text-white sm:py-20"
           id="como-funciona"
         >
-          <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
             <div className="max-w-3xl">
               <span className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-300">
                 Funcionamento da solução
@@ -173,17 +175,17 @@ export default function Solucao() {
               </p>
             </div>
 
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {etapas.map((etapa) => (
                 <article
                   key={etapa.numero}
-                  className="rounded-3xl bg-white/10 p-6 backdrop-blur-sm transition hover:bg-white/15"
+                  className="rounded-2xl bg-white/10 p-6"
                 >
                   <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 font-bold text-white">
                     {etapa.numero}
                   </span>
 
-                  <h3 className="mt-7 text-xl font-bold">{etapa.titulo}</h3>
+                  <h3 className="mt-6 text-xl font-bold">{etapa.titulo}</h3>
 
                   <p className="mt-3 leading-relaxed text-blue-100">
                     {etapa.descricao}
@@ -196,10 +198,10 @@ export default function Solucao() {
 
         {/* Demonstração das páginas funcionais */}
         <section
-          className="scroll-mt-8 bg-slate-50 px-5 py-20 sm:px-8 lg:px-12"
+          className="scroll-mt-8 bg-slate-50 py-16 sm:py-20"
           id="demonstracao"
         >
-          <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
             <div className="max-w-3xl">
               <span className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-600">
                 Demonstração funcional
@@ -216,22 +218,22 @@ export default function Solucao() {
               </p>
             </div>
 
-            <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
               <div
-                className="flex flex-col gap-3 sm:flex-row"
+                className="grid gap-3 sm:grid-cols-3"
                 role="group"
                 aria-label="Ações da demonstração da solução"
               >
                 <Link
                   to="/validacao"
-                  className="rounded-2xl bg-blue-600 px-6 py-3 text-center font-semibold text-white transition hover:bg-blue-700"
+                  className="rounded-lg bg-[#2545ed] px-6 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
                 >
                   Registrar ações
                 </Link>
 
                 <Link
                   to="/metricas"
-                  className="rounded-2xl bg-blue-50 px-6 py-3 text-center font-semibold text-blue-700 transition hover:bg-blue-100"
+                  className="rounded-lg border border-slate-200 bg-white px-6 py-3 text-center font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
                 >
                   Métricas
                 </Link>
@@ -241,7 +243,7 @@ export default function Solucao() {
                   onClick={() =>
                     setMostrarFluxo((estadoAnterior) => !estadoAnterior)
                   }
-                  className="cursor-pointer rounded-2xl border border-slate-300 px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-100"
+                  className="cursor-pointer rounded-lg border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
                   aria-expanded={mostrarFluxo}
                   aria-controls="fluxo-completo"
                 >
@@ -249,13 +251,14 @@ export default function Solucao() {
                 </button>
               </div>
 
-              {mostrarFluxo && (
-                <article
+              <article
                   className="mt-8 grid gap-8 border-t border-slate-200 pt-8 lg:grid-cols-2"
                   id="fluxo-completo"
+                  hidden={!mostrarFluxo}
+                  aria-labelledby="titulo-fluxo-completo"
                 >
                   <div>
-                    <h3 className="text-2xl font-bold text-blue-950">
+                    <h3 id="titulo-fluxo-completo" className="text-2xl font-bold text-blue-950">
                       Fluxo completo da experiência
                     </h3>
 
@@ -303,15 +306,14 @@ export default function Solucao() {
                       </div>
                     ))}
                   </div>
-                </article>
-              )}
+              </article>
             </div>
           </div>
         </section>
 
         {/* Resultado esperado */}
-        <section className="bg-white px-5 py-20 sm:px-8 lg:px-12">
-          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2">
+        <section className="bg-white py-16 sm:py-20">
+          <div className="mx-auto grid max-w-7xl gap-8 px-5 sm:px-8 lg:grid-cols-2 lg:px-12">
             <div>
               <span className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-600">
                 Resultado esperado
@@ -332,7 +334,7 @@ export default function Solucao() {
             </div>
 
             <div className="space-y-4">
-              <article className="rounded-3xl bg-blue-50 p-6">
+              <article className="rounded-2xl bg-blue-50 p-6">
                 <strong className="text-xl text-blue-950">
                   Mais participação
                 </strong>
@@ -343,7 +345,7 @@ export default function Solucao() {
                 </span>
               </article>
 
-              <article className="rounded-3xl bg-blue-50 p-6">
+              <article className="rounded-2xl bg-blue-50 p-6">
                 <strong className="text-xl text-blue-950">Mais controle</strong>
 
                 <span className="mt-2 block leading-relaxed text-slate-600">
@@ -352,7 +354,7 @@ export default function Solucao() {
                 </span>
               </article>
 
-              <article className="rounded-3xl bg-blue-50 p-6">
+              <article className="rounded-2xl bg-blue-50 p-6">
                 <strong className="text-xl text-blue-950">Mais impacto</strong>
 
                 <span className="mt-2 block leading-relaxed text-slate-600">
