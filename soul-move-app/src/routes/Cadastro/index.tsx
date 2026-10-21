@@ -1,15 +1,28 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import logoSoulMove from "../../assets/logo/LogoSoulMoveIndigo.png";
 import imagemMobilidade from "../../assets/banners/img-header-homem.png";
 
+type DadosCadastro = {
+  nome: string;
+  email: string;
+};
+
 const estiloCampo =
-  "mt-2 min-h-12 w-full rounded-lg border border-slate-200 bg-white px-3 py-3 text-sm text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100";
+  "mt-2 min-h-12 w-full rounded-lg border border-slate-200 bg-white px-3 py-3 text-sm text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 aria-invalid:border-red-500 aria-invalid:focus:ring-red-100";
 
 export default function Cadastro() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
+  const {
+    register,
+    formState: { errors },
+  } = useForm<DadosCadastro>({
+    mode: "onTouched",
+    defaultValues: { nome: "", email: "" },
+  });
 
   useEffect(() => {
     document.title = "SoulMove | Cadastro";
@@ -38,16 +51,56 @@ export default function Cadastro() {
           <h1 id="titulo-cadastro" className="text-3xl font-bold tracking-tight">Crie sua conta</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">É grátis. Comece a fazer a diferença hoje.</p>
 
-          {/* Validação e envio entram nas próximas etapas. */}
+          {/* Senhas, aceite dos termos e envio serão implementados nas próximas etapas. */}
           <form noValidate className="mt-7 space-y-5">
             <div>
               <label htmlFor="cadastro-nome" className="text-sm font-semibold">Nome completo</label>
-              <input id="cadastro-nome" type="text" autoComplete="name" placeholder="Como você se chama?" className={estiloCampo} />
+              <input
+                id="cadastro-nome"
+                type="text"
+                autoComplete="name"
+                placeholder="Como você se chama?"
+                className={estiloCampo}
+                aria-invalid={Boolean(errors.nome)}
+                aria-describedby={errors.nome ? "erro-cadastro-nome" : undefined}
+                {...register("nome", {
+                  required: "Informe seu nome.",
+                  validate: (valor) => valor.trim().length > 0 || "Informe seu nome.",
+                })}
+              />
+              {errors.nome && (
+                <p id="erro-cadastro-nome" className="mt-2 text-sm text-red-700">
+                  {errors.nome.message}
+                </p>
+              )}
             </div>
 
             <div>
               <label htmlFor="cadastro-email" className="text-sm font-semibold">E-mail</label>
-              <input id="cadastro-email" type="email" autoComplete="email" placeholder="voce@exemplo.com" className={estiloCampo} />
+              <input
+                id="cadastro-email"
+                type="email"
+                autoComplete="email"
+                autoCapitalize="none"
+                spellCheck={false}
+                placeholder="voce@exemplo.com"
+                className={estiloCampo}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? "erro-cadastro-email" : undefined}
+                {...register("email", {
+                  required: "Informe seu e-mail.",
+                  setValueAs: (valor: string) => valor.trim(),
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Informe um e-mail válido.",
+                  },
+                })}
+              />
+              {errors.email && (
+                <p id="erro-cadastro-email" className="mt-2 text-sm text-red-700">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
