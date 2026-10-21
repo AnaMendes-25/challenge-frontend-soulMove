@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ModalResgate from "../components/ModalResgate/ModalResgate";
 
 const recompensaExemplo = {
@@ -11,6 +11,25 @@ const recompensaExemplo = {
 export default function ResgatePreview() {
   const [aberto, setAberto] = useState(true);
   const [saldoExemplo, setSaldoExemplo] = useState(1000);
+  const [simularFalha, setSimularFalha] = useState(false);
+  const [confirmando, setConfirmando] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
+  const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (temporizador.current !== null) clearTimeout(temporizador.current);
+  }, []);
+
+  function simularTentativa() {
+    if (confirmando) return;
+    setErro(null);
+    setConfirmando(true);
+    // Demonstra somente carregamento e falha; não chama API nem efetua resgate.
+    temporizador.current = setTimeout(() => {
+      setConfirmando(false);
+      setErro("Falha simulada na prévia. Nenhum resgate foi realizado. Tente novamente.");
+    }, 2000);
+  }
 
   return (
     <main className="min-h-dvh bg-slate-100 px-6 py-10 text-slate-900">
@@ -33,9 +52,17 @@ export default function ResgatePreview() {
             <option value={0}>0 pontos — sem saldo</option>
           </select>
         </label>
+        <label className="mt-4 flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={simularFalha}
+            onChange={(evento) => { setSimularFalha(evento.target.checked); setErro(null); }}
+          />
+          Simular carregamento e erro (sem resgate real)
+        </label>
         <button
           type="button"
-          onClick={() => setAberto(true)}
+          onClick={() => { setErro(null); setAberto(true); }}
           className="mt-6 cursor-pointer rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
         >
           Abrir prévia do modal
@@ -46,6 +73,9 @@ export default function ResgatePreview() {
         recompensa={recompensaExemplo}
         saldoPontos={saldoExemplo}
         aoCancelar={() => setAberto(false)}
+        aoConfirmar={simularFalha ? simularTentativa : undefined}
+        confirmando={confirmando}
+        erro={erro}
       />
     </main>
   );

@@ -13,6 +13,9 @@ interface ModalResgateProps {
   recompensa: RecompensaResgate | null;
   saldoPontos: number;
   aoCancelar: () => void;
+  aoConfirmar?: (recompensa: RecompensaResgate) => void;
+  confirmando?: boolean;
+  erro?: string | null;
 }
 
 export default function ModalResgate({
@@ -20,6 +23,9 @@ export default function ModalResgate({
   recompensa,
   saldoPontos,
   aoCancelar,
+  aoConfirmar,
+  confirmando = false,
+  erro = null,
 }: ModalResgateProps) {
   const tituloId = useId();
   const descricaoId = useId();
@@ -59,11 +65,12 @@ export default function ModalResgate({
   return (
     <dialog
       ref={dialogRef}
+      aria-busy={confirmando}
       aria-labelledby={tituloId}
       aria-describedby={`${descricaoId} ${saldoId}`}
       onCancel={(evento) => {
         evento.preventDefault();
-        aoCancelar();
+        if (!confirmando) aoCancelar();
       }}
       onKeyDown={(evento) => {
         if (evento.key !== "Tab") return;
@@ -84,7 +91,7 @@ export default function ModalResgate({
       }}
       onClick={(evento) => {
         if (evento.target === evento.currentTarget) {
-          aoCancelar();
+          if (!confirmando) aoCancelar();
         }
       }}
       className="fixed inset-0 m-auto max-h-[calc(100dvh-3rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-2xl border-0 bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-slate-950/45"
@@ -99,7 +106,8 @@ export default function ModalResgate({
           </div>
           <button
             type="button"
-            onClick={aoCancelar}
+            aria-disabled={confirmando}
+            onClick={() => { if (!confirmando) aoCancelar(); }}
             aria-label="Fechar confirmação de resgate"
             className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
@@ -138,22 +146,38 @@ export default function ModalResgate({
             : `Após confirmar o resgate, seu saldo será de ${saldoAposResgate.toLocaleString("pt-BR")} ${saldoAposResgate === 1 ? "ponto" : "pontos"}.`}
         </p>
 
+        {confirmando && (
+          <p role="status" className="mt-4 text-sm text-blue-700">
+            Processando resgate. Aguarde a confirmação.
+          </p>
+        )}
+        {erro && !confirmando && (
+          <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">
+            {erro}
+          </p>
+        )}
+
         <footer className="mt-6 grid gap-3 sm:grid-cols-2">
           <button
             type="button"
             ref={cancelarRef}
-            onClick={aoCancelar}
+            aria-disabled={confirmando}
+            onClick={() => { if (!confirmando) aoCancelar(); }}
             className="min-h-11 cursor-pointer rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Cancelar
           </button>
-          {/* Habilitar após integrar o endpoint real; abrir o modal não desconta pontos. */}
+          {/* A confirmação só fica disponível quando uma ação de resgate é fornecida. */}
           <button
             type="button"
-            disabled
-            className="min-h-11 cursor-not-allowed rounded-lg bg-[#2545ed] px-4 py-3 text-sm font-semibold text-white opacity-60"
+            disabled={!aoConfirmar || pontosFaltantes > 0}
+            aria-disabled={confirmando || !aoConfirmar || pontosFaltantes > 0}
+            onClick={() => {
+              if (!confirmando && pontosFaltantes === 0) aoConfirmar?.(recompensa);
+            }}
+            className="min-h-11 cursor-pointer rounded-lg bg-[#2545ed] px-4 py-3 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-60 aria-disabled:cursor-not-allowed aria-disabled:opacity-60"
           >
-            Confirmar resgate
+            {confirmando ? "Processando..." : "Confirmar resgate"}
           </button>
         </footer>
       </div>
