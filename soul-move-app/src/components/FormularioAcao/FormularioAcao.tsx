@@ -311,7 +311,7 @@ export default function FormularioAcao({
           disabled={carregandoIA}
           className="w-full cursor-pointer rounded-[7px] bg-[#2454de] p-[14px] text-[15px] font-bold text-white transition hover:-translate-y-[1px] hover:bg-[#1d43b4] disabled:bg-gray-400"
         >
-          {carregandoIA ? "A analisar imagem com a IA..." : "Enviar para avaliação"}
+          {carregandoIA ? "Imagem sendo Avaliada..." : "Enviar para avaliação"}
         </button>
       </form>
     </div>
