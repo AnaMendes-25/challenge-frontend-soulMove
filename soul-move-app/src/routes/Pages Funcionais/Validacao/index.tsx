@@ -1,4 +1,4 @@
-import { api} from "../../../services/api"; 
+import { api, ApiError} from "../../../services/api"; 
 import { startTransition, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
@@ -96,6 +96,33 @@ export default function Validacao() {
     carregarAtividades();
   }, []);
 
+  async function handleEnviarAtividade(idDaAtividade: string, pontosGanhos: number) {
+    try {
+      // 1. Pega o ID do usuário logado do localStorage (ou usa 1 como fallback)
+      const idUtilizadorLogado = Number(localStorage.getItem("usuariold")) || 1; 
+
+      // 2. Dispara o POST usando a nossa função genérica
+      await api.post("/atividades/registrar", {
+        usuarioId: idUtilizadorLogado,
+        atividadeId: Number(idDaAtividade)
+      });
+
+      // 3. Se o Java devolver 201 (Sucesso), atualizamos os pontos e abrimos o modal!
+      setMovePoints(addMovePoints(pontosGanhos));
+      setEnviado(true);
+
+    } catch (erro: unknown) {
+      
+      if (erro instanceof ApiError) {
+        // Se for 409 (Já registrou hoje), a mensagem vem bonitinha do Java
+        alert(erro.message); 
+      } else {
+        console.error("Erro inesperado ao registar atividade:", erro);
+        alert("Ocorreu um erro inesperado. Tente novamente.");
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#f5f5f5] text-[#111]">
       <AsideBar />
@@ -183,7 +210,7 @@ export default function Validacao() {
                       <FormularioAcao
                         acao={acao}
                         aoEnviar={() => {
-                          setMovePoints(addMovePoints(acao.pontos));
+                          handleEnviarAtividade(acao.id, acao.pontos);
                           setEnviado(true);
                         }}
                       />
