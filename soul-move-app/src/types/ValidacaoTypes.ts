@@ -7,6 +7,7 @@ export interface AcaoSustentavel {
   pontos: number;
   comprovacao: string;
   exemplo: string;
+  dadoOriginalJava?: AtividadeBackend;
 }
 
 export interface PessoaRankingValidacao {

@@ -1,4 +1,4 @@
-import { api, ApiError} from "../../../services/api"; 
+import { api, ApiError } from "../../../services/api";
 import { startTransition, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
@@ -24,11 +24,11 @@ import type { AtividadeBackend } from "../../../types/ValidacaoTypes";
 export default function Validacao() {
   const navigate = useNavigate();
   const { acaoId } = useParams<{ acaoId?: string }>();
-  
+
   const [acoes, setAcoes] = useState<AcaoSustentavel[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [acaoAberta, setAcaoAberta] = useState<string>(acaoId || "");
-  
+
 
   // Controla a abertura e o fechamento do modal.
   const [enviado, setEnviado] = useState(false);
@@ -66,22 +66,25 @@ export default function Validacao() {
     async function carregarAtividades() {
       try {
         // A API traz o catálogo completo
-        const resposta = await api.get("/atividades"); 
-        
+        const resposta = await api.get("/atividades");
+
         const listaAtividades = resposta.data || [];
 
         // Mapeamos diretamente os dados ricos que vêm do Java
         const acoesFormatadas = listaAtividades.map((item: AtividadeBackend) => {
           // Busca apenas o ícone e textos de ajuda no dicionário local
-          const dadosVisuais = acoesSustentaveis.find((mock) => mock.id === item.tipoAtividade);
+          const dadosVisuais = acoesSustentaveis.find(
+            (mock) => mock.id.toLowerCase() === item.tipoAtividade.toLowerCase()
+          );
 
           return {
-            id: String(item.id), // ID real do banco (ex: "3") para o React Router
-            titulo: item.nome, // "Reciclar vidro" direto do Java
-            pontos: item.pontuacao, // Pontuação oficial direto do Java
+            id: String(item.id),
+            titulo: item.nome,
+            pontos: item.pontuacao,
             icone: dadosVisuais?.icone || "📌",
             comprovacao: dadosVisuais?.comprovacao || item.validacao || "Envie um comprovante válido.",
             exemplo: dadosVisuais?.exemplo || item.descricao || "Ex.: Ação sustentável",
+            dadoOriginalJava: item,
           };
         });
 
@@ -99,7 +102,7 @@ export default function Validacao() {
   async function handleEnviarAtividade(idDaAtividade: string, pontosGanhos: number) {
     try {
       // 1. Pega o ID do usuário logado do localStorage (ou usa 1 como fallback)
-      const idUtilizadorLogado = Number(localStorage.getItem("usuariold")) || 1; 
+      const idUtilizadorLogado = Number(localStorage.getItem("usuariold")) || 1;
 
       // 2. Dispara o POST usando a nossa função genérica
       await api.post("/atividades/registrar", {
@@ -112,10 +115,10 @@ export default function Validacao() {
       setEnviado(true);
 
     } catch (erro: unknown) {
-      
+
       if (erro instanceof ApiError) {
         // Se for 409 (Já registrou hoje), a mensagem vem bonitinha do Java
-        alert(erro.message); 
+        alert(erro.message);
       } else {
         console.error("Erro inesperado ao registar atividade:", erro);
         alert("Ocorreu um erro inesperado. Tente novamente.");
@@ -130,10 +133,10 @@ export default function Validacao() {
       <main className="pb-[88px] min-[601px]:ml-[90px] min-[601px]:pb-0 min-[992px]:ml-[160px]">
         <section className="mx-auto w-[calc(100%-16px)] max-w-[960px] py-[20px] min-[426px]:w-[calc(100%-20px)] min-[426px]:py-[24px] min-[601px]:w-[calc(100%-24px)] min-[601px]:max-w-[760px] min-[601px]:py-[40px] min-[992px]:w-[calc(100%-32px)] min-[992px]:max-w-[960px] min-[992px]:py-[60px]">
           <div className="grid grid-cols-1 items-start gap-[28px] min-[992px]:grid-cols-[minmax(0,600px)_minmax(280px,340px)]">
-            
+
             {/* Área principal com os cards das ações */}
             <div className="flex flex-col gap-[12px] min-[426px]:gap-[16px]">
-              
+
               {/* MENSAGEM DE CARREGANDO ADICIONADA AQUI */}
               {carregando && (
                 <div className="p-[22px] text-center text-[16px] font-bold text-[#2454de]">
@@ -205,10 +208,11 @@ export default function Validacao() {
                   </button>
 
                   {/* Formulário da ação selecionada */}
-                  {acaoAberta === acao.id && (
+                  {acaoAberta === acao.id && acao.dadoOriginalJava && (
                     <div id={`formulario-${acao.id}`}>
                       <FormularioAcao
                         acao={acao}
+                        atividade={acao.dadoOriginalJava}
                         aoEnviar={() => {
                           handleEnviarAtividade(acao.id, acao.pontos);
                           setEnviado(true);

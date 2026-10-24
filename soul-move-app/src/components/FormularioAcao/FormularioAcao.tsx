@@ -1,21 +1,20 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, type ChangeEvent, type DragEvent } from "react";
 import { acaoSchema, type FormularioValidacao } from "../../types/acaoSchema";
-import type { AcaoSustentavel } from "../../types/ValidacaoTypes";
+import type { AcaoSustentavel, AtividadeBackend } from "../../types/ValidacaoTypes";
+import { validarImagemSustentavel } from "../../services/moondreamService";
 
-import {
-  useState,
-  type ChangeEvent,
-  type DragEvent,
-} from "react";
 
 interface FormularioAcaoProps {
   acao: AcaoSustentavel;
+  atividade: AtividadeBackend;
   aoEnviar: () => void;
 }
 
 export default function FormularioAcao({
   acao,
+  atividade,
   aoEnviar,
 }: FormularioAcaoProps) {
   const [preview, setPreview] = useState("");
@@ -49,10 +48,7 @@ export default function FormularioAcao({
 
     if (!formatosPermitidos.includes(arquivoSelecionado.type)) {
       setValue("arquivo", null, { shouldValidate: true });
-      setError("arquivo", {
-        type: "validate",
-        message: "Por favor, envie uma imagem PNG ou JPG.",
-      });
+      setError("arquivo", { type: "validate", message: "Por favor, envie uma imagem PNG ou JPG." });
       setPreview("");
       setNomeArquivo("");
       return;
@@ -84,89 +80,35 @@ export default function FormularioAcao({
     setNomeArquivo("");
   }
 
-  // Função auxiliar para converter o ficheiro em Base64 para a Moondream
-  const converterParaBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
-  // função de apoio para gerar perguntas personalizadas com campo selecionado
-  function gerarPergunta(tipoAcaoId: string): string {
-    switch (tipoAcaoId) {
-      case "reciclagem":
-        return "Esta imagem mostra claramente materiais recicláveis separados, lixeiras de coleta seletiva ou o processo ativo de reciclagem? Responda obrigatoriamente com 'Sim' ou 'Não' no início, seguido de uma breve justificativa.";
-
-      case "energia":
-        return "Esta imagem evidencia uma medida clara de economia de energia, como luzes apagadas aproveitando luz natural, painéis solares ou um medidor/aparelho focado em eficiência energética? Responda obrigatoriamente com 'Sim' ou 'Não' no início, seguido de uma breve justificativa.";
-
-      case "transporte":
-        return "Esta imagem comprova o uso ou presença em transporte público (como o interior de um ônibus, trem, metrô, bilhete de passagem válido ou estação de embarque)? Responda obrigatoriamente com 'Sim' ou 'Não' no início, seguido de uma breve justificativa.";
-
-      case "bike":
-        return "Esta imagem mostra uma bicicleta em uso, estacionada em contexto de trajeto ou um ciclista em deslocamento urbano? Responda obrigatoriamente com 'Sim' ou 'Não' no início, seguido de uma breve justificativa.";
-
-      case "pe":
-        return "Esta imagem comprova um deslocamento a pé (como calçados em movimento em calçada urbana, trilha ou caminhada utilitária)? Responda obrigatoriamente com 'Sim' ou 'Não' no início, seguido de uma breve justificativa.";
-
-      default:
-        return "Esta imagem comprova de forma inquestionável uma ação sustentável válida? Responda obrigatoriamente com 'Sim' ou 'Não' no início, seguido de uma breve justificativa.";
-    }
-  }
+ 
 
   // Função executada APÓS o Zod aprovar os campos do formulário
-  async function enviarFormulario(dados: FormularioValidacao) {
-
+ async function enviarFormulario(dados: FormularioValidacao) {
     if (!dados.arquivo) return;
+
+    if (!atividade) {
+    setErroIA("Erro interno: Dados da atividade não encontrados.");
+    return;
+  }
 
     try {
       setCarregandoIA(true);
       setErroIA("");
 
-      // Converter a imagem para base64
-      const imagemBase64 = await converterParaBase64(dados.arquivo);
-
-      //Chamar a API da Moondream para validar a imagem
-      const respostaIA = await fetch("https://api.moondream.ai/v1/query", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Moondream-Auth": import.meta.env.VITE_MOONDREAM_API_KEY || "",
-        },
-        body: JSON.stringify({
-          model: "moondream3.1-9B-A2B",
-          image_url: imagemBase64,
-          question: gerarPergunta(acao.id),
-        }),
-      });
-
-      if (!respostaIA.ok) throw new Error("Erro ao comunicar com o serviço de IA.");
-
-      const resultadoIA = await respostaIA.json();
-      console.log("Resposta completa da IA:", resultadoIA); // Vê o que aparece aqui na consola (F12)
-
-      // Usa o encadeamento opcional para evitar crashes caso 'answer' venha indefinido
-      const respostaTexto = resultadoIA?.answer || "";
-      const textoResposta = respostaTexto.trim().toLowerCase();
-
-      if (!textoResposta.includes("sim")) {
-        setErroIA(`A IA rejeitou a imagem: ${resultadoIA?.answer || "Resposta inválida da IA"}`);
-        setCarregandoIA(false);
+      // 2. Aqui está o truque: mandamos a variável 'atividadeBanco' para o serviço da IA!
+      const resultadoIA = await validarImagemSustentavel(dados.arquivo, atividade);
+      if (!resultadoIA.aprovada) {
+        setErroIA(`A IA rejeitou a imagem: ${resultadoIA.mensagem}`);
         return;
       }
 
-      //Se passou pela IA, prosseguimos para o envio normal (chama a API Java através do pai)
       aoEnviar();
-
       reset();
-      setPreview("");
-      setNomeArquivo("");
-    } catch (erro) {
+      removerImagem();
+      
+    } catch (erro: unknown) {
       console.error("Erro no processamento:", erro);
-      setErroIA("Ocorreu um erro técnico ao validar a imagem com a IA.");
+      setErroIA(erro instanceof Error ? erro.message : "Ocorreu um erro técnico ao validar a imagem com a IA.");
     } finally {
       setCarregandoIA(false);
     }
