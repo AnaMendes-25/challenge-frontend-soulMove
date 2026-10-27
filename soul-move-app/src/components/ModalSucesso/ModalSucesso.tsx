@@ -18,21 +18,28 @@ export default function ModalSucesso({
 
   useEffect(() => {
     if (aberto) {
-      setVisivel(true);
+      const frameInicial = requestAnimationFrame(() => {
+        setVisivel(true);
 
-      requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setAnimando(true);
         });
       });
+
+      return () => cancelAnimationFrame(frameInicial);
     } else {
-      setAnimando(false);
+      const frameFechamento = requestAnimationFrame(() => {
+        setAnimando(false);
+      });
 
       const timer = setTimeout(() => {
         setVisivel(false);
       }, 200);
 
-      return () => clearTimeout(timer);
+      return () => {
+        cancelAnimationFrame(frameFechamento);
+        clearTimeout(timer);
+      };
     }
   }, [aberto]);
 
