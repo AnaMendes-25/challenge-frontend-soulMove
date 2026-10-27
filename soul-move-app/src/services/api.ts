@@ -1,5 +1,4 @@
-
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_SOULMOVE_URL || "http://localhost:8080";
 
 export class ApiError extends Error {
   status: number;
@@ -14,7 +13,7 @@ export class ApiError extends Error {
 }
 
 async function tratarResposta(resposta: Response) {
-  // Trata 204 No Content sem dar erro de JSON
+  // Trata 204 No Content sem dar erro de parse no JSON
   if (resposta.status === 204) {
     return { data: null };
   }
@@ -32,7 +31,6 @@ async function tratarResposta(resposta: Response) {
   return { data: body };
 }
 
-// Opções adicionais para requisições (como headers extras ou AbortSignal para cancelar)
 interface RequestOptions {
   headers?: Record<string, string>;
   signal?: AbortSignal;
@@ -40,10 +38,10 @@ interface RequestOptions {
 
 export const api = {
   get: async (endpoint: string, options?: RequestOptions) => {
+    // Removido 'Content-Type' de requisições GET para evitar falhas de CORS/preflight
     const resposta = await fetch(`${BASE_URL}${endpoint}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
         ...options?.headers,
       },
       signal: options?.signal,
@@ -52,9 +50,8 @@ export const api = {
   },
 
   post: async <T>(endpoint: string, body?: T, options?: RequestOptions) => {
-    // Se o body for FormData, o navegador DEVE definir o Content-Type automaticamente
     const isFormData = body instanceof FormData;
-    
+
     const headers: Record<string, string> = {
       ...options?.headers,
     };
@@ -93,14 +90,14 @@ export const api = {
   },
 
   delete: async (endpoint: string, options?: RequestOptions) => {
+    // Removido 'Content-Type' fixo do DELETE (só envia se não houver corpo)
     const resposta = await fetch(`${BASE_URL}${endpoint}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         ...options?.headers,
       },
       signal: options?.signal,
     });
     return tratarResposta(resposta);
-  }
+  },
 };
