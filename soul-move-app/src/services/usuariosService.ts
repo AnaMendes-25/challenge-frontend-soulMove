@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api, exigirObjeto } from "./api";
 import type {
   Usuario,
   UsuarioCadastroRequest,
@@ -17,7 +17,7 @@ export const usuariosService = {
    */
   async cadastrar(payload: UsuarioCadastroRequest): Promise<Usuario> {
     const { data } = await api.post("/usuarios", payload);
-    const usuario = data as Usuario;
+    const usuario = exigirObjeto<Usuario>(data, "usuário");
     if (usuario?.id) {
       localStorage.setItem("usuarioId", String(usuario.id));
     }
@@ -35,7 +35,7 @@ export const usuariosService = {
    */
   async login(payload: UsuarioLoginRequest): Promise<Usuario> {
     const { data } = await api.post("/usuarios/login", payload);
-    const usuario = data as Usuario;
+    const usuario = exigirObjeto<Usuario>(data, "usuário");
     if (usuario?.id) {
       localStorage.setItem("usuarioId", String(usuario.id));
     }
