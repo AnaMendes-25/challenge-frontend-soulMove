@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api, exigirArray, exigirObjeto } from "./api";
 import type { RankingItem } from "./rankingTypes";
 
 export const rankingService = {
@@ -19,7 +19,7 @@ export const rankingService = {
   async obterRankingGeral(limite?: number): Promise<RankingItem[]> {
     const query = limite && limite > 0 ? `?limite=${limite}` : "";
     const { data } = await api.get(`/ranking${query}`);
-    return (data as RankingItem[]) || [];
+    return exigirArray<RankingItem>(data, "ranking");
   },
 
   /**
@@ -32,6 +32,6 @@ export const rankingService = {
    */
   async obterPosicaoUsuario(usuarioId: number): Promise<RankingItem> {
     const { data } = await api.get(`/ranking/${usuarioId}`);
-    return data as RankingItem;
+    return exigirObjeto<RankingItem>(data, "posição no ranking");
   },
 };
