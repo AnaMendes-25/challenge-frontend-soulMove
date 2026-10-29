@@ -1,6 +1,5 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_API_SOULMOVE_URL || "http://localhost:8080";
 
-//classe de erro com tipagem estrita
 export class ApiError extends Error {
   status: number;
   campos: Record<string, string> | null;
@@ -13,8 +12,8 @@ export class ApiError extends Error {
   }
 }
 
-// 2. Na sua função tratarResposta, substituímos aquele 'any' feio:
 async function tratarResposta(resposta: Response) {
+  // Trata 204 No Content sem dar erro de parse no JSON
   if (resposta.status === 204) {
     return { data: null };
   }
@@ -22,7 +21,6 @@ async function tratarResposta(resposta: Response) {
   const body = await resposta.json().catch(() => null);
 
   if (!resposta.ok) {
-    // Agora instanciamos a nossa classe ApiError! Zero any.
     throw new ApiError(
       body?.mensagem || `Erro na requisição: ${resposta.status}`,
       resposta.status,
@@ -33,52 +31,73 @@ async function tratarResposta(resposta: Response) {
   return { data: body };
 }
 
-// (get, post, put, delete) 
+interface RequestOptions {
+  headers?: Record<string, string>;
+  signal?: AbortSignal;
+}
 
 export const api = {
-  // GET: Buscar dados
-  get: async (endpoint: string) => {
+  get: async (endpoint: string, options?: RequestOptions) => {
+    // Removido 'Content-Type' de requisições GET para evitar falhas de CORS/preflight
     const resposta = await fetch(`${BASE_URL}${endpoint}`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        ...options?.headers,
       },
+      signal: options?.signal,
     });
     return tratarResposta(resposta);
   },
 
-  // POST: Criar/Enviar dados. Usamos o <T> genérico para o body.
-  post: async <T>(endpoint: string, body: T) => {
+  post: async <T>(endpoint: string, body?: T, options?: RequestOptions) => {
+    const isFormData = body instanceof FormData;
+
+    const headers: Record<string, string> = {
+      ...options?.headers,
+    };
+
+    if (!isFormData) {
+      headers["Content-Type"] = "application/json";
+    }
+
     const resposta = await fetch(`${BASE_URL}${endpoint}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
+      headers,
+      body: isFormData ? (body as FormData) : JSON.stringify(body),
+      signal: options?.signal,
     });
     return tratarResposta(resposta);
   },
 
-  // PUT: Editar dados. Mesma estrutura do POST.
-  put: async <T>(endpoint: string, body: T) => {
+  put: async <T>(endpoint: string, body?: T, options?: RequestOptions) => {
+    const isFormData = body instanceof FormData;
+
+    const headers: Record<string, string> = {
+      ...options?.headers,
+    };
+
+    if (!isFormData) {
+      headers["Content-Type"] = "application/json";
+    }
+
     const resposta = await fetch(`${BASE_URL}${endpoint}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
+      headers,
+      body: isFormData ? (body as FormData) : JSON.stringify(body),
+      signal: options?.signal,
     });
     return tratarResposta(resposta);
   },
 
-  // DELETE: Apagar dados. Não tem body.
-  delete: async (endpoint: string) => {
+  delete: async (endpoint: string, options?: RequestOptions) => {
+    // Removido 'Content-Type' fixo do DELETE (só envia se não houver corpo)
     const resposta = await fetch(`${BASE_URL}${endpoint}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
+        ...options?.headers,
       },
+      signal: options?.signal,
     });
     return tratarResposta(resposta);
-  }
+  },
 };

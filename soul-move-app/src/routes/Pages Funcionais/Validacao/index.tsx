@@ -67,6 +67,7 @@ export default function Validacao() {
       try {
         // A API traz o catálogo completo
         const resposta = await api.get("/atividades");
+        console.log("Resposta bruta da API:", resposta.data);
 
         const listaAtividades = resposta.data || [];
 
