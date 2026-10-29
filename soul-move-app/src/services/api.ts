@@ -1,5 +1,9 @@
 const BASE_URL = (import.meta.env.VITE_API_SOULMOVE_URL ?? "").replace(/\/+$/, "");
 
+function validarBaseUrl(): void { 
+  if (!BASE_URL) { throw new ApiError("A URL da API não está configurada. Verifique a variável VITE_API_SOULMOVE_URL.", null,) };
+}
+
 type ApiErrorFields = Record<string, string | string[]>;
 
 interface ApiErrorBody {
@@ -72,6 +76,7 @@ async function request<T>(
   body?: unknown,
   options: RequestOptions = {},
 ): Promise<ApiResponse<T>> {
+  validarBaseUrl();
   const headers = new Headers(options.headers);
   let requestBody: BodyInit | undefined;
 
