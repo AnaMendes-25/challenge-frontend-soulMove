@@ -66,10 +66,10 @@ export default function Validacao() {
     async function carregarAtividades() {
       try {
         // A API traz o catálogo completo
-        const resposta = await api.get("/atividades");
-        console.log("Resposta bruta da API:", resposta.data);
+        const resposta = await api.get<AtividadeBackend[]>("/atividades");
+        console.log("Resposta da API:", resposta.data);
 
-        const listaAtividades = resposta.data || [];
+        const listaAtividades = resposta.data ?? [];
 
         // Mapeamos diretamente os dados ricos que vêm do Java
         const acoesFormatadas = listaAtividades.map((item: AtividadeBackend) => {
