@@ -1,4 +1,5 @@
-import { api } from "./api";
+import { api, exigirArray, exigirObjeto } from "./api";
+import type { RequestOptions } from "./api";
 import type { RankingItem } from "./rankingTypes";
 
 export const rankingService = {
@@ -16,10 +17,10 @@ export const rankingService = {
    * 4. Privacidade: Esta rota não expõe o e-mail nem a foto dos utilizadores, sendo a rota oficial
    *    para o placar do aplicativo (evite chamar `GET /usuarios/top10`).
    */
-  async obterRankingGeral(limite?: number): Promise<RankingItem[]> {
+  async obterRankingGeral(limite?: number, options?: RequestOptions): Promise<RankingItem[]> {
     const query = limite && limite > 0 ? `?limite=${limite}` : "";
-    const { data } = await api.get(`/ranking${query}`);
-    return (data as RankingItem[]) || [];
+    const { data } = await api.get(`/ranking${query}`, options);
+    return exigirArray<RankingItem>(data, "ranking");
   },
 
   /**
@@ -30,8 +31,8 @@ export const rankingService = {
    * - Utilize para alimentar o card de destaque "Sua Posição" na Home.
    * - O parâmetro deve ser o `usuarioId` (o ID retornado no cadastro/login), e não o ID da linha do ranking.
    */
-  async obterPosicaoUsuario(usuarioId: number): Promise<RankingItem> {
-    const { data } = await api.get(`/ranking/${usuarioId}`);
-    return data as RankingItem;
+  async obterPosicaoUsuario(usuarioId: number, options?: RequestOptions): Promise<RankingItem> {
+    const { data } = await api.get(`/ranking/${usuarioId}`, options);
+    return exigirObjeto<RankingItem>(data, "posição no ranking");
   },
 };
