@@ -1,10 +1,6 @@
 import { api, exigirArray, exigirObjeto } from "./api";
-import type {
-  AtividadeBackend,
-  RegistrarAtividadeRequest,
-  TipoAtividade,
-  UsuarioAtividadeResponse,
-} from "./atividadesTypes";
+import type { RequestOptions } from "./api";
+import type { AtividadeBackend, RegistrarAtividadeRequest, TipoAtividade, UsuarioAtividadeResponse } from "./atividadesTypes";
 
 export const atividadesService = {
   /**
@@ -15,9 +11,9 @@ export const atividadesService = {
    * - A API não garante uma ordem específica de retorno; ordene no front-end se necessário.
    * - O catálogo é global e não traz dados específicos do utilizador (ex.: se já atingiu o limite hoje).
    */
-  async listarAtividades(tipo?: TipoAtividade): Promise<AtividadeBackend[]> {
+  async listarAtividades(tipo?: TipoAtividade, options?: RequestOptions): Promise<AtividadeBackend[]> {
     const query = tipo ? `?tipo=${tipo}` : "";
-    const { data } = await api.get(`/atividades${query}`);
+    const { data } = await api.get(`/atividades${query}`, options);
     return exigirArray<AtividadeBackend>(data, "atividades");
   },
 

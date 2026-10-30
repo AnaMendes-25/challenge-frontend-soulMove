@@ -44,39 +44,53 @@ export default function Validacao() {
   }, [acaoId]);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function carregarPontuacaoUsuario() {
       try {
         const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
 
-        const usuario = await usuariosService.buscarPorId(usuarioId);
+        const usuario = await usuariosService.buscarPorId(usuarioId, {signal: controller.signal});
 
         setMovePoints(usuario.pontuacaoSoul);
       } catch (erro) {
+        if (controller.signal.aborted) return;
+
         console.error("Erro ao carregar pontuação do usuário:", erro);
       }
     }
 
     void carregarPontuacaoUsuario();
+
+    return () => controller.abort();
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function carregarRanking() {
       try {
         const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
 
         const [dadosRanking, dadosUsuario] = await Promise.all([
-          rankingService.obterRankingGeral(5),
-          rankingService.obterPosicaoUsuario(usuarioId),
+          rankingService.obterRankingGeral(5, {signal: controller.signal,}),
+          rankingService.obterPosicaoUsuario(usuarioId, {signal: controller.signal,}),
         ]);
+
+        if (controller.signal.aborted) return;
 
         setRankingApi(dadosRanking);
         setPosicaoUsuario(dadosUsuario);
       } catch (erro) {
+        if (controller.signal.aborted) return;
+
         console.error("Erro ao carregar ranking:", erro);
       }
     }
 
     void carregarRanking();
+
+    return () => controller.abort();
   }, []);
 
   // Abre o card selecionado e fecha os outros.
@@ -94,17 +108,16 @@ export default function Validacao() {
 
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function carregarAtividades() {
       try {
-        // A API traz o catálogo completo
-        const listaAtividades = await atividadesService.listarAtividades();
+        const listaAtividades = await atividadesService.listarAtividades(undefined, { signal: controller.signal });
 
-        // Mapeamos diretamente os dados ricos que vêm do Java
+        if (controller.signal.aborted) return;
+
         const acoesFormatadas = listaAtividades.map((item: AtividadeBackend) => {
-          // Busca apenas o ícone e textos de ajuda no dicionário local
-          const dadosVisuais = acoesSustentaveis.find(
-            (mock) => mock.id.toLowerCase() === item.tipoAtividade.toLowerCase()
-          );
+          const dadosVisuais = acoesSustentaveis.find((mock) => mock.id.toLowerCase() === item.tipoAtividade.toLowerCase());
 
           return {
             id: String(item.id),
@@ -119,13 +132,19 @@ export default function Validacao() {
 
         setAcoes(acoesFormatadas);
       } catch (erro) {
+        if (controller.signal.aborted) return;
+
         console.error("Erro ao carregar o catálogo de atividades:", erro);
       } finally {
-        setCarregando(false);
+        if (!controller.signal.aborted) {
+          setCarregando(false);
+        }
       }
     }
 
-    carregarAtividades();
+    void carregarAtividades();
+
+    return () => controller.abort();
   }, []);
 
   async function handleEnviarAtividade(idDaAtividade: string) {
