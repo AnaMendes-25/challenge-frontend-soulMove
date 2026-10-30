@@ -129,32 +129,54 @@ export default function Validacao() {
   }, []);
 
   async function handleEnviarAtividade(idDaAtividade: string) {
-    try {
-      // 1. Pega o ID do usuário logado do localStorage (ou usa 1 como fallback)
-      // NECESSÁRIO REMOVER ESSE FALLBACK APÓS A IMPLEMENTAÇÃO DE USUÁRIO!!!
-      const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
+    const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
 
-      // 2. Dispara o POST usando a nossa função genérica
+    try {
       await atividadesService.registrarAtividade({
         usuarioId: idUtilizadorLogado,
-        atividadeId: Number(idDaAtividade)
+        atividadeId: Number(idDaAtividade),
       });
-
-      const usuarioAtualizado = await usuariosService.buscarPorId(idUtilizadorLogado);
-
-      // 3. Se o Java devolver 201 (Sucesso), atualizamos os pontos e abrimos o modal!
-      setMovePoints(usuarioAtualizado.pontuacaoSoul);
-      setEnviado(true);
-      
     } catch (erro: unknown) {
-
       if (erro instanceof ApiError) {
-        // Se for 409 (Já registrou hoje), a mensagem vem bonitinha do Java
         alert(erro.message);
       } else {
-        console.error("Erro inesperado ao registar atividade:", erro);
+        console.error("Erro inesperado ao registrar atividade:", erro);
         alert("Ocorreu um erro inesperado. Tente novamente.");
       }
+
+      return;
+    }
+
+    // O registro foi concluído com sucesso.
+    setEnviado(true);
+
+    // Atualiza os pontos do usuário.
+    try {
+      const usuarioAtualizado =
+        await usuariosService.buscarPorId(idUtilizadorLogado);
+
+      setMovePoints(usuarioAtualizado.pontuacaoSoul);
+    } catch (erro) {
+      console.error(
+        "Atividade registrada, mas não foi possível atualizar os pontos:",
+        erro
+      );
+    }
+
+    // Atualiza o ranking independentemente da atualização dos pontos.
+    try {
+      const [rankingAtualizado, posicaoAtualizada] = await Promise.all([
+        rankingService.obterRankingGeral(5),
+        rankingService.obterPosicaoUsuario(idUtilizadorLogado),
+      ]);
+
+      setRankingApi(rankingAtualizado);
+      setPosicaoUsuario(posicaoAtualizada);
+    } catch (erro) {
+      console.error(
+        "Atividade registrada, mas não foi possível atualizar o ranking:",
+        erro
+      );
     }
   }
 
