@@ -1,4 +1,4 @@
-import { api, exigirArray, exigirObjeto } from "./api";
+import { api } from "./api";
 import type {
   Recompensa,
   RecompensaComStatus,
@@ -13,7 +13,7 @@ export const recompensasService = {
    */
   async listarRecompensas(): Promise<Recompensa[]> {
     const { data } = await api.get("/recompensas");
-    return exigirArray<Recompensa>(data, "recompensas");
+    return (data as Recompensa[]) || [];
   },
 
   /**
@@ -22,7 +22,7 @@ export const recompensasService = {
    */
   async buscarPorId(id: number): Promise<Recompensa> {
     const { data } = await api.get(`/recompensas/${id}`);
-    return exigirObjeto<Recompensa>(data, "recompensa");
+    return data as Recompensa;
   },
 
   /**
@@ -40,7 +40,7 @@ export const recompensasService = {
    */
   async resgatar(payload: ResgatarRecompensaRequest): Promise<UsuarioRecompensaResponse> {
     const { data } = await api.post("/recompensas/resgatar", payload);
-    return exigirObjeto<UsuarioRecompensaResponse>(data, "resgate de recompensa");
+    return data as UsuarioRecompensaResponse;
   },
 
   /**
@@ -53,7 +53,7 @@ export const recompensasService = {
    */
   async obterHistorico(usuarioId: number): Promise<UsuarioRecompensaResponse[]> {
     const { data } = await api.get(`/recompensas/historico/${usuarioId}`);
-    return exigirArray<UsuarioRecompensaResponse>(data, "histórico de resgates");
+    return (data as UsuarioRecompensaResponse[]) || [];
   },
 
   /**

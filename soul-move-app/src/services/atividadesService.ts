@@ -1,6 +1,10 @@
-import { api, exigirArray, exigirObjeto } from "./api";
-import type { RequestOptions } from "./api";
-import type { AtividadeBackend, RegistrarAtividadeRequest, TipoAtividade, UsuarioAtividadeResponse } from "./atividadesTypes";
+import { api } from "./api";
+import type {
+  AtividadeBackend,
+  RegistrarAtividadeRequest,
+  TipoAtividade,
+  UsuarioAtividadeResponse,
+} from "./atividadesTypes";
 
 export const atividadesService = {
   /**
@@ -11,10 +15,10 @@ export const atividadesService = {
    * - A API não garante uma ordem específica de retorno; ordene no front-end se necessário.
    * - O catálogo é global e não traz dados específicos do utilizador (ex.: se já atingiu o limite hoje).
    */
-  async listarAtividades(tipo?: TipoAtividade, options?: RequestOptions): Promise<AtividadeBackend[]> {
+  async listarAtividades(tipo?: TipoAtividade): Promise<AtividadeBackend[]> {
     const query = tipo ? `?tipo=${tipo}` : "";
-    const { data } = await api.get(`/atividades${query}`, options);
-    return exigirArray<AtividadeBackend>(data, "atividades");
+    const { data } = await api.get(`/atividades${query}`);
+    return (data as AtividadeBackend[]) || [];
   },
 
   /**
@@ -25,7 +29,7 @@ export const atividadesService = {
    */
   async listarTipos(): Promise<TipoAtividade[]> {
     const { data } = await api.get("/atividades/tipos");
-    return exigirArray<TipoAtividade>(data, "tipos de atividade");
+    return (data as TipoAtividade[]) || [];
   },
 
   /**
@@ -34,7 +38,7 @@ export const atividadesService = {
    */
   async buscarPorId(id: number): Promise<AtividadeBackend> {
     const { data } = await api.get(`/atividades/${id}`);
-    return exigirObjeto<AtividadeBackend>(data, "atividade");
+    return data as AtividadeBackend;
   },
 
   /**
@@ -51,7 +55,7 @@ export const atividadesService = {
    */
   async registrarAtividade(payload: RegistrarAtividadeRequest): Promise<UsuarioAtividadeResponse> {
     const { data } = await api.post("/atividades/registrar", payload);
-    return exigirObjeto<UsuarioAtividadeResponse>(data, "registro de atividade");
+    return data as UsuarioAtividadeResponse;
   },
 
   /**
@@ -64,7 +68,7 @@ export const atividadesService = {
    */
   async obterHistorico(usuarioId: number): Promise<UsuarioAtividadeResponse[]> {
     const { data } = await api.get(`/atividades/historico/${usuarioId}`);
-    return exigirArray<UsuarioAtividadeResponse>(data, "histórico de atividades");
+    return (data as UsuarioAtividadeResponse[]) || [];
   },
 
   /*

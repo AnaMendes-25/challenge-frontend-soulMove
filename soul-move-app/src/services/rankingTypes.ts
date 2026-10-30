@@ -8,5 +8,4 @@ export interface RankingItem {
   pontuacaoTotal: number;  // Pontuação vitalícia (`pontuacaoUsuario`) usada na classificação
   usuarioId: number;       // ID do utilizador dono desta posição no ranking
   nomeUsuario: string;     // Nome do utilizador exibido na tabela
-  fotoUsuario: string;     // Foto do utilizador exibido na tabela
 }

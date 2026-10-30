@@ -1,20 +1,24 @@
-import { ApiError } from "../../../services/api";
+import { api, ApiError } from "../../../services/api";
 import { startTransition, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-
-import { atividadesService } from "../../../services/atividadesService";
-import { usuariosService } from "../../../services/usuariosService";
-import { rankingService } from "../../../services/rankingService";
 
 import AsideBar from "../../../components/AsideBar/AsideBar";
 import FormularioAcao from "../../../components/FormularioAcao/FormularioAcao";
 import ModalSucesso from "../../../components/ModalSucesso/ModalSucesso";
 
-import { acoesSustentaveis, missoesValidacao, } from "../../../data/ValidacaoData";
+import { ranking } from "../../../data/MetricasData";
+import {
+  acoesSustentaveis,
+  missoesValidacao,
+} from "../../../data/ValidacaoData";
+import {
+  addMovePoints,
+  getCurrentRanking,
+  getMovePoints,
+} from "../../../utils/movePoints";
 
 import type { AcaoSustentavel } from "../../../types/ValidacaoTypes";
 import type { AtividadeBackend } from "../../../types/ValidacaoTypes";
-import type { RankingItem } from "../../../services/rankingTypes";
 
 
 export default function Validacao() {
@@ -24,14 +28,15 @@ export default function Validacao() {
   const [acoes, setAcoes] = useState<AcaoSustentavel[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [acaoAberta, setAcaoAberta] = useState<string>(acaoId || "");
-  const [rankingApi, setRankingApi] = useState<RankingItem[]>([]);
-  const [posicaoUsuario, setPosicaoUsuario] = useState<RankingItem | null>(null);
-  const [fotosComErro, setFotosComErro] = useState<number[]>([]);
 
 
   // Controla a abertura e o fechamento do modal.
   const [enviado, setEnviado] = useState(false);
-  const [movePoints, setMovePoints] = useState(0);
+  const [movePoints, setMovePoints] = useState(getMovePoints);
+  const rankingAtual = getCurrentRanking(ranking);
+
+  // Encontra os dados do usuário atual no ranking.
+  const usuarioAtual = rankingAtual.find((pessoa) => pessoa.usuarioAtual);
 
   useEffect(() => {
     document.title = "SoulMove | Registrar ações";
@@ -42,56 +47,6 @@ export default function Validacao() {
       setAcaoAberta(acaoId || "");
     });
   }, [acaoId]);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function carregarPontuacaoUsuario() {
-      try {
-        const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
-
-        const usuario = await usuariosService.buscarPorId(usuarioId, {signal: controller.signal});
-
-        setMovePoints(usuario.pontuacaoSoul);
-      } catch (erro) {
-        if (controller.signal.aborted) return;
-
-        console.error("Erro ao carregar pontuação do usuário:", erro);
-      }
-    }
-
-    void carregarPontuacaoUsuario();
-
-    return () => controller.abort();
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function carregarRanking() {
-      try {
-        const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
-
-        const [dadosRanking, dadosUsuario] = await Promise.all([
-          rankingService.obterRankingGeral(5, {signal: controller.signal,}),
-          rankingService.obterPosicaoUsuario(usuarioId, {signal: controller.signal,}),
-        ]);
-
-        if (controller.signal.aborted) return;
-
-        setRankingApi(dadosRanking);
-        setPosicaoUsuario(dadosUsuario);
-      } catch (erro) {
-        if (controller.signal.aborted) return;
-
-        console.error("Erro ao carregar ranking:", erro);
-      }
-    }
-
-    void carregarRanking();
-
-    return () => controller.abort();
-  }, []);
 
   // Abre o card selecionado e fecha os outros.
   function abrirOuFecharCard(id: string) {
@@ -108,16 +63,20 @@ export default function Validacao() {
 
 
   useEffect(() => {
-    const controller = new AbortController();
-
     async function carregarAtividades() {
       try {
-        const listaAtividades = await atividadesService.listarAtividades(undefined, { signal: controller.signal });
+        // A API traz o catálogo completo
+        const resposta = await api.get("/atividades");
+        console.log("Resposta bruta da API:", resposta.data);
 
-        if (controller.signal.aborted) return;
+        const listaAtividades = resposta.data || [];
 
+        // Mapeamos diretamente os dados ricos que vêm do Java
         const acoesFormatadas = listaAtividades.map((item: AtividadeBackend) => {
-          const dadosVisuais = acoesSustentaveis.find((mock) => mock.id.toLowerCase() === item.tipoAtividade.toLowerCase());
+          // Busca apenas o ícone e textos de ajuda no dicionário local
+          const dadosVisuais = acoesSustentaveis.find(
+            (mock) => mock.id.toLowerCase() === item.tipoAtividade.toLowerCase()
+          );
 
           return {
             id: String(item.id),
@@ -132,70 +91,39 @@ export default function Validacao() {
 
         setAcoes(acoesFormatadas);
       } catch (erro) {
-        if (controller.signal.aborted) return;
-
         console.error("Erro ao carregar o catálogo de atividades:", erro);
       } finally {
-        if (!controller.signal.aborted) {
-          setCarregando(false);
-        }
+        setCarregando(false);
       }
     }
 
-    void carregarAtividades();
-
-    return () => controller.abort();
+    carregarAtividades();
   }, []);
 
-  async function handleEnviarAtividade(idDaAtividade: string) {
-    const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
-
+  async function handleEnviarAtividade(idDaAtividade: string, pontosGanhos: number) {
     try {
-      await atividadesService.registrarAtividade({
+      // 1. Pega o ID do usuário logado do localStorage (ou usa 1 como fallback)
+      const idUtilizadorLogado = Number(localStorage.getItem("usuariold")) || 1;
+
+      // 2. Dispara o POST usando a nossa função genérica
+      await api.post("/atividades/registrar", {
         usuarioId: idUtilizadorLogado,
-        atividadeId: Number(idDaAtividade),
+        atividadeId: Number(idDaAtividade)
       });
+
+      // 3. Se o Java devolver 201 (Sucesso), atualizamos os pontos e abrimos o modal!
+      setMovePoints(addMovePoints(pontosGanhos));
+      setEnviado(true);
+
     } catch (erro: unknown) {
+
       if (erro instanceof ApiError) {
+        // Se for 409 (Já registrou hoje), a mensagem vem bonitinha do Java
         alert(erro.message);
       } else {
-        console.error("Erro inesperado ao registrar atividade:", erro);
+        console.error("Erro inesperado ao registar atividade:", erro);
         alert("Ocorreu um erro inesperado. Tente novamente.");
       }
-
-      return;
-    }
-
-    // O registro foi concluído com sucesso.
-    setEnviado(true);
-
-    // Atualiza os pontos do usuário.
-    try {
-      const usuarioAtualizado =
-        await usuariosService.buscarPorId(idUtilizadorLogado);
-
-      setMovePoints(usuarioAtualizado.pontuacaoSoul);
-    } catch (erro) {
-      console.error(
-        "Atividade registrada, mas não foi possível atualizar os pontos:",
-        erro
-      );
-    }
-
-    // Atualiza o ranking independentemente da atualização dos pontos.
-    try {
-      const [rankingAtualizado, posicaoAtualizada] = await Promise.all([
-        rankingService.obterRankingGeral(5),
-        rankingService.obterPosicaoUsuario(idUtilizadorLogado),
-      ]);
-
-      setRankingApi(rankingAtualizado);
-      setPosicaoUsuario(posicaoAtualizada);
-    } catch (erro) {
-      console.error(
-        "Atividade registrada, mas não foi possível atualizar o ranking:",
-        erro
-      );
     }
   }
 
@@ -286,7 +214,10 @@ export default function Validacao() {
                       <FormularioAcao
                         acao={acao}
                         atividade={acao.dadoOriginalJava}
-                        aoEnviar={() => handleEnviarAtividade(acao.id)}
+                        aoEnviar={() => {
+                          handleEnviarAtividade(acao.id, acao.pontos);
+                          setEnviado(true);
+                        }}
                       />
                     </div>
                   )}
@@ -310,7 +241,7 @@ export default function Validacao() {
 
                 <span className="text-[14px] font-bold text-[#111]">
                   <span className="text-[#13b95e]">↑</span>{" "}
-                  {posicaoUsuario?.posicao ?? "—"}º
+                  {usuarioAtual?.posicao ?? 0}º
                 </span>
               </section>
 
@@ -321,50 +252,41 @@ export default function Validacao() {
                 </h2>
 
                 <ol className="flex flex-col gap-[10px]">
-                  {rankingApi.map((pessoa) => (
-                  <li
-                    key={pessoa.id}
-                    className="grid grid-cols-[24px_32px_1fr] items-center gap-[12px] rounded-[8px] bg-white p-[12px] min-[601px]:grid-cols-[28px_36px_1fr_auto]"
-                  >
-                    <span className="text-[14px] font-bold text-[#2454de]">
-                      {pessoa.posicao}º
-                    </span>
-
-                    {pessoa.fotoUsuario && !fotosComErro.includes(pessoa.usuarioId) ? (
-                      <img
-                        src={pessoa.fotoUsuario}
-                        alt={pessoa.nomeUsuario}
-                        onError={() => {
-                          setFotosComErro((atuais) =>
-                            atuais.includes(pessoa.usuarioId)
-                              ? atuais
-                              : [...atuais, pessoa.usuarioId]
-                          );
-                        }}
-                        className="h-[32px] w-[32px] rounded-full object-cover min-[601px]:h-[36px] min-[601px]:w-[36px]"
-                      />
-                    ) : (
-                      <span className="grid h-[32px] w-[32px] place-items-center rounded-full bg-[#eaf2ff] text-[10px] font-bold text-[#2454de] min-[601px]:h-[36px] min-[601px]:w-[36px]">
-                        {pessoa.nomeUsuario
-                          .split(" ")
-                          .filter(Boolean)
-                          .slice(0, 2)
-                          .map((nome) => nome[0])
-                          .join("")
-                          .toUpperCase()}
+                  {rankingAtual.slice(0, 5).map((pessoa) => (
+                    <li
+                      key={pessoa.posicao}
+                      className="grid grid-cols-[24px_32px_1fr] items-center gap-[12px] rounded-[8px] bg-white p-[12px] min-[601px]:grid-cols-[28px_36px_1fr_auto]"
+                    >
+                      <span className="text-[14px] font-bold text-[#2454de]">
+                        {pessoa.posicao}º
                       </span>
-                    )}
 
-                    <div>
-                      <strong className="block text-[14px] font-bold">
-                        {pessoa.nomeUsuario}
+                      {pessoa.foto ? (
+                        <img
+                          src={pessoa.foto}
+                          alt={pessoa.nome}
+                          className="h-[32px] w-[32px] rounded-full object-cover min-[601px]:h-[36px] min-[601px]:w-[36px]"
+                        />
+                      ) : (
+                        <span className="grid h-[32px] w-[32px] place-items-center rounded-full bg-[#eaf2ff] text-[10px] font-bold text-[#2454de] min-[601px]:h-[36px] min-[601px]:w-[36px]">
+                          {pessoa.iniciais}
+                        </span>
+                      )}
+
+                      <div>
+                        <strong className="block text-[14px] font-bold">
+                          {pessoa.nome}
+                        </strong>
+
+                        <span className="block text-[12px] text-[#9b9b9b]">
+                          {pessoa.cidade}
+                        </span>
+                      </div>
+
+                      <strong className="col-start-3 text-[14px] font-bold text-[#2454de] min-[601px]:col-start-auto">
+                        {pessoa.pontos.toLocaleString("pt-BR")}pts
                       </strong>
-                    </div>
-
-                    <strong className="col-start-3 text-[14px] font-bold text-[#2454de] min-[601px]:col-start-auto">
-                      {pessoa.pontuacaoTotal.toLocaleString("pt-BR")} pts
-                    </strong>
-                  </li>
+                    </li>
                   ))}
                 </ol>
 

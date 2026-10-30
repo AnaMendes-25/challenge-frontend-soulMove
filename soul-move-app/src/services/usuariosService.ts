@@ -1,6 +1,10 @@
-import { api, exigirObjeto } from "./api";
-import type { RequestOptions } from "./api";
-import type { Usuario, UsuarioCadastroRequest, UsuarioLoginRequest, UsuarioUpdateRequest } from "./usuariosTypes";
+import { api } from "./api";
+import type {
+  Usuario,
+  UsuarioCadastroRequest,
+  UsuarioLoginRequest,
+  UsuarioUpdateRequest,
+} from "./usuariosTypes";
 
 export const usuariosService = {
   /**
@@ -13,7 +17,7 @@ export const usuariosService = {
    */
   async cadastrar(payload: UsuarioCadastroRequest): Promise<Usuario> {
     const { data } = await api.post("/usuarios", payload);
-    const usuario = exigirObjeto<Usuario>(data, "usuário");
+    const usuario = data as Usuario;
     if (usuario?.id) {
       localStorage.setItem("usuarioId", String(usuario.id));
     }
@@ -31,7 +35,7 @@ export const usuariosService = {
    */
   async login(payload: UsuarioLoginRequest): Promise<Usuario> {
     const { data } = await api.post("/usuarios/login", payload);
-    const usuario = exigirObjeto<Usuario>(data, "usuário");
+    const usuario = data as Usuario;
     if (usuario?.id) {
       localStorage.setItem("usuarioId", String(usuario.id));
     }
@@ -47,10 +51,10 @@ export const usuariosService = {
    * - Resgatar uma recompensa (`POST /recompensas/resgatar`)
    * Motivo: As rotas de registro/resgate NÃO retornam os saldos novos no payload de resposta.
    */
-    async buscarPorId(id: number, options?: RequestOptions): Promise<Usuario> {
-      const { data } = await api.get(`/usuarios/${id}`, options);
-      return exigirObjeto<Usuario>(data, "usuário");
-    },
+  async buscarPorId(id: number): Promise<Usuario> {
+    const { data } = await api.get(`/usuarios/${id}`);
+    return data as Usuario;
+  },
 
   /**
    * Atualiza o nome e/ou foto do perfil do usuário.
@@ -61,7 +65,7 @@ export const usuariosService = {
    */
   async atualizarPerfil(id: number, payload: UsuarioUpdateRequest): Promise<Usuario> {
     const { data } = await api.put(`/usuarios/${id}`, payload);
-    return exigirObjeto<Usuario>(data, "usuário");
+    return data as Usuario;
   },
 
   /**

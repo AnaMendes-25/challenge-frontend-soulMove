@@ -9,7 +9,7 @@ import { validarImagemSustentavel } from "../../services/moondreamService";
 interface FormularioAcaoProps {
   acao: AcaoSustentavel;
   atividade: AtividadeBackend;
-  aoEnviar: () => Promise<void>;
+  aoEnviar: () => void;
 }
 
 export default function FormularioAcao({
@@ -20,7 +20,6 @@ export default function FormularioAcao({
   const [preview, setPreview] = useState("");
   const [nomeArquivo, setNomeArquivo] = useState("");
   const [carregandoIA, setCarregandoIA] = useState(false);
-  const [enviando, setEnviando] = useState(false);
   const [erroIA, setErroIA] = useState("");
 
   // O useForm agora usa o Zod através do zodResolver
@@ -96,14 +95,14 @@ export default function FormularioAcao({
       setCarregandoIA(true);
       setErroIA("");
 
+      // 2. Aqui está o truque: mandamos a variável 'atividadeBanco' para o serviço da IA!
       const resultadoIA = await validarImagemSustentavel(dados.arquivo, atividade);
       if (!resultadoIA.aprovada) {
         setErroIA(`A IA rejeitou a imagem: ${resultadoIA.mensagem}`);
         return;
       }
-      setEnviando(true);
 
-      await aoEnviar();
+      aoEnviar();
       reset();
       removerImagem();
       
@@ -112,7 +111,6 @@ export default function FormularioAcao({
       setErroIA(erro instanceof Error ? erro.message : "Ocorreu um erro técnico ao validar a imagem com a IA.");
     } finally {
       setCarregandoIA(false);
-      setEnviando(false);
     }
   }
 
@@ -252,7 +250,7 @@ export default function FormularioAcao({
 
         <button
           type="submit"
-          disabled={carregandoIA || enviando}
+          disabled={carregandoIA}
           className="w-full cursor-pointer rounded-[7px] bg-[#2454de] p-[14px] text-[15px] font-bold text-white transition hover:-translate-y-[1px] hover:bg-[#1d43b4] disabled:bg-gray-400"
         >
           {carregandoIA ? "Imagem sendo Avaliada..." : "Enviar para avaliação"}
