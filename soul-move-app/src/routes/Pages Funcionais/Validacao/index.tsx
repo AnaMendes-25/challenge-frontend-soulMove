@@ -267,9 +267,7 @@ export default function Validacao() {
                       <FormularioAcao
                         acao={acao}
                         atividade={acao.dadoOriginalJava}
-                        aoEnviar={() => {
-                          void handleEnviarAtividade(acao.id);
-                        }}
+                        aoEnviar={() => handleEnviarAtividade(acao.id)}
                       />
                     </div>
                   )}
