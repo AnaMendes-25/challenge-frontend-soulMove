@@ -35,7 +35,7 @@ export default function Cadastro() {
   return (
     <main className="min-h-dvh bg-white text-slate-900 lg:grid lg:grid-cols-2">
       <div className="flex min-h-dvh flex-col">
-        <header className="flex items-center justify-between gap-4 px-5 py-7 sm:px-8">
+        <header className="flex items-center justify-between gap-4 px-5 py-4 sm:px-8">
           <Link
             to="/"
             aria-label="Página inicial SoulMove"
@@ -50,13 +50,13 @@ export default function Cadastro() {
 
         <section
           aria-labelledby="titulo-cadastro"
-          className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-5 py-8 sm:px-8 lg:py-10"
+          className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-5 py-4 sm:px-8"
         >
           <h1 id="titulo-cadastro" className="text-3xl font-bold tracking-tight">Crie sua conta</h1>
           <p className="mt-2 text-sm leading-relaxed text-slate-600">É grátis. Comece a fazer a diferença hoje.</p>
 
           {/* O envio depende do cliente HTTP e do contrato da API. Os links dos termos ainda precisam ser definidos. */}
-          <form noValidate className="mt-7 space-y-5">
+          <form noValidate className="mt-5 space-y-3">
             <div>
               <label htmlFor="cadastro-nome" className="text-sm font-semibold">Nome completo</label>
               <input
@@ -215,15 +215,15 @@ export default function Cadastro() {
           </p>
         </section>
 
-        <footer className="flex flex-wrap items-center justify-between gap-4 px-5 py-6 text-xs text-slate-500 sm:px-8">
+        <footer className="flex flex-wrap items-center justify-between gap-4 px-5 py-4 text-xs text-slate-500 sm:px-8">
           <span>© {new Date().getFullYear()} SoulMove</span>
           <div className="flex gap-5"><span>Privacidade</span><span>Termos de uso</span></div>
         </footer>
       </div>
 
       {/* Imagem provisória do projeto até receber a foto usada no Figma. */}
-      <div className="hidden min-h-dvh bg-slate-100 lg:block">
-        <img src={imagemMobilidade} alt="Pessoa com uma bicicleta, representando mobilidade sustentável" className="sticky top-0 h-dvh w-full object-cover" />
+      <div className="relative hidden min-h-0 overflow-hidden bg-slate-100 lg:block">
+        <img src={imagemMobilidade} alt="Pessoa com uma bicicleta, representando mobilidade sustentável" className="absolute inset-0 h-full w-full object-cover object-center" />
       </div>
     </main>
   );
