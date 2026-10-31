@@ -78,42 +78,44 @@ export default function AsideBar() {
         </button>
         <div className="relative">
           <button
-              type="button"
-              onClick={() => setMenuAberto((aberto) => !aberto)}
-              aria-label="Minha conta"
-              aria-expanded={menuAberto}
-              title="Minha conta"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-colors hover:bg-blue-50 hover:text-[#2545cd] cursor-pointer"
+            type="button"
+            onClick={() => setMenuAberto((aberto) => !aberto)}
+            aria-label="Minha conta"
+            aria-expanded={menuAberto}
+            title="Minha conta"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-colors hover:bg-blue-50 hover:text-[#2545cd] cursor-pointer"
           >
-              <FiUser
-                  className="h-5 w-5"
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-              />
+            <FiUser
+              className="h-5 w-5"
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
           </button>
 
           {menuAberto && (
             <div className="absolute bottom-14 right-0 z-50 w-44 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl md:bottom-0 md:left-14 md:right-auto">
-                <button
-                    type="button"
-                    disabled
-                    title="Minha conta — em breve"
-                    className="flex w-full cursor-not-allowed items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-slate-400 cursor-not-allowed"
-                >
-                    <FiUser className="h-4 w-4" aria-hidden="true" />
-                    Minha conta
-                </button>
+              <button
+                type="button"
+                disabled
+                title="Minha conta — em breve"
+                aria-label="Abrir minha conta - indisponível"
+                className="flex w-full cursor-not-allowed items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-slate-400 cursor-not-allowed"
+              >
+                <FiUser className="h-4 w-4" aria-hidden="true" />
+                Minha conta
+              </button>
 
-                <div className="my-1 border-t border-slate-100" />
+              <div className="my-1 border-t border-slate-100" />
 
-                <button
-                    type="button"
-                    onClick={sair}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 cursor-pointer"
-                >
-                    <FiLogOut className="h-4 w-4" aria-hidden="true" />
-                    Sair
-                </button>
+              <button
+                type="button"
+                onClick={sair}
+                aria-label="Sair"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 cursor-pointer"
+              >
+                <FiLogOut className="h-4 w-4" aria-hidden="true" />
+                Sair
+              </button>
             </div>
           )}
         </div>
