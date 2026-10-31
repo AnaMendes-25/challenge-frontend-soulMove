@@ -1,6 +1,8 @@
-import { NavLink } from "react-router";
-import { FiBarChart2, FiSliders, FiUser } from "react-icons/fi";
+import { useState } from "react";
+import { NavLink, useNavigate } from "react-router";
+import { FiBarChart2, FiSliders, FiUser, FiLogOut } from "react-icons/fi";
 import logoSoulMove from "../../assets/logo/LogoSWhite.png";
+import { usuariosService } from "../../services/usuariosService";
 
 function IconeInicio() {
   return (
@@ -26,6 +28,15 @@ const estiloLink = ({ isActive }: { isActive: boolean }) =>
   }`;
 
 export default function AsideBar() {
+  const [menuAberto, setMenuAberto] = useState(false);
+  const navigate = useNavigate();
+
+  function sair() {
+      usuariosService.logout();
+      setMenuAberto(false);
+      navigate("/login", { replace: true });
+  }
+  
   return (
     <aside
       className="fixed inset-x-0 bottom-0 z-40 flex h-20 items-center justify-between border-t border-slate-100 bg-white px-2 sm:px-4 md:inset-y-0 md:left-0 md:right-auto md:h-dvh md:w-24 md:flex-col md:justify-start md:border-r md:border-t-0 md:px-0 md:py-8"
@@ -65,15 +76,47 @@ export default function AsideBar() {
         >
           <FiSliders className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" focusable="false" />
         </button>
-        <button
-          type="button"
-          disabled
-          aria-label="Minha conta — indisponível no momento"
-          title="Minha conta — em breve"
-          className="flex h-10 w-10 cursor-not-allowed items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500"
-        >
-          <FiUser className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" focusable="false" />
-        </button>
+        <div className="relative">
+          <button
+              type="button"
+              onClick={() => setMenuAberto((aberto) => !aberto)}
+              aria-label="Minha conta"
+              aria-expanded={menuAberto}
+              title="Minha conta"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-colors hover:bg-blue-50 hover:text-[#2545cd] cursor-pointer"
+          >
+              <FiUser
+                  className="h-5 w-5"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+              />
+          </button>
+
+          {menuAberto && (
+            <div className="absolute bottom-14 right-0 z-50 w-44 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl md:bottom-0 md:left-14 md:right-auto">
+                <button
+                    type="button"
+                    disabled
+                    title="Minha conta — em breve"
+                    className="flex w-full cursor-not-allowed items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-slate-400 cursor-not-allowed"
+                >
+                    <FiUser className="h-4 w-4" aria-hidden="true" />
+                    Minha conta
+                </button>
+
+                <div className="my-1 border-t border-slate-100" />
+
+                <button
+                    type="button"
+                    onClick={sair}
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50 cursor-pointer"
+                >
+                    <FiLogOut className="h-4 w-4" aria-hidden="true" />
+                    Sair
+                </button>
+            </div>
+          )}
+        </div>
       </div>
     </aside>
   );
