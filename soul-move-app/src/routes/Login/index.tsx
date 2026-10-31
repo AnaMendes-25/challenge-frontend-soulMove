@@ -1,32 +1,66 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import logoSoulMove from "../../assets/logo/LogoSoulMoveIndigo.png";
 import imagemMobilidade from "../../assets/banners/img-header-homem.png";
-import { BsAlignEnd } from "react-icons/bs";
+import { ApiError } from "../../services/api";
+import { usuariosService } from "../../services/usuariosService";
+
 type DadosLogin = { email: string; senha: string; };
 
 const estiloCampo = "mt-2 min-h-12 w-full rounded-lg border border-slate-200 bg-white px-3 py-3 text-sm text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 aria-invalid:border-red-500 aria-invalid:focus:ring-red-100";
 
 export default function Login() {
-    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    const { register, handleSubmit, formState: { errors } } = 
-        useForm<DadosLogin>({
-            mode: "onTouched",
-            defaultValues: {
-                email: "",
-                senha: "",
-            },
-        });
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [carregando, setCarregando] = useState(false);
+    const [erroLogin, setErroLogin] = useState("");
+
+    const destino = (
+        location.state as { from?: { pathname?: string } } | null
+    )?.from?.pathname;
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<DadosLogin>({
+        mode: "onTouched",
+        defaultValues: {
+            email: "",
+            senha: "",
+        },
+    });
 
     useEffect(() => {
         document.title = "SoulMove | Login";
     }, []);
 
-    function onSubmit(dados: DadosLogin) {
-        console.log("Dados do login:", dados);
+    async function onSubmit(dados: DadosLogin) {
+        setCarregando(true);
+        setErroLogin("");
+
+        try {
+            await usuariosService.login(dados);
+
+            navigate(
+                destino && destino !== "/login" ? destino : "/solucao",
+                { replace: true }
+            );
+        } catch (erro) {
+            if (erro instanceof ApiError && erro.status === 401) {
+                setErroLogin("E-mail ou senha inválidos.");
+            } else if (erro instanceof Error) {
+                setErroLogin(erro.message);
+            } else {
+                setErroLogin("Não foi possível entrar. Tente novamente.");
+            }
+        } finally {
+            setCarregando(false);
+        }
     }
 
     return (
@@ -54,8 +88,14 @@ export default function Login() {
                     </Link>
                 </header>
 
-                <section aria-labelledby="titulo-login" className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-5 py-8 sm:px-8">
-                    <h1 id="titulo-login" className="text-3xl font-semibold tracking-tight">
+                <section
+                    aria-labelledby="titulo-login"
+                    className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-5 py-8 sm:px-8"
+                >
+                    <h1
+                        id="titulo-login"
+                        className="text-3xl font-semibold tracking-tight"
+                    >
                         Entre na sua conta
                     </h1>
 
@@ -85,7 +125,9 @@ export default function Login() {
                                 placeholder="voce@exemplo.com"
                                 className={estiloCampo}
                                 aria-invalid={Boolean(errors.email)}
-                                aria-describedby={errors.email ? "erro-login-email" : undefined}
+                                aria-describedby={
+                                    errors.email ? "erro-login-email" : undefined
+                                }
                                 {...register("email", {
                                     required: "Informe seu e-mail.",
                                     setValueAs: (valor: string) => valor.trim(),
@@ -97,14 +139,20 @@ export default function Login() {
                             />
 
                             {errors.email && (
-                                <p id="erro-login-email" className="mt-2 text-sm text-red-700">
+                                <p
+                                    id="erro-login-email"
+                                    className="mt-2 text-sm text-red-700"
+                                >
                                     {errors.email.message}
                                 </p>
                             )}
                         </div>
 
                         <div>
-                            <label htmlFor="login-senha" className="text-sm font-semibold">
+                            <label
+                                htmlFor="login-senha"
+                                className="text-sm font-semibold"
+                            >
                                 Senha
                             </label>
 
@@ -116,16 +164,22 @@ export default function Login() {
                                     placeholder="Digite sua senha"
                                     className={`${estiloCampo} pr-12`}
                                     aria-invalid={Boolean(errors.senha)}
-                                    aria-describedby={errors.senha ? "erro-login-senha" : undefined}
+                                    aria-describedby={
+                                        errors.senha ? "erro-login-senha" : undefined
+                                    }
                                     {...register("senha", {
                                         required: "Informe sua senha.",
                                     })}
                                 />
-                        
+
                                 <button
                                     type="button"
-                                    onClick={() => setMostrarSenha((visivel) => !visivel)}
-                                    aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                                    onClick={() =>
+                                        setMostrarSenha((visivel) => !visivel)
+                                    }
+                                    aria-label={
+                                        mostrarSenha ? "Ocultar senha" : "Mostrar senha"
+                                    }
                                     aria-pressed={mostrarSenha}
                                     aria-controls="login-senha"
                                     className="absolute inset-y-0 right-0 flex w-12 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
@@ -139,13 +193,16 @@ export default function Login() {
                             </div>
 
                             {errors.senha && (
-                                <p id="erro-login-senha" className="mt-2 text-sm text-red-700">
+                                <p
+                                    id="erro-login-senha"
+                                    className="mt-2 text-sm text-red-700"
+                                >
                                     {errors.senha.message}
                                 </p>
                             )}
-                            
-                            <div className="w-full text-end mt-2">
-                                <Link 
+
+                            <div className="mt-2 w-full text-end">
+                                <Link
                                     to="/recuperar-senha"
                                     className="text-sm font-medium text-blue-700 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-blue-600"
                                 >
@@ -154,11 +211,21 @@ export default function Login() {
                             </div>
                         </div>
 
+                        {erroLogin && (
+                            <p
+                                role="alert"
+                                className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                            >
+                                {erroLogin}
+                            </p>
+                        )}
+
                         <button
                             type="submit"
-                            className="min-h-12 w-full cursor-pointer rounded-lg bg-[#2545ed] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            disabled={carregando}
+                            className="min-h-12 w-full cursor-pointer rounded-lg bg-[#2545ed] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                            Entrar
+                            {carregando ? "Entrando..." : "Entrar"}
                         </button>
                     </form>
 
@@ -183,7 +250,6 @@ export default function Login() {
                 </footer>
             </div>
 
-            {/* Imagem provisória do projeto até receber a foto usada no Figma. */}
             <div className="relative hidden min-h-0 overflow-hidden bg-slate-100 lg:block">
                 <img
                     src={imagemMobilidade}

@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx";
 import App from "./App.tsx";
 import Error from "./routes/Error/Index.tsx";
 import Home from "./routes/Home/index.tsx";
@@ -18,16 +19,24 @@ export const router = createBrowserRouter([
     element: <App />,
     errorElement: <Error />,
     children: [
-      { path: "/", element: <Home /> },
-      { path: "/contato", element: <Contato /> },
-      { path: "/login", element: <Login /> },
-      { path: "/faq", element: <Faq /> },
-      { path: "/sobre", element: <Sobre /> },
-      { path: "/integrantes", element: <Integrantes /> },
-      { path: "/solucao", element: <Solucao /> },
-      { path: "/metricas", element: <Metricas /> },
-      { path: "/validacao", element: <Validacao /> },
-      { path: "/validacao/:acaoId", element: <Validacao /> },
+      // Rotas públicas
+      { index: true, element: <Home /> },
+      { path: "login", element: <Login /> },
+      { path: "contato", element: <Contato /> },
+      { path: "faq", element: <Faq /> },
+      { path: "sobre", element: <Sobre /> },
+      { path: "integrantes", element: <Integrantes /> },
+
+      // Rotas privadas
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: "solucao", element: <Solucao /> },
+          { path: "metricas", element: <Metricas /> },
+          { path: "validacao", element: <Validacao /> },
+          { path: "validacao/:acaoId", element: <Validacao /> },
+        ],
+      },
     ],
   },
 ]);
