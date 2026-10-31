@@ -9,6 +9,7 @@ import Integrantes from "./routes/Integrantes/index.tsx";
 import Solucao from "./routes/Pages Funcionais/Solucao/index.tsx";
 import Metricas from "./routes/Pages Funcionais/Metricas/index.tsx";
 import Validacao from "./routes/Pages Funcionais/Validacao/index.tsx";
+import Login from "./routes/Login/index.tsx";
 // Adicionado tratamento de erro
 
 export const router = createBrowserRouter([
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/contato", element: <Contato /> },
+      { path: "/login", element: <Login /> },
       { path: "/faq", element: <Faq /> },
       { path: "/sobre", element: <Sobre /> },
       { path: "/integrantes", element: <Integrantes /> },
