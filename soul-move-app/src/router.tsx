@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
     children: [
       // Rotas públicas
       { index: true, element: <Home /> },
-      { path: "login", element: <Login /> },
+      { path: "login", element: <Login/> },
       { path: "contato", element: <Contato /> },
       { path: "faq", element: <Faq /> },
       { path: "sobre", element: <Sobre /> },
