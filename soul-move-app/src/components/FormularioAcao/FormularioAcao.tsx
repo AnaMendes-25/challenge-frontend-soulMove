@@ -6,10 +6,16 @@ import type { AcaoSustentavel, AtividadeBackend } from "../../types/ValidacaoTyp
 import { validarImagemSustentavel } from "../../services/moondreamService";
 
 
+export interface DadosEnvioAcao {
+  nome: string;
+  comentario: string;
+  arquivo: File;
+}
+
 interface FormularioAcaoProps {
   acao: AcaoSustentavel;
   atividade: AtividadeBackend;
-  aoEnviar: () => Promise<void>;
+  aoEnviar: (dados: DadosEnvioAcao) => Promise<void>;
 }
 
 export default function FormularioAcao({
@@ -103,7 +109,11 @@ export default function FormularioAcao({
       }
       setEnviando(true);
 
-      await aoEnviar();
+      await aoEnviar({
+        nome: dados.nome,
+        comentario: dados.comentario,
+        arquivo: dados.arquivo,
+      });
       reset();
       removerImagem();
       
