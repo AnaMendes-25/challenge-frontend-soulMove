@@ -1,5 +1,4 @@
-import { ApiError } from "../../../services/api";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
 import { atividadesService } from "../../../services/atividadesService";
@@ -29,6 +28,9 @@ export default function Validacao() {
   const [fotosComErro, setFotosComErro] = useState<number[]>([]);
 
 
+  //Cria a ref no topo do componente index.tsx (dentro da função da página)
+  const enviandoBackend = useRef(false);
+
   // Controla a abertura e o fechamento do modal.
   const [enviado, setEnviado] = useState(false);
   const [movePoints, setMovePoints] = useState(0);
@@ -50,7 +52,7 @@ export default function Validacao() {
       try {
         const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
 
-        const usuario = await usuariosService.buscarPorId(usuarioId, {signal: controller.signal});
+        const usuario = await usuariosService.buscarPorId(usuarioId, { signal: controller.signal });
 
         setMovePoints(usuario.pontuacaoSoul);
       } catch (erro) {
@@ -73,8 +75,8 @@ export default function Validacao() {
         const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
 
         const [dadosRanking, dadosUsuario] = await Promise.all([
-          rankingService.obterRankingGeral(5, {signal: controller.signal,}),
-          rankingService.obterPosicaoUsuario(usuarioId, {signal: controller.signal,}),
+          rankingService.obterRankingGeral(5, { signal: controller.signal, }),
+          rankingService.obterPosicaoUsuario(usuarioId, { signal: controller.signal, }),
         ]);
 
         if (controller.signal.aborted) return;
@@ -124,6 +126,7 @@ export default function Validacao() {
             titulo: item.nome,
             pontos: item.pontuacao,
             icone: dadosVisuais?.icone || "📌",
+            iconeImg: dadosVisuais?.iconeImg,
             comprovacao: dadosVisuais?.comprovacao || item.validacao || "Envie um comprovante válido.",
             exemplo: dadosVisuais?.exemplo || item.descricao || "Ex.: Ação sustentável",
             dadoOriginalJava: item,
@@ -148,54 +151,46 @@ export default function Validacao() {
   }, []);
 
   async function handleEnviarAtividade(idDaAtividade: string) {
-    const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
+
+    if (enviandoBackend.current) return;
+    enviandoBackend.current = true;
 
     try {
+      const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
+
       await atividadesService.registrarAtividade({
         usuarioId: idUtilizadorLogado,
         atividadeId: Number(idDaAtividade),
       });
-    } catch (erro: unknown) {
-      if (erro instanceof ApiError) {
-        alert(erro.message);
-      } else {
-        console.error("Erro inesperado ao registrar atividade:", erro);
-        alert("Ocorreu um erro inesperado. Tente novamente.");
+
+      setEnviado(true);
+
+      try {
+        const usuarioAtualizado = await usuariosService.buscarPorId(idUtilizadorLogado);
+        setMovePoints(usuarioAtualizado.pontuacaoSoul);
+      } catch (erro) {
+        console.error(
+          "Atividade registrada, mas não foi possível atualizar os pontos:",
+          erro
+        );
       }
 
-      return;
-    }
+      try {
+        const [rankingAtualizado, posicaoAtualizada] = await Promise.all([
+          rankingService.obterRankingGeral(5),
+          rankingService.obterPosicaoUsuario(idUtilizadorLogado),
+        ]);
 
-    // O registro foi concluído com sucesso.
-    setEnviado(true);
-
-    // Atualiza os pontos do usuário.
-    try {
-      const usuarioAtualizado =
-        await usuariosService.buscarPorId(idUtilizadorLogado);
-
-      setMovePoints(usuarioAtualizado.pontuacaoSoul);
-    } catch (erro) {
-      console.error(
-        "Atividade registrada, mas não foi possível atualizar os pontos:",
-        erro
-      );
-    }
-
-    // Atualiza o ranking independentemente da atualização dos pontos.
-    try {
-      const [rankingAtualizado, posicaoAtualizada] = await Promise.all([
-        rankingService.obterRankingGeral(5),
-        rankingService.obterPosicaoUsuario(idUtilizadorLogado),
-      ]);
-
-      setRankingApi(rankingAtualizado);
-      setPosicaoUsuario(posicaoAtualizada);
-    } catch (erro) {
-      console.error(
-        "Atividade registrada, mas não foi possível atualizar o ranking:",
-        erro
-      );
+        setRankingApi(rankingAtualizado);
+        setPosicaoUsuario(posicaoAtualizada);
+      } catch (erro) {
+        console.error(
+          "Atividade registrada, mas não foi possível atualizar o ranking:",
+          erro
+        );
+      }
+    } finally {
+      enviandoBackend.current = false;
     }
   }
 
@@ -235,7 +230,11 @@ export default function Validacao() {
                       className="grid h-[42px] min-w-[42px] place-items-center rounded-full bg-[#eaf2ff] text-[20px] text-[#2454de] min-[601px]:h-[56px] min-[601px]:min-w-[56px] min-[601px]:text-[24px]"
                       aria-hidden="true"
                     >
-                      {acao.icone}
+                      {acao.iconeImg ? (
+                        <img src={acao.iconeImg} alt="" className="h-[28px] w-[28px] object-contain min-[601px]:h-[34px] min-[601px]:w-[34px]" />
+                      ) : (
+                        acao.icone
+                      )}
                     </div>
 
                     <div className="flex-1">
@@ -322,49 +321,49 @@ export default function Validacao() {
 
                 <ol className="flex flex-col gap-[10px]">
                   {rankingApi.map((pessoa) => (
-                  <li
-                    key={pessoa.id}
-                    className="grid grid-cols-[24px_32px_1fr] items-center gap-[12px] rounded-[8px] bg-white p-[12px] min-[601px]:grid-cols-[28px_36px_1fr_auto]"
-                  >
-                    <span className="text-[14px] font-bold text-[#2454de]">
-                      {pessoa.posicao}º
-                    </span>
-
-                    {pessoa.fotoUsuario && !fotosComErro.includes(pessoa.usuarioId) ? (
-                      <img
-                        src={pessoa.fotoUsuario}
-                        alt={pessoa.nomeUsuario}
-                        onError={() => {
-                          setFotosComErro((atuais) =>
-                            atuais.includes(pessoa.usuarioId)
-                              ? atuais
-                              : [...atuais, pessoa.usuarioId]
-                          );
-                        }}
-                        className="h-[32px] w-[32px] rounded-full object-cover min-[601px]:h-[36px] min-[601px]:w-[36px]"
-                      />
-                    ) : (
-                      <span className="grid h-[32px] w-[32px] place-items-center rounded-full bg-[#eaf2ff] text-[10px] font-bold text-[#2454de] min-[601px]:h-[36px] min-[601px]:w-[36px]">
-                        {pessoa.nomeUsuario
-                          .split(" ")
-                          .filter(Boolean)
-                          .slice(0, 2)
-                          .map((nome) => nome[0])
-                          .join("")
-                          .toUpperCase()}
+                    <li
+                      key={pessoa.id}
+                      className="grid grid-cols-[24px_32px_1fr] items-center gap-[12px] rounded-[8px] bg-white p-[12px] min-[601px]:grid-cols-[28px_36px_1fr_auto]"
+                    >
+                      <span className="text-[14px] font-bold text-[#2454de]">
+                        {pessoa.posicao}º
                       </span>
-                    )}
 
-                    <div>
-                      <strong className="block text-[14px] font-bold">
-                        {pessoa.nomeUsuario}
+                      {pessoa.fotoUsuario && !fotosComErro.includes(pessoa.usuarioId) ? (
+                        <img
+                          src={pessoa.fotoUsuario}
+                          alt={pessoa.nomeUsuario}
+                          onError={() => {
+                            setFotosComErro((atuais) =>
+                              atuais.includes(pessoa.usuarioId)
+                                ? atuais
+                                : [...atuais, pessoa.usuarioId]
+                            );
+                          }}
+                          className="h-[32px] w-[32px] rounded-full object-cover min-[601px]:h-[36px] min-[601px]:w-[36px]"
+                        />
+                      ) : (
+                        <span className="grid h-[32px] w-[32px] place-items-center rounded-full bg-[#eaf2ff] text-[10px] font-bold text-[#2454de] min-[601px]:h-[36px] min-[601px]:w-[36px]">
+                          {pessoa.nomeUsuario
+                            .split(" ")
+                            .filter(Boolean)
+                            .slice(0, 2)
+                            .map((nome) => nome[0])
+                            .join("")
+                            .toUpperCase()}
+                        </span>
+                      )}
+
+                      <div>
+                        <strong className="block text-[14px] font-bold">
+                          {pessoa.nomeUsuario}
+                        </strong>
+                      </div>
+
+                      <strong className="col-start-3 text-[14px] font-bold text-[#2454de] min-[601px]:col-start-auto">
+                        {pessoa.pontuacaoTotal.toLocaleString("pt-BR")} pts
                       </strong>
-                    </div>
-
-                    <strong className="col-start-3 text-[14px] font-bold text-[#2454de] min-[601px]:col-start-auto">
-                      {pessoa.pontuacaoTotal.toLocaleString("pt-BR")} pts
-                    </strong>
-                  </li>
+                    </li>
                   ))}
                 </ol>
 
