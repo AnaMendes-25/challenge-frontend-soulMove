@@ -55,14 +55,10 @@ Analise a imagem e responda mentalmente:
 REGRAS DE DECISÃO:
 
 APROVADA:
-Somente se a imagem apresentar evidências visuais relevantes
-e diretamente relacionadas à atividade solicitada, mas pode incluir certo grau de tolerancia.
+Se a imagem mostrar claramente a ação solicitada, com evidências visuais suficientes.
 
 REPROVADA:
-Se a imagem mostrar uma ação diferente, mesmo que seja sustentável.
-Se mostrar apenas objetos relacionados ao tema, sem comprovar a ação.
-Se a relação com a atividade depender de suposições.
-
+Se a imagem mostrar uma ação diferente da atividade solicitada.
 
 IMPORTANTE:
 Avalie a ação visível, não a intenção presumida da pessoa.

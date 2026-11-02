@@ -18,8 +18,8 @@ interface FormularioAcaoProps {
   aoEnviar: (dados: DadosEnvioAcao) => Promise<void>;
 }
 
-const LARGURA_MAXIMA = 800;
-const ALTURA_MAXIMA = 400;
+const LARGURA_MAXIMA = 3840;
+const ALTURA_MAXIMA = 3840;
 
 // Lê a imagem e confere se cabe no limite de dimensões; imagem ilegível é recusada.
 async function dimensoesPermitidas(arquivo: File): Promise<boolean> {
@@ -157,7 +157,7 @@ export default function FormularioAcao({
 
   return (
     <div className="px-[14px] pb-[14px] min-[601px]:px-[22px] min-[601px]:pb-[22px]">
-      <form onSubmit={handleSubmit(enviarFormulario)} noValidate>
+      <form onSubmit={(e) => void handleSubmit(enviarFormulario)(e)} noValidate>
         {/* Upload obrigatório */}
         <div
           className={`mb-[16px] rounded-[8px] border p-[16px] ${errors.arquivo ? "border-[#d93025]" : "border-[#ddd]"
