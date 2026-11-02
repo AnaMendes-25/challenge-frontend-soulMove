@@ -76,14 +76,16 @@ export default function Metricas() {
       return;
     }
 
+    const idUsuario = usuarioId;
+
     const controlador = new AbortController();
 
     async function carregarResumo() {
       try {
         const resultados = await Promise.allSettled([
-          usuariosService.buscarPorId(usuarioId, { signal: controlador.signal }),
-          atividadesService.obterHistorico(usuarioId, { signal: controlador.signal }),
-          rankingService.obterPosicaoUsuario(usuarioId, { signal: controlador.signal }),
+          usuariosService.buscarPorId(idUsuario, { signal: controlador.signal }),
+          atividadesService.obterHistorico(idUsuario, { signal: controlador.signal }),
+          rankingService.obterPosicaoUsuario(idUsuario, { signal: controlador.signal }),
           rankingService.obterRankingGeral(10, { signal: controlador.signal }),
         ]);
 
