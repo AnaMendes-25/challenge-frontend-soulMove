@@ -18,6 +18,21 @@ interface FormularioAcaoProps {
   aoEnviar: (dados: DadosEnvioAcao) => Promise<void>;
 }
 
+const LARGURA_MAXIMA = 800;
+const ALTURA_MAXIMA = 400;
+
+// Lê a imagem e confere se cabe no limite de dimensões; imagem ilegível é recusada.
+async function dimensoesPermitidas(arquivo: File): Promise<boolean> {
+  try {
+    const imagem = await createImageBitmap(arquivo);
+    const permitida = imagem.width <= LARGURA_MAXIMA && imagem.height <= ALTURA_MAXIMA;
+    imagem.close();
+    return permitida;
+  } catch {
+    return false;
+  }
+}
+
 export default function FormularioAcao({
   acao,
   atividade,
@@ -48,7 +63,7 @@ export default function FormularioAcao({
     mode: "onTouched",
   });
 
-  function processarArquivo(arquivoSelecionado?: File) {
+  async function processarArquivo(arquivoSelecionado?: File) {
     if (!arquivoSelecionado) return;
 
     const formatosPermitidos = ["image/png", "image/jpeg"];
@@ -56,6 +71,14 @@ export default function FormularioAcao({
     if (!formatosPermitidos.includes(arquivoSelecionado.type)) {
       setValue("arquivo", null, { shouldValidate: true });
       setError("arquivo", { type: "validate", message: "Por favor, envie uma imagem PNG ou JPG." });
+      setPreview("");
+      setNomeArquivo("");
+      return;
+    }
+
+    if (!(await dimensoesPermitidas(arquivoSelecionado))) {
+      setValue("arquivo", null, { shouldValidate: true });
+      setError("arquivo", { type: "validate", message: `A imagem deve ter no máximo ${LARGURA_MAXIMA}x${ALTURA_MAXIMA}px.` });
       setPreview("");
       setNomeArquivo("");
       return;
