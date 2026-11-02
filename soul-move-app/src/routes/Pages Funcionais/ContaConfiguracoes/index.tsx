@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiUser } from 'react-icons/fi';
 import { contaSchema } from '../../../types/contaSchema';
 import type { ContaFormData } from '../../../types/contaSchema';
 import { usuariosService } from '../../../services/usuariosService';
@@ -19,6 +19,7 @@ export const ContaConfiguracoes: React.FC = () => {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [usuarioAtual, setUsuarioAtual] = useState<Usuario | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [mostrarSenha, setMostrarSenha] = useState<boolean>(false);
     const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState<boolean>(false);
 
@@ -140,6 +141,29 @@ export const ContaConfiguracoes: React.FC = () => {
         leitor.readAsDataURL(arquivo);
     };
 
+    const handleExcluirConta = () => {
+        if (!usuarioAtual) return;
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmarExclusaoConta = async () => {
+        if (!usuarioAtual) return;
+
+        setSaving(true);
+        setErrorMessage(null);
+        setIsDeleteModalOpen(false);
+
+        try {
+            await usuariosService.excluirConta(usuarioAtual.id);
+            navigate('/login', { replace: true });
+        } catch (err: unknown) {
+            const errorObj = err as { message?: string };
+            setErrorMessage(errorObj?.message || 'Não foi possível excluir a conta. Tente novamente.');
+        } finally {
+            setSaving(false);
+        }
+    };
+
     if (loading) {
         return (
             <>
@@ -201,7 +225,7 @@ return (
                                     {fotoPreview ? (
                                         <img src={fotoPreview} alt="Prévia da foto do usuário" className="h-full w-full object-cover" />
                                     ) : (
-                                        <span>Adicionar foto</span>
+                                        <FiUser className="h-10 w-10 text-gray-400" strokeWidth={1.5} aria-hidden="true" />
                                     )}
                                 </label>
                                 <input
@@ -327,7 +351,63 @@ return (
                             </ButtonBase>
                         </div>
                     </form>
+
+                        <section className="border-t border-red-100 pt-5">
+                            <h3 className="text-sm font-semibold text-red-700">Excluir conta</h3>
+                            <p className="mt-1 text-xs text-gray-500">
+                                Esta ação remove permanentemente sua conta e não pode ser desfeita.
+                            </p>
+                            <ButtonBase
+                                type="button"
+                                variant="secondary"
+                                onClick={handleExcluirConta}
+                                disabled={saving}
+                                className="mt-3 text-red-600 outline-red-600 hover:bg-red-50 hover:text-red-700"
+                            >
+                                {saving ? 'A processar...' : 'Excluir minha conta'}
+                            </ButtonBase>
+                        </section>
                 </div>
+
+                {isDeleteModalOpen && (
+                    <div
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-5"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="titulo-exclusao-conta"
+                    >
+                        <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+                            <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-red-100 text-2xl text-red-600">
+                                !
+                            </div>
+                            <h2 id="titulo-exclusao-conta" className="text-center text-xl font-bold text-gray-900">
+                                Excluir sua conta?
+                            </h2>
+                            <p className="mt-3 text-center text-sm leading-relaxed text-gray-600">
+                                Ao excluir sua conta, você perderá todos os seus pontos e dados.
+                                Esta ação é irreversível.
+                            </p>
+                            <div className="mt-6 flex justify-end gap-3">
+                                <ButtonBase
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => setIsDeleteModalOpen(false)}
+                                    className="hover:bg-gray-100"
+                                >
+                                    Cancelar
+                                </ButtonBase>
+                                <ButtonBase
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={confirmarExclusaoConta}
+                                    className="text-red-600 outline-red-600 hover:bg-red-600 hover:text-white"
+                                >
+                                    Excluir conta
+                                </ButtonBase>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Modal de Sucesso */}
                 {isModalOpen && (

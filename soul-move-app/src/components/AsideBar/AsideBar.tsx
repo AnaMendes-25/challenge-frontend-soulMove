@@ -31,6 +31,7 @@ const estiloLink = ({ isActive }: { isActive: boolean }) =>
 export default function AsideBar() {
   const [menuAberto, setMenuAberto] = useState(false);
   const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [fotoCarregada, setFotoCarregada] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function AsideBar() {
 
     const atualizarUsuario = (event: Event) => {
       setUsuario((event as CustomEvent<Usuario>).detail);
+      setFotoCarregada(true);
     };
 
     carregarUsuario();
@@ -108,8 +110,13 @@ export default function AsideBar() {
             title="Minha conta"
             className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100 text-slate-500 transition-colors hover:bg-blue-50 hover:text-[#2545cd] cursor-pointer"
           >
-            {usuario?.fotoUsuario ? (
-              <img src={usuario.fotoUsuario} alt="" className="h-full w-full object-cover" />
+            {usuario?.fotoUsuario && fotoCarregada ? (
+              <img
+                src={usuario.fotoUsuario}
+                alt=""
+                className="h-full w-full object-cover"
+                onError={() => setFotoCarregada(false)}
+              />
             ) : (
               <FiUser className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
             )}
