@@ -32,6 +32,18 @@ export interface RegistrarAtividadeRequest {
 }
 
 /**
+ * Dados do comprovante enviado como multipart/form-data.
+ * Utilizado na rota: POST /validacao
+ */
+export interface EnviarComprovanteRequest {
+  usuarioId: number;
+  atividadeId: number;
+  nome: string;
+  comentario: string;
+  arquivo: File;
+}
+
+/**
  * Resposta retornada ao registrar uma atividade ou ao listar o histórico.
  * Utilizada nas rotas: POST /atividades/registrar, GET /atividades/historico/{usuarioId}
  */
