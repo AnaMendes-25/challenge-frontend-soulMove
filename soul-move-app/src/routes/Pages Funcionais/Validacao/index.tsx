@@ -8,8 +8,9 @@ import { rankingService } from "../../../services/rankingService";
 import AsideBar from "../../../components/AsideBar/AsideBar";
 import FormularioAcao, { type DadosEnvioAcao } from "../../../components/FormularioAcao/FormularioAcao";
 import ModalSucesso from "../../../components/ModalSucesso/ModalSucesso";
+import HistoricoAtividades from "../../../components/HistoricoAtividades/HistoricoAtividades";
 
-import { acoesSustentaveis, missoesValidacao, } from "../../../data/ValidacaoData";
+import { acoesSustentaveis } from "../../../data/ValidacaoData";
 
 import type { AcaoSustentavel } from "../../../types/ValidacaoTypes";
 import type { AtividadeBackend } from "../../../types/ValidacaoTypes";
@@ -31,6 +32,7 @@ export default function Validacao() {
   // Controla a abertura e o fechamento do modal.
   const [enviado, setEnviado] = useState(false);
   const [movePoints, setMovePoints] = useState(0);
+  const [recarregarHistorico, setRecarregarHistorico] = useState(0);
 
   useEffect(() => {
     document.title = "SoulMove | Registrar ações";
@@ -164,6 +166,9 @@ export default function Validacao() {
 
     // O registro foi concluído com sucesso.
     setEnviado(true);
+
+    // Recarrega a lista de atividades registradas.
+    setRecarregarHistorico((valor) => valor + 1);
 
     // Atualiza os pontos do usuário.
     try {
@@ -376,55 +381,11 @@ export default function Validacao() {
                 </Link>
               </section>
 
-              {/* Missões ativas */}
-              <section className="flex flex-col">
-                <h2 className="mb-[12px] text-[14px] font-medium uppercase text-[#444]">
-                  Missões ativas
-                </h2>
-
-                {missoesValidacao.map((missao) => {
-                  const progresso = (missao.progresso / missao.total) * 100;
-
-                  return (
-                    <article
-                      key={missao.id}
-                      className="mb-[10px] rounded-[8px] bg-white px-[16px] py-[12px]"
-                    >
-                      <div className="mb-[10px] flex items-center justify-between gap-2">
-                        <strong className="text-[14px] font-bold">
-                          {missao.titulo}
-                        </strong>
-
-                        <span className="text-[14px] font-bold text-[#ff7a00]">
-                          +{missao.pontos}
-                        </span>
-                      </div>
-
-                      <div className="mb-[8px] h-[7px] w-full overflow-hidden rounded-full bg-[#dedede]">
-                        <span
-                          className="block h-full rounded-full bg-[#2454de]"
-                          style={{ width: `${progresso}%` }}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between text-[12px] text-[#777]">
-                        <span>
-                          {missao.progresso}/{missao.total}
-                        </span>
-
-                        <span>termina em {missao.diasRestantes} dias</span>
-                      </div>
-                    </article>
-                  );
-                })}
-
-                <Link
-                  to="/metricas"
-                  className="mt-[4px] inline-flex text-[14px] font-semibold text-[#4d4d4d] transition hover:text-[#2454de]"
-                >
-                  Ver mais missões →
-                </Link>
-              </section>
+              {/* Atividades registradas (histórico real da API) */}
+              <HistoricoAtividades
+                usuarioId={usuariosService.getUsuarioIdGuardado() ?? 1}
+                recarregarKey={recarregarHistorico}
+              />
             </aside>
           </div>
         </section>

@@ -32,8 +32,8 @@ export const atividadesService = {
    * Obtém os detalhes de uma atividade específica pelo ID.
    * Rota: GET /atividades/{id}
    */
-  async buscarPorId(id: number): Promise<AtividadeBackend> {
-    const { data } = await api.get(`/atividades/${id}`);
+  async buscarPorId(id: number, options?: RequestOptions): Promise<AtividadeBackend> {
+    const { data } = await api.get(`/atividades/${id}`, options);
     return exigirObjeto<AtividadeBackend>(data, "atividade");
   },
 
@@ -79,10 +79,17 @@ export const atividadesService = {
    * - Retorna os registros ordenados do mais recente para o mais antigo.
    * - A propriedade `dataAtividade` vem no formato "yyyy-MM-dd" (sem horário).
    */
-  async obterHistorico(usuarioId: number): Promise<UsuarioAtividadeResponse[]> {
-    const { data } = await api.get(`/atividades/historico/${usuarioId}`);
+  async obterHistorico(usuarioId: number, options?: RequestOptions): Promise<UsuarioAtividadeResponse[]> {
+    const { data } = await api.get(`/atividades/historico/${usuarioId}`, options);
     return exigirArray<UsuarioAtividadeResponse>(data, "histórico de atividades");
   },
+
+  /*
+   * EXCLUSÃO DE REGISTRO DO HISTÓRICO - NÃO IMPLEMENTADA:
+   * O Swagger atual (/v3/api-docs) não expõe DELETE para registros de /atividades/historico.
+   * (Só existe DELETE /usuarios/{id}.) Quando o backend criar a rota, adicionar aqui a chamada
+   * `api.delete(...)` e habilitar a lixeira em HistoricoAtividades (ver #14).
+   */
 
   /*
    * ROTA ADMINISTRATIVA - NÃO CHAMAR NO APP DO UTILIZADOR FINAL:
