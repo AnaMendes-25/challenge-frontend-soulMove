@@ -1,40 +1,34 @@
-# 🌱 SoulMove
+# 🌱 SoulMove — H2
 
 ## 📖 Sobre o Projeto
 
-O **SoulMove** é uma plataforma desenvolvida com foco em sustentabilidade, mobilidade consciente e gamificação.
+O **SoulMove** é uma aplicação web desenvolvida para incentivar hábitos sustentáveis por meio de mobilidade consciente, gamificação, pontuação e recompensas.
 
-A proposta do projeto é incentivar hábitos sustentáveis por meio de um sistema de pontuação e recompensas, transformando pequenas ações do cotidiano em impactos positivos para o meio ambiente. Os usuários podem registrar atividades sustentáveis, participar de desafios e acumular pontos que podem ser convertidos em benefícios dentro da plataforma.
+A versão final combina uma landing page pública com uma área interna autenticada. Nela, o usuário consulta seus MOVE Points, registra ações sustentáveis, acompanha o ranking da comunidade e visualiza ou resgata recompensas disponíveis.
 
 ---
 
 ## 🖥️ Como Funciona
 
-Os usuários acumulam pontos ao realizar atividades sustentáveis, como:
+Na área interna, os usuários podem registrar atividades sustentáveis como:
 
-- 🚶 Caminhadas
-- 🏃 Corridas
-- 🚴 Passeios de bicicleta
+- ♻️ Reciclagem
+- 💡 Redução do consumo de energia
 - 🚌 Uso de transporte público
-- 💡 Redução no consumo de energia
-- ♻️ Atos de reciclagem
+- 🚴 Trajetos de bicicleta
+- 🚶 Trajetos de caminhada
 
-Cada atividade gera pontuações que podem ser convertidas em benefícios reais dentro da plataforma.
+Cada registro é enviado para a API e atualiza o saldo de `pontuacaoSoul` do usuário.
 
-Além do registro das atividades, os usuários podem acompanhar sua evolução, participar de desafios e comparar seu desempenho por meio do ranking.
+Também é possível acompanhar a quantidade de ações realizadas, a posição individual no ranking e os dez usuários com maior pontuação.
 
 ---
 
 ## 🏆 Sistema de Recompensas
 
-Os pontos acumulados dentro do SoulMove podem ser utilizados para obter benefícios relacionados à sustentabilidade.
+Os MOVE Points podem ser utilizados para resgatar recompensas cadastradas pela API.
 
-Entre as possibilidades estão:
-
-- Descontos na conta de energia
-- Benefícios oferecidos por parceiros
-- Recompensas sustentáveis
-- Participação em desafios e campanhas especiais
+O catálogo é carregado por `GET /recompensas`, e cada item informa sua descrição, seu identificador e seu valor em pontos. O resgate usa `POST /recompensas/resgatar`. O fluxo atual inclui confirmação, validação do saldo, atualização do saldo após o resgate e aviso visual de que a experiência de desconto ainda é um protótipo.
 
 ---
 
@@ -58,10 +52,10 @@ A plataforma busca transformar pequenas ações do cotidiano em impactos positiv
 - Envio de evidências das atividades
 - Sistema de pontuação
 - Ranking global
-- Participação em desafios e missões
 - Validação de ações
 - Sistema de recompensas
-- Gamificação dos usuários
+- Ranking individual e Top 10 da comunidade
+- Cadastro e login
 - Interface responsiva
 
 ---
@@ -74,7 +68,6 @@ A solução permite que os usuários:
 
 - Registrem atividades sustentáveis
 - Compartilhem evidências por meio de imagens
-- Participem de desafios e missões
 - Acumulem pontos
 - Conquistem recompensas
 - Acompanhem sua posição no ranking
@@ -111,6 +104,8 @@ challenge-frontend-soulMove/
 │   │   │   └── markdown-img/
 │   │   ├── components/
 │   │   ├── routes/
+│   │   ├── services/
+│   │   ├── data/
 │   │   ├── types/
 │   │   └── utils/
 │   └── public/ (quando necessário)
@@ -135,9 +130,23 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
 - ESLint — análise estática do código
 - Git e GitHub — versionamento e colaboração
 
+### Referência visual
+
+- [Figma — SoulMove H2](https://www.figma.com/design/Vl2qsDRX2mpbC8IruAYc5p/SoulMove-H2?node-id=2190-4861)
+
 ---
 
-## ▶️ Como Executar Localmente
+## ▶️ Como Usar
+
+### Links da entrega
+
+- Repositório: [github.com/AnaMendes-25/challenge-frontend-soulMove](https://github.com/AnaMendes-25/challenge-frontend-soulMove)
+- Vídeo de apresentação: [YouTube](https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS)
+- Aplicação publicada na Vercel: **URL pendente de confirmação**
+
+O vídeo acima é o material atualmente registrado no projeto. Ele deve ser substituído quando houver um novo vídeo que demonstre a versão final.
+
+### Executar localmente
 
 Para rodar o projeto em sua máquina, siga os passos abaixo:
 
@@ -159,17 +168,61 @@ cd challenge-frontend-soulMove/soul-move-app
 npm install
 ```
 
-4. Execute o projeto
+4. Configure as variáveis de ambiente
+
+Crie `soul-move-app/.env` a partir do exemplo:
+
+```bash
+copy .env.example .env
+```
+
+Preencha a URL pública da API sem adicionar tokens ou senhas ao repositório:
+
+```env
+VITE_API_SOULMOVE_URL=https://sua-api.example.com
+```
+
+`VITE_MOONDREAM_API_KEY` é opcional para a funcionalidade que utiliza o serviço Moondream. Nunca publique uma chave real; use uma variável local.
+
+5. Execute o projeto
 
 ```bash
 npm run dev
 ```
 
-5. Acesse a aplicação
+6. Acesse a aplicação
 
 ```bash
 http://localhost:5173/
 ```
+
+### Scripts disponíveis
+
+Executar dentro de `soul-move-app/`:
+
+| Comando | Finalidade |
+| --- | --- |
+| `npm run dev` | Inicia o servidor de desenvolvimento Vite |
+| `npm run build` | Executa o type-check e gera a build de produção |
+| `npm run lint` | Executa o ESLint |
+| `npm run preview` | Serve localmente a build de produção |
+
+### Fluxo de teste
+
+1. Abra a landing page e use **Login** ou **Cadastre-se**.
+2. Para testar com dados reais, use uma conta autorizada pelo responsável pela API; não inclua credenciais no README, no `.env.example` ou em commits.
+3. Após o login, a aplicação guarda somente o `usuarioId` retornado pela API no `localStorage`.
+4. A área interna consulta a API para carregar o usuário, o histórico de atividades, o ranking e as recompensas.
+5. Em **Registrar ações**, escolha uma atividade, envie a comprovação solicitada e conclua o registro.
+6. Em **Métricas**, consulte os pontos, o total de ações, o ranking e o catálogo de recompensas.
+
+### Limitações atuais
+
+- A aplicação depende da disponibilidade e da URL configurada da API remota.
+- O contrato atual do ranking não fornece cidade; por isso, a lista exibe posição, nome, foto quando disponível e pontuação.
+- O catálogo de recompensas fornece apenas `id`, `descricao` e `valor`; os cards usam um ícone genérico.
+- O desconto associado ao resgate ainda é uma experiência de protótipo.
+- Não há credenciais de teste públicas neste repositório.
 
 ---
 
@@ -193,7 +246,7 @@ Esses ativos são utilizados diretamente pelos componentes e rotas da aplicaçã
 O código-fonte do projeto está disponível no GitHub.
 
 - Repositório oficial: [github.com/AnaMendes-25/challenge-frontend-soulMove](https://github.com/AnaMendes-25/challenge-frontend-soulMove)
-- Link apresentando solução: [https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS](https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS)
+- Link apresentando solução: [YouTube](https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS)
 
 ---
 
