@@ -193,7 +193,7 @@ export default function FormularioAcao({
                   ou arraste e solte
                 </span>
                 <span className="text-[12px]">
-                  PNG ou JPG (máx. 800x400px)
+                  PNG ou JPG (máx. {ALTURA_MAXIMA}x{LARGURA_MAXIMA}px)
                 </span>
               </label>
             </>
