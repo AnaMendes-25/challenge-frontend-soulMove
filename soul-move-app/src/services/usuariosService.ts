@@ -53,11 +53,10 @@ export const usuariosService = {
     },
 
   /**
-   * Atualiza o nome e/ou foto do perfil do usuário.
+   * Atualiza os dados do perfil do usuário.
    * Rota: PUT /usuarios/{id}
-   * 
-   * NOTA: O PUT é substitutivo completo para esses dois campos. E-mail, senha e pontos
-   * não são alterados nesta rota.
+   *
+   * O e-mail e a senha são opcionais conforme o contrato de atualização.
    */
   async atualizarPerfil(id: number, payload: UsuarioUpdateRequest): Promise<Usuario> {
     const { data } = await api.put(`/usuarios/${id}`, payload);

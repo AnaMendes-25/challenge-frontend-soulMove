@@ -10,7 +10,9 @@ import Integrantes from "./routes/Integrantes/index.tsx";
 import Solucao from "./routes/Pages Funcionais/Solucao/index.tsx";
 import Metricas from "./routes/Pages Funcionais/Metricas/index.tsx";
 import Validacao from "./routes/Pages Funcionais/Validacao/index.tsx";
+import { ContaConfiguracoes } from "./routes/Pages Funcionais/ContaConfiguracoes/index.tsx";
 import Login from "./routes/Login/index.tsx";
+
 // Adicionado tratamento de erro
 
 export const router = createBrowserRouter([
@@ -21,7 +23,7 @@ export const router = createBrowserRouter([
     children: [
       // Rotas públicas
       { index: true, element: <Home /> },
-      { path: "login", element: <Login /> },
+      { path: "login", element: <Login/> },
       { path: "contato", element: <Contato /> },
       { path: "faq", element: <Faq /> },
       { path: "sobre", element: <Sobre /> },
@@ -35,6 +37,7 @@ export const router = createBrowserRouter([
           { path: "metricas", element: <Metricas /> },
           { path: "validacao", element: <Validacao /> },
           { path: "validacao/:acaoId", element: <Validacao /> },
+          { path: "/configuracoes", element: <ContaConfiguracoes/> }
         ],
       },
     ],
