@@ -60,6 +60,7 @@ export default function Metricas() {
   const [recompensas, setRecompensas] = useState<Recompensa[]>([]);
   const [rankingUsuario, setRankingUsuario] = useState<RankingItem | null>(null);
   const [rankingComunidade, setRankingComunidade] = useState<RankingItem[]>([]);
+  const [fotosComErro, setFotosComErro] = useState<number[]>([]);
   const [recompensaEmResgate, setRecompensaEmResgate] = useState<number | null>(null);
   const [recompensaSelecionada, setRecompensaSelecionada] = useState<Recompensa | null>(null);
   const [erroResgate, setErroResgate] = useState("");
@@ -279,10 +280,17 @@ export default function Metricas() {
                       {pessoa.posicao}º
                     </span>
                     <div className="flex min-w-0 items-center gap-3">
-                      {pessoa.fotoUsuario ? (
+                      {pessoa.fotoUsuario && !fotosComErro.includes(pessoa.usuarioId) ? (
                         <img
                           src={pessoa.fotoUsuario}
-                          alt=""
+                          alt={pessoa.nomeUsuario}
+                          onError={() => {
+                            setFotosComErro((atuais) =>
+                              atuais.includes(pessoa.usuarioId)
+                                ? atuais
+                                : [...atuais, pessoa.usuarioId]
+                            );
+                          }}
                           className="h-10 w-10 shrink-0 rounded-full object-cover"
                         />
                       ) : (
