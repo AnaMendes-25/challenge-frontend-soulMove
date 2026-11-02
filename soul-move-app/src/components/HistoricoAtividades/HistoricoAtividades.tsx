@@ -21,9 +21,6 @@ interface EstadoDetalhe {
   mensagem?: string;
 }
 
-const MENSAGEM_SEM_DELETE =
-  "Exclusão indisponível: a API ainda não oferece DELETE para registros do histórico.";
-
 const ROTULO_TIPO: Record<string, string> = {
   RECICLAGEM: "Reciclagem",
   TRANSPORTE_PUBLICO: "Transporte público",
@@ -169,7 +166,7 @@ export default function HistoricoAtividades({ usuarioId, recarregarKey = 0 }: Hi
 
       {estado === "pronto" && registros.length > 0 && (
         <ul className="flex flex-col gap-[10px]">
-          {registros.map((registro) => {
+          {registros.slice(0, 5).map((registro) => {
             const visual = visualDaAtividade(registro.nomeAtividade, catalogo);
 
             return (
@@ -204,27 +201,6 @@ export default function HistoricoAtividades({ usuarioId, recarregarKey = 0 }: Hi
                 </span>
               </button>
 
-              {/* A API não possui DELETE para este recurso: lixeira desabilitada, sem simulação local. */}
-              <button
-                type="button"
-                disabled
-                title={MENSAGEM_SEM_DELETE}
-                aria-label={`Excluir ${registro.nomeAtividade} (indisponível)`}
-                className="grid h-[32px] w-[32px] shrink-0 cursor-not-allowed place-items-center rounded-[8px] text-[#b5b5b5]"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-[18px] w-[18px]"
-                  aria-hidden="true"
-                >
-                  <path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6" />
-                </svg>
-              </button>
             </li>
             );
           })}
