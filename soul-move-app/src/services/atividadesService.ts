@@ -1,6 +1,6 @@
 import { api, exigirArray, exigirObjeto } from "./api";
 import type { RequestOptions } from "./api";
-import type { AtividadeBackend, RegistrarAtividadeRequest, TipoAtividade, UsuarioAtividadeResponse } from "./atividadesTypes";
+import type { AtividadeBackend, EnviarComprovanteRequest, RegistrarAtividadeRequest, TipoAtividade, UsuarioAtividadeResponse } from "./atividadesTypes";
 
 export const atividadesService = {
   /**
@@ -52,6 +52,23 @@ export const atividadesService = {
   async registrarAtividade(payload: RegistrarAtividadeRequest): Promise<UsuarioAtividadeResponse> {
     const { data } = await api.post("/atividades/registrar", payload);
     return exigirObjeto<UsuarioAtividadeResponse>(data, "registro de atividade");
+  },
+
+  /**
+   * Envia o comprovante (imagem, nome e comentário) da atividade.
+   * Rota: POST /validacao (multipart/form-data)
+   *
+   * ATENÇÃO: os nomes dos campos do FormData devem ser conferidos com o backend.
+   */
+  async enviarComprovante(payload: EnviarComprovanteRequest): Promise<void> {
+    const formData = new FormData();
+    formData.append("usuarioId", String(payload.usuarioId));
+    formData.append("atividadeId", String(payload.atividadeId));
+    formData.append("nome", payload.nome);
+    formData.append("comentario", payload.comentario);
+    formData.append("arquivo", payload.arquivo);
+
+    await api.post("/validacao", formData);
   },
 
   /**

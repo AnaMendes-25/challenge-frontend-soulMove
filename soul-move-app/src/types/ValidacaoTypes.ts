@@ -3,6 +3,7 @@
 export interface AcaoSustentavel {
   id: string;
   icone: string;
+  iconeImg?: string;
   titulo: string;
   pontos: number;
   comprovacao: string;
