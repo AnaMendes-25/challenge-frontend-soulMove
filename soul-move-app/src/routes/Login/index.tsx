@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import logoSoulMove from "../../assets/logo/LogoSoulMoveIndigo.png";
-import imagemMobilidade from "../../assets/banners/img-header-homem.png";
+import imagemMobilidade from "../../assets/banners/loginEcadastro-acesso.png";
 import { ApiError } from "../../services/api";
 import { usuariosService } from "../../services/usuariosService";
 

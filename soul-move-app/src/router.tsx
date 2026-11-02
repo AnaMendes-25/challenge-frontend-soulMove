@@ -12,6 +12,7 @@ import Metricas from "./routes/Pages Funcionais/Metricas/index.tsx";
 import Validacao from "./routes/Pages Funcionais/Validacao/index.tsx";
 import { ContaConfiguracoes } from "./routes/Pages Funcionais/ContaConfiguracoes/index.tsx";
 import Login from "./routes/Login/index.tsx";
+import Cadastro from "./routes/Cadastro/index.tsx";
 
 // Adicionado tratamento de erro
 
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
       // Rotas públicas
       { index: true, element: <Home /> },
       { path: "login", element: <Login/> },
+      { path: "cadastro", element: <Cadastro /> },
       { path: "contato", element: <Contato /> },
       { path: "faq", element: <Faq /> },
       { path: "sobre", element: <Sobre /> },
