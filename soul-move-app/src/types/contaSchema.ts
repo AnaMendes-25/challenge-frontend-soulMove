@@ -4,6 +4,7 @@ export const contaSchema = z
   .object({
     nome: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres'),
     email: z.string().email('E-mail inválido'),
+    fotoUsuario: z.string().optional(),
     senha: z.string().optional(),
     confirmarSenha: z.string().optional(),
   })
