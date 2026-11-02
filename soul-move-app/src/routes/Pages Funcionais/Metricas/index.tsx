@@ -10,6 +10,7 @@ import type { Recompensa } from "../../../services/recompensasTypes";
 import { ApiError } from "../../../services/api";
 import ModalSucesso from "../../../components/ModalSucesso/ModalSucesso";
 import ButtonBase from "../../../components/ButtonBase/ButtonBase";
+import { FiGift } from "react-icons/fi";
 
 interface NumeroAnimadoProps {
   valorFinal: number;
@@ -322,8 +323,11 @@ export default function Metricas() {
                   key={recompensa.id}
                   className="rounded-lg border border-blue-200 bg-white p-3 shadow-sm"
                 >
-                  <div className="flex h-8 items-center text-xl" aria-hidden="true">
-                    🎁
+                  <div
+                    className="flex h-8 items-center text-blue-600"
+                    aria-hidden="true"
+                  >
+                    <FiGift className="h-5 w-5" strokeWidth={1.7} />
                   </div>
                   <h3 className="mt-1 text-[11px] font-bold text-slate-900">
                     {recompensa.descricao}
