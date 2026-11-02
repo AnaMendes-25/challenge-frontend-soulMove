@@ -1,4 +1,3 @@
-import { ApiError } from "../../../services/api";
 import { startTransition, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
@@ -7,7 +6,7 @@ import { usuariosService } from "../../../services/usuariosService";
 import { rankingService } from "../../../services/rankingService";
 
 import AsideBar from "../../../components/AsideBar/AsideBar";
-import FormularioAcao from "../../../components/FormularioAcao/FormularioAcao";
+import FormularioAcao, { type DadosEnvioAcao } from "../../../components/FormularioAcao/FormularioAcao";
 import ModalSucesso from "../../../components/ModalSucesso/ModalSucesso";
 
 import { acoesSustentaveis, missoesValidacao, } from "../../../data/ValidacaoData";
@@ -124,6 +123,7 @@ export default function Validacao() {
             titulo: item.nome,
             pontos: item.pontuacao,
             icone: dadosVisuais?.icone || "📌",
+            iconeImg: dadosVisuais?.iconeImg,
             comprovacao: dadosVisuais?.comprovacao || item.validacao || "Envie um comprovante válido.",
             exemplo: dadosVisuais?.exemplo || item.descricao || "Ex.: Ação sustentável",
             dadoOriginalJava: item,
@@ -147,24 +147,20 @@ export default function Validacao() {
     return () => controller.abort();
   }, []);
 
-  async function handleEnviarAtividade(idDaAtividade: string) {
+  async function handleEnviarAtividade(idDaAtividade: string, dados: DadosEnvioAcao) {
     const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
 
-    try {
-      await atividadesService.registrarAtividade({
-        usuarioId: idUtilizadorLogado,
-        atividadeId: Number(idDaAtividade),
-      });
-    } catch (erro: unknown) {
-      if (erro instanceof ApiError) {
-        alert(erro.message);
-      } else {
-        console.error("Erro inesperado ao registrar atividade:", erro);
-        alert("Ocorreu um erro inesperado. Tente novamente.");
-      }
+    // Em caso de erro, a exceção sobe para o formulário, que exibe a mensagem e mantém o comprovante.
+    await atividadesService.enviarComprovante({
+      usuarioId: idUtilizadorLogado,
+      atividadeId: Number(idDaAtividade),
+      ...dados,
+    });
 
-      return;
-    }
+    await atividadesService.registrarAtividade({
+      usuarioId: idUtilizadorLogado,
+      atividadeId: Number(idDaAtividade),
+    });
 
     // O registro foi concluído com sucesso.
     setEnviado(true);
@@ -235,7 +231,11 @@ export default function Validacao() {
                       className="grid h-[42px] min-w-[42px] place-items-center rounded-full bg-[#eaf2ff] text-[20px] text-[#2454de] min-[601px]:h-[56px] min-[601px]:min-w-[56px] min-[601px]:text-[24px]"
                       aria-hidden="true"
                     >
-                      {acao.icone}
+                      {acao.iconeImg ? (
+                        <img src={acao.iconeImg} alt="" className="h-[28px] w-[28px] object-contain min-[601px]:h-[34px] min-[601px]:w-[34px]" />
+                      ) : (
+                        acao.icone
+                      )}
                     </div>
 
                     <div className="flex-1">
@@ -286,7 +286,7 @@ export default function Validacao() {
                       <FormularioAcao
                         acao={acao}
                         atividade={acao.dadoOriginalJava}
-                        aoEnviar={() => handleEnviarAtividade(acao.id)}
+                        aoEnviar={(dados) => handleEnviarAtividade(acao.id, dados)}
                       />
                     </div>
                   )}
