@@ -1,4 +1,4 @@
-# 🌱 SoulMove — H2
+# 🌱 SoulMove 
 
 ## 📖 Sobre o Projeto
 
