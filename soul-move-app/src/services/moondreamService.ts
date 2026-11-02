@@ -55,10 +55,9 @@ Analise a imagem e responda mentalmente:
 REGRAS DE DECISÃO:
 
 APROVADA:
-Se a imagem mostrar claramente a ação solicitada, com evidências visuais suficientes.
+Se a imagem mostrar claramente a ação solicitada, com evidências visuais suficientes, pode aceitar tolerância para pequenas variações na execução da atividade.
 
-REPROVADA:
-Se a imagem mostrar uma ação diferente da atividade solicitada.
+
 
 IMPORTANTE:
 Avalie a ação visível, não a intenção presumida da pessoa.

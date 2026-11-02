@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
 import { atividadesService } from "../../../services/atividadesService";
@@ -6,7 +6,7 @@ import { usuariosService } from "../../../services/usuariosService";
 import { rankingService } from "../../../services/rankingService";
 
 import AsideBar from "../../../components/AsideBar/AsideBar";
-import FormularioAcao, { type DadosEnvioAcao } from "../../../components/FormularioAcao/FormularioAcao";
+import FormularioAcao from "../../../components/FormularioAcao/FormularioAcao";
 import ModalSucesso from "../../../components/ModalSucesso/ModalSucesso";
 
 import { acoesSustentaveis, missoesValidacao, } from "../../../data/ValidacaoData";
@@ -27,6 +27,9 @@ export default function Validacao() {
   const [posicaoUsuario, setPosicaoUsuario] = useState<RankingItem | null>(null);
   const [fotosComErro, setFotosComErro] = useState<number[]>([]);
 
+
+  //Cria a ref no topo do componente index.tsx (dentro da função da página)
+  const enviandoBackend = useRef(false);
 
   // Controla a abertura e o fechamento do modal.
   const [enviado, setEnviado] = useState(false);
@@ -49,7 +52,7 @@ export default function Validacao() {
       try {
         const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
 
-        const usuario = await usuariosService.buscarPorId(usuarioId, {signal: controller.signal});
+        const usuario = await usuariosService.buscarPorId(usuarioId, { signal: controller.signal });
 
         setMovePoints(usuario.pontuacaoSoul);
       } catch (erro) {
@@ -72,8 +75,8 @@ export default function Validacao() {
         const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
 
         const [dadosRanking, dadosUsuario] = await Promise.all([
-          rankingService.obterRankingGeral(5, {signal: controller.signal,}),
-          rankingService.obterPosicaoUsuario(usuarioId, {signal: controller.signal,}),
+          rankingService.obterRankingGeral(5, { signal: controller.signal, }),
+          rankingService.obterPosicaoUsuario(usuarioId, { signal: controller.signal, }),
         ]);
 
         if (controller.signal.aborted) return;
@@ -147,51 +150,47 @@ export default function Validacao() {
     return () => controller.abort();
   }, []);
 
-  async function handleEnviarAtividade(idDaAtividade: string, dados: DadosEnvioAcao) {
-    const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
+  async function handleEnviarAtividade(idDaAtividade: string) {
 
-    // Em caso de erro, a exceção sobe para o formulário, que exibe a mensagem e mantém o comprovante.
-    await atividadesService.enviarComprovante({
-      usuarioId: idUtilizadorLogado,
-      atividadeId: Number(idDaAtividade),
-      ...dados,
-    });
+    if (enviandoBackend.current) return;
+    enviandoBackend.current = true;
 
-    await atividadesService.registrarAtividade({
-      usuarioId: idUtilizadorLogado,
-      atividadeId: Number(idDaAtividade),
-    });
-
-    // O registro foi concluído com sucesso.
-    setEnviado(true);
-
-    // Atualiza os pontos do usuário.
     try {
-      const usuarioAtualizado =
-        await usuariosService.buscarPorId(idUtilizadorLogado);
+      const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
 
-      setMovePoints(usuarioAtualizado.pontuacaoSoul);
-    } catch (erro) {
-      console.error(
-        "Atividade registrada, mas não foi possível atualizar os pontos:",
-        erro
-      );
-    }
+      await atividadesService.registrarAtividade({
+        usuarioId: idUtilizadorLogado,
+        atividadeId: Number(idDaAtividade),
+      });
 
-    // Atualiza o ranking independentemente da atualização dos pontos.
-    try {
-      const [rankingAtualizado, posicaoAtualizada] = await Promise.all([
-        rankingService.obterRankingGeral(5),
-        rankingService.obterPosicaoUsuario(idUtilizadorLogado),
-      ]);
+      setEnviado(true);
 
-      setRankingApi(rankingAtualizado);
-      setPosicaoUsuario(posicaoAtualizada);
-    } catch (erro) {
-      console.error(
-        "Atividade registrada, mas não foi possível atualizar o ranking:",
-        erro
-      );
+      try {
+        const usuarioAtualizado = await usuariosService.buscarPorId(idUtilizadorLogado);
+        setMovePoints(usuarioAtualizado.pontuacaoSoul);
+      } catch (erro) {
+        console.error(
+          "Atividade registrada, mas não foi possível atualizar os pontos:",
+          erro
+        );
+      }
+
+      try {
+        const [rankingAtualizado, posicaoAtualizada] = await Promise.all([
+          rankingService.obterRankingGeral(5),
+          rankingService.obterPosicaoUsuario(idUtilizadorLogado),
+        ]);
+
+        setRankingApi(rankingAtualizado);
+        setPosicaoUsuario(posicaoAtualizada);
+      } catch (erro) {
+        console.error(
+          "Atividade registrada, mas não foi possível atualizar o ranking:",
+          erro
+        );
+      }
+    } finally {
+      enviandoBackend.current = false;
     }
   }
 
@@ -286,7 +285,7 @@ export default function Validacao() {
                       <FormularioAcao
                         acao={acao}
                         atividade={acao.dadoOriginalJava}
-                        aoEnviar={(dados) => handleEnviarAtividade(acao.id, dados)}
+                        aoEnviar={() => handleEnviarAtividade(acao.id)}
                       />
                     </div>
                   )}
@@ -322,49 +321,49 @@ export default function Validacao() {
 
                 <ol className="flex flex-col gap-[10px]">
                   {rankingApi.map((pessoa) => (
-                  <li
-                    key={pessoa.id}
-                    className="grid grid-cols-[24px_32px_1fr] items-center gap-[12px] rounded-[8px] bg-white p-[12px] min-[601px]:grid-cols-[28px_36px_1fr_auto]"
-                  >
-                    <span className="text-[14px] font-bold text-[#2454de]">
-                      {pessoa.posicao}º
-                    </span>
-
-                    {pessoa.fotoUsuario && !fotosComErro.includes(pessoa.usuarioId) ? (
-                      <img
-                        src={pessoa.fotoUsuario}
-                        alt={pessoa.nomeUsuario}
-                        onError={() => {
-                          setFotosComErro((atuais) =>
-                            atuais.includes(pessoa.usuarioId)
-                              ? atuais
-                              : [...atuais, pessoa.usuarioId]
-                          );
-                        }}
-                        className="h-[32px] w-[32px] rounded-full object-cover min-[601px]:h-[36px] min-[601px]:w-[36px]"
-                      />
-                    ) : (
-                      <span className="grid h-[32px] w-[32px] place-items-center rounded-full bg-[#eaf2ff] text-[10px] font-bold text-[#2454de] min-[601px]:h-[36px] min-[601px]:w-[36px]">
-                        {pessoa.nomeUsuario
-                          .split(" ")
-                          .filter(Boolean)
-                          .slice(0, 2)
-                          .map((nome) => nome[0])
-                          .join("")
-                          .toUpperCase()}
+                    <li
+                      key={pessoa.id}
+                      className="grid grid-cols-[24px_32px_1fr] items-center gap-[12px] rounded-[8px] bg-white p-[12px] min-[601px]:grid-cols-[28px_36px_1fr_auto]"
+                    >
+                      <span className="text-[14px] font-bold text-[#2454de]">
+                        {pessoa.posicao}º
                       </span>
-                    )}
 
-                    <div>
-                      <strong className="block text-[14px] font-bold">
-                        {pessoa.nomeUsuario}
+                      {pessoa.fotoUsuario && !fotosComErro.includes(pessoa.usuarioId) ? (
+                        <img
+                          src={pessoa.fotoUsuario}
+                          alt={pessoa.nomeUsuario}
+                          onError={() => {
+                            setFotosComErro((atuais) =>
+                              atuais.includes(pessoa.usuarioId)
+                                ? atuais
+                                : [...atuais, pessoa.usuarioId]
+                            );
+                          }}
+                          className="h-[32px] w-[32px] rounded-full object-cover min-[601px]:h-[36px] min-[601px]:w-[36px]"
+                        />
+                      ) : (
+                        <span className="grid h-[32px] w-[32px] place-items-center rounded-full bg-[#eaf2ff] text-[10px] font-bold text-[#2454de] min-[601px]:h-[36px] min-[601px]:w-[36px]">
+                          {pessoa.nomeUsuario
+                            .split(" ")
+                            .filter(Boolean)
+                            .slice(0, 2)
+                            .map((nome) => nome[0])
+                            .join("")
+                            .toUpperCase()}
+                        </span>
+                      )}
+
+                      <div>
+                        <strong className="block text-[14px] font-bold">
+                          {pessoa.nomeUsuario}
+                        </strong>
+                      </div>
+
+                      <strong className="col-start-3 text-[14px] font-bold text-[#2454de] min-[601px]:col-start-auto">
+                        {pessoa.pontuacaoTotal.toLocaleString("pt-BR")} pts
                       </strong>
-                    </div>
-
-                    <strong className="col-start-3 text-[14px] font-bold text-[#2454de] min-[601px]:col-start-auto">
-                      {pessoa.pontuacaoTotal.toLocaleString("pt-BR")} pts
-                    </strong>
-                  </li>
+                    </li>
                   ))}
                 </ol>
 

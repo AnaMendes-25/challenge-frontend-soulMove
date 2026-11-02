@@ -2,6 +2,10 @@ import { api, exigirArray, exigirObjeto } from "./api";
 import type { RequestOptions } from "./api";
 import type { AtividadeBackend, EnviarComprovanteRequest, RegistrarAtividadeRequest, TipoAtividade, UsuarioAtividadeResponse } from "./atividadesTypes";
 
+const registrosEmAndamento = new Map<string, Promise<UsuarioAtividadeResponse>>();
+const ultimoRegistro = new Map<string, number>();
+const JANELA_ANTI_DUPLICACAO_MS = 2000;
+
 export const atividadesService = {
   /**
    * Lista todas as atividades do catálogo (ou filtradas por tipo se informado).
@@ -50,9 +54,35 @@ export const atividadesService = {
    *    invoque `usuariosService.buscarPorId(usuarioId)` para atualizar os pontos na ecrã/UI.
    */
   async registrarAtividade(payload: RegistrarAtividadeRequest): Promise<UsuarioAtividadeResponse> {
-    const { data } = await api.post("/atividades/registrar", payload);
-    return exigirObjeto<UsuarioAtividadeResponse>(data, "registro de atividade");
-  },
+     const chave = `${payload.usuarioId}:${payload.atividadeId}`;
+     const agora = Date.now();
+     const registradoEm = ultimoRegistro.get(chave);
+
+     if (registradoEm !== undefined && agora - registradoEm < JANELA_ANTI_DUPLICACAO_MS) {
+       throw new Error("Este envio já foi processado. Aguarde antes de enviar novamente.");
+     }
+
+     const registroExistente = registrosEmAndamento.get(chave);
+
+     if (registroExistente) return registroExistente;
+
+     const requisicao = (async () => {
+       const { data } = await api.post("/atividades/registrar", payload);
+       return exigirObjeto<UsuarioAtividadeResponse>(data, "registro de atividade");
+     })();
+
+     registrosEmAndamento.set(chave, requisicao);
+
+     try {
+       const resposta = await requisicao;
+       ultimoRegistro.set(chave, Date.now());
+       return resposta;
+     } finally {
+       if (registrosEmAndamento.get(chave) === requisicao) {
+         registrosEmAndamento.delete(chave);
+       }
+     }
+   },
 
   /**
    * Envia o comprovante (imagem, nome e comentário) da atividade.
@@ -61,11 +91,15 @@ export const atividadesService = {
    * ATENÇÃO: os nomes dos campos do FormData devem ser conferidos com o backend.
    */
   async enviarComprovante(payload: EnviarComprovanteRequest): Promise<void> {
-   await api.post("/atividades/registrar", {
-    usuarioId: payload.usuarioId,
-    atividadeId: payload.atividadeId,
-  });
-  },
+     const formData = new FormData();
+     formData.append("usuarioId", String(payload.usuarioId));
+     formData.append("atividadeId", String(payload.atividadeId));
+     formData.append("nome", payload.nome);
+     formData.append("comentario", payload.comentario);
+     formData.append("arquivo", payload.arquivo);
+
+     await api.post("/validacao", formData);
+   },
 
   /**
    * Obtém o histórico de atividades realizadas pelo utilizador.
