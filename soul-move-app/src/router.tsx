@@ -11,6 +11,7 @@ import Solucao from "./routes/Pages Funcionais/Solucao/index.tsx";
 import Metricas from "./routes/Pages Funcionais/Metricas/index.tsx";
 import Validacao from "./routes/Pages Funcionais/Validacao/index.tsx";
 import { ContaConfiguracoes } from "./routes/Pages Funcionais/ContaConfiguracoes/index.tsx";
+import Login from "./routes/Login/index.tsx";
 
 // Adicionado tratamento de erro
 
