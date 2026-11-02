@@ -148,7 +148,7 @@ export default function Metricas() {
       <main className="min-h-screen overflow-x-hidden pb-28 md:ml-24 md:pb-10">
         <div className="mx-auto w-full max-w-6xl px-4 pt-6 sm:px-8 lg:px-10">
           <header className="mb-7">
-            <p className="text-xs font-medium text-slate-400">Dashboard / Visão geral</p>
+           
             <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
               Visão geral
             </h1>
