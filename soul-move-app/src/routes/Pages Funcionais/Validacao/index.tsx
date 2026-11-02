@@ -1,5 +1,11 @@
 import { startTransition, useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router";
+import type { IconType } from "react-icons";
+import {
+  FiTruck,
+} from "react-icons/fi";
+import { PiRecycleLight, PiPersonSimpleBikeLight, PiPersonSimpleWalkThin  } from "react-icons/pi";
+import { SlEnergy } from "react-icons/sl";
 
 import { atividadesService } from "../../../services/atividadesService";
 import { usuariosService } from "../../../services/usuariosService";
@@ -15,6 +21,26 @@ import { acoesSustentaveis } from "../../../data/ValidacaoData";
 import type { AcaoSustentavel } from "../../../types/ValidacaoTypes";
 import type { AtividadeBackend } from "../../../types/ValidacaoTypes";
 import type { RankingItem } from "../../../services/rankingTypes";
+
+const iconesPorTipo: Record<string, IconType> = {
+  RECICLAGEM: PiRecycleLight,
+  REDUCAO_ENERGIA: SlEnergy,
+  TRANSPORTE_PUBLICO: FiTruck,
+  TRAJETO_BIKE: PiPersonSimpleBikeLight,
+  TRAJETO_CAMINHADA: PiPersonSimpleWalkThin,
+};
+
+function IconeAcao({ tipo }: { tipo: string }) {
+  const Icone = iconesPorTipo[tipo] ?? PiPersonSimpleWalkThin;
+
+  return (
+    <Icone
+      className="h-[24px] w-[24px] min-[601px]:h-[30px] min-[601px]:w-[30px]"
+      strokeWidth={1.8}
+      aria-hidden="true"
+    />
+  );
+}
 
 
 export default function Validacao() {
@@ -124,14 +150,13 @@ export default function Validacao() {
           const dadosVisuais = acoesSustentaveis.find((mock) => mock.id.toLowerCase() === item.tipoAtividade.toLowerCase());
 
           return {
-            id: String(item.id),
-            titulo: item.nome,
-            pontos: item.pontuacao,
-            icone: dadosVisuais?.icone || "📌",
-            iconeImg: dadosVisuais?.iconeImg,
-            comprovacao: dadosVisuais?.comprovacao || item.validacao || "Envie um comprovante válido.",
-            exemplo: dadosVisuais?.exemplo || item.descricao || "Ex.: Ação sustentável",
-            dadoOriginalJava: item,
+          id: String(item.id),
+          titulo: item.nome,
+          pontos: item.pontuacao,
+          icone: dadosVisuais?.icone || "📌",
+          comprovacao: dadosVisuais?.comprovacao || item.validacao || "Envie um comprovante válido.",
+          exemplo: dadosVisuais?.exemplo || item.descricao || "Ex.: Ação sustentável",
+          dadoOriginalJava: item,
           };
         });
 
@@ -165,6 +190,7 @@ export default function Validacao() {
         atividadeId: Number(idDaAtividade),
       });
 
+      setRecarregarHistorico((valorAtual) => valorAtual + 1);
       setEnviado(true);
 
       try {
@@ -232,11 +258,7 @@ export default function Validacao() {
                       className="grid h-[42px] min-w-[42px] place-items-center rounded-full bg-[#eaf2ff] text-[20px] text-[#2454de] min-[601px]:h-[56px] min-[601px]:min-w-[56px] min-[601px]:text-[24px]"
                       aria-hidden="true"
                     >
-                      {acao.iconeImg ? (
-                        <img src={acao.iconeImg} alt="" className="h-[28px] w-[28px] object-contain min-[601px]:h-[34px] min-[601px]:w-[34px]" />
-                      ) : (
-                        acao.icone
-                      )}
+                      <IconeAcao tipo={acao.dadoOriginalJava?.tipoAtividade ?? ""} />
                     </div>
 
                     <div className="flex-1">
