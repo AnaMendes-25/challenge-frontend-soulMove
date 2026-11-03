@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { Recompensa, UsuarioRecompensaResponse } from "../../services/recompensasTypes";
 
 interface ModalResgateProps {
@@ -14,6 +14,10 @@ interface ModalResgateProps {
 }
 
 export default function ModalResgate({ recompensa, saldo, confirmando, erro, resultado, incerto, aoConfirmar, aoFechar, aoAtualizarSaldo }: ModalResgateProps) {
+  const codigoDemonstrativo = "SOULMOVE-DEMO";
+  const [mensagemCopia, setMensagemCopia] = useState("");
+  const codigoId = useId();
+  const avisoCodigoId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const cancelarRef = useRef<HTMLButtonElement>(null);
   const tituloId = useId();
@@ -42,6 +46,15 @@ export default function ModalResgate({ recompensa, saldo, confirmando, erro, res
     if (resultado && !confirmando) cancelarRef.current?.focus();
   }, [resultado, confirmando]);
 
+  async function copiarCodigo() {
+    try {
+      await navigator.clipboard.writeText(codigoDemonstrativo);
+      setMensagemCopia("Código demonstrativo copiado. Ele não tem validade comercial.");
+    } catch {
+      setMensagemCopia("Não foi possível copiar automaticamente. Selecione o código e copie manualmente.");
+    }
+  }
+
   const estiloBotao = "min-h-11 rounded-lg px-4 py-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-60 aria-disabled:cursor-not-allowed aria-disabled:opacity-60";
 
   return (
@@ -54,7 +67,7 @@ export default function ModalResgate({ recompensa, saldo, confirmando, erro, res
       onClick={(evento) => { if (evento.target === evento.currentTarget && !confirmando) aoFechar(); }}
       onKeyDown={(evento) => {
         if (evento.key !== "Tab") return;
-        const botoes = evento.currentTarget.querySelectorAll<HTMLButtonElement>("button:not(:disabled)");
+        const botoes = evento.currentTarget.querySelectorAll<HTMLElement>("button:not(:disabled), input:not(:disabled)");
         const primeiro = botoes[0];
         const ultimo = botoes[botoes.length - 1];
         if (evento.shiftKey && document.activeElement === primeiro) { evento.preventDefault(); ultimo?.focus(); }
@@ -76,7 +89,23 @@ export default function ModalResgate({ recompensa, saldo, confirmando, erro, res
       </div>
       {saldo !== null && <p className="mt-4 text-sm">{resultado ? "Saldo atualizado" : "Seu saldo"}: <strong>{saldo.toLocaleString("pt-BR")} pts</strong></p>}
       {!resultado && saldo !== null && <p className="mt-2 text-sm text-slate-600">{faltam > 0 ? `Saldo insuficiente. Faltam ${faltam.toLocaleString("pt-BR")} pontos.` : `Saldo após o resgate: ${(saldo - recompensa.valor).toLocaleString("pt-BR")} pts.`}</p>}
-      {resultado && <p className="mt-4 text-sm text-slate-600">O código do benefício ainda não está disponível. O número acima identifica o registro do resgate.</p>}
+      <p id={avisoCodigoId} className="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-900">
+        Este benefício é demonstrativo e não tem validade comercial. O resgate utiliza seus MOVE Points.
+      </p>
+      {resultado && <div className="mt-4 space-y-2">
+        <label htmlFor={codigoId} className="block text-sm font-semibold">Código demonstrativo — sem validade</label>
+        <input
+          id={codigoId}
+          type="text"
+          readOnly
+          value={codigoDemonstrativo}
+          aria-describedby={avisoCodigoId}
+          onFocus={(evento) => evento.currentTarget.select()}
+          className="min-h-11 w-full rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 font-mono text-sm font-semibold text-blue-900 outline-none focus:ring-2 focus:ring-blue-600"
+        />
+        <button type="button" onClick={() => void copiarCodigo()} className={`${estiloBotao} w-full bg-blue-600 text-white`}>Copiar código demonstrativo</button>
+        <p role="status" className="text-sm text-slate-600">{mensagemCopia}</p>
+      </div>}
       {saldo === null && !incerto && <div className="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-900" role="status">
         <p>{resultado ? "O resgate foi realizado, mas não foi possível atualizar seu saldo. Não confirme o mesmo resgate novamente." : "Atualize seu saldo antes de confirmar um resgate."}</p>
         <button type="button" disabled={confirmando} onClick={aoAtualizarSaldo} className="mt-2 min-h-11 font-semibold underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-blue-600">Atualizar saldo</button>

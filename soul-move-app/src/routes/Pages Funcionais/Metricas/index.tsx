@@ -428,7 +428,7 @@ export default function Metricas() {
               </div>}
             </div>}
             {ultimoResgate && <p role="status" className="mt-4 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-900">
-              Último resgate confirmado: <strong>#{ultimoResgate.id}</strong> — {ultimoResgate.descricaoRecompensa}. O código do benefício ainda não está disponível.
+              Último resgate confirmado: <strong>#{ultimoResgate.id}</strong> — {ultimoResgate.descricaoRecompensa}. Benefício demonstrativo, sem validade comercial.
             </p>}
             {!saldoConfiavel && !carregandoResumo && !resgateIncerto && <button type="button" onClick={() => void atualizarSaldo()} disabled={atualizandoSaldo || recompensaEmResgate !== null} className="mt-4 min-h-11 text-sm font-semibold text-blue-700 underline focus-visible:outline-2 focus-visible:outline-blue-600">{atualizandoSaldo ? "Atualizando saldo..." : "Atualizar saldo para liberar resgates"}</button>}
             {erroResgate && (
