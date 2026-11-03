@@ -1,15 +1,36 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, type ChangeEvent, type DragEvent } from "react";
+import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { acaoSchema, type FormularioValidacao } from "../../types/acaoSchema";
 import type { AcaoSustentavel, AtividadeBackend } from "../../types/ValidacaoTypes";
 import { validarImagemSustentavel } from "../../services/moondreamService";
 
 
+export interface DadosEnvioAcao {
+  nome: string;
+  comentario: string;
+  arquivo: File;
+}
+
 interface FormularioAcaoProps {
   acao: AcaoSustentavel;
   atividade: AtividadeBackend;
-  aoEnviar: () => void;
+  aoEnviar: (dados: DadosEnvioAcao) => Promise<void>;
+}
+
+const LARGURA_MAXIMA = 3840;
+const ALTURA_MAXIMA = 3840;
+
+// Lê a imagem e confere se cabe no limite de dimensões; imagem ilegível é recusada.
+async function dimensoesPermitidas(arquivo: File): Promise<boolean> {
+  try {
+    const imagem = await createImageBitmap(arquivo);
+    const permitida = imagem.width <= LARGURA_MAXIMA && imagem.height <= ALTURA_MAXIMA;
+    imagem.close();
+    return permitida;
+  } catch {
+    return false;
+  }
 }
 
 export default function FormularioAcao({
@@ -20,7 +41,10 @@ export default function FormularioAcao({
   const [preview, setPreview] = useState("");
   const [nomeArquivo, setNomeArquivo] = useState("");
   const [carregandoIA, setCarregandoIA] = useState(false);
+  const [enviando, setEnviando] = useState(false);
   const [erroIA, setErroIA] = useState("");
+  // Trava síncrona: o estado do React só atualiza depois, e um clique duplo passaria.
+  const envioEmAndamento = useRef(false);
 
   // O useForm agora usa o Zod através do zodResolver
   const {
@@ -41,7 +65,7 @@ export default function FormularioAcao({
     mode: "onTouched",
   });
 
-  function processarArquivo(arquivoSelecionado?: File) {
+  async function processarArquivo(arquivoSelecionado?: File) {
     if (!arquivoSelecionado) return;
 
     const formatosPermitidos = ["image/png", "image/jpeg"];
@@ -49,6 +73,14 @@ export default function FormularioAcao({
     if (!formatosPermitidos.includes(arquivoSelecionado.type)) {
       setValue("arquivo", null, { shouldValidate: true });
       setError("arquivo", { type: "validate", message: "Por favor, envie uma imagem PNG ou JPG." });
+      setPreview("");
+      setNomeArquivo("");
+      return;
+    }
+
+    if (!(await dimensoesPermitidas(arquivoSelecionado))) {
+      setValue("arquivo", null, { shouldValidate: true });
+      setError("arquivo", { type: "validate", message: `A imagem deve ter no máximo ${LARGURA_MAXIMA}x${ALTURA_MAXIMA}px.` });
       setPreview("");
       setNomeArquivo("");
       return;
@@ -91,18 +123,25 @@ export default function FormularioAcao({
     return;
   }
 
+    if (envioEmAndamento.current) return;
+    envioEmAndamento.current = true;
+
     try {
       setCarregandoIA(true);
       setErroIA("");
 
-      // 2. Aqui está o truque: mandamos a variável 'atividadeBanco' para o serviço da IA!
       const resultadoIA = await validarImagemSustentavel(dados.arquivo, atividade);
       if (!resultadoIA.aprovada) {
         setErroIA(`A IA rejeitou a imagem: ${resultadoIA.mensagem}`);
         return;
       }
+      setEnviando(true);
 
-      aoEnviar();
+      await aoEnviar({
+        nome: dados.nome,
+        comentario: dados.comentario,
+        arquivo: dados.arquivo,
+      });
       reset();
       removerImagem();
       
@@ -110,13 +149,15 @@ export default function FormularioAcao({
       console.error("Erro no processamento:", erro);
       setErroIA(erro instanceof Error ? erro.message : "Ocorreu um erro técnico ao validar a imagem com a IA.");
     } finally {
+      envioEmAndamento.current = false;
       setCarregandoIA(false);
+      setEnviando(false);
     }
   }
 
   return (
     <div className="px-[14px] pb-[14px] min-[601px]:px-[22px] min-[601px]:pb-[22px]">
-      <form onSubmit={handleSubmit(enviarFormulario)} noValidate>
+      <form onSubmit={(e) => void handleSubmit(enviarFormulario)(e)} noValidate>
         {/* Upload obrigatório */}
         <div
           className={`mb-[16px] rounded-[8px] border p-[16px] ${errors.arquivo ? "border-[#d93025]" : "border-[#ddd]"
@@ -132,6 +173,8 @@ export default function FormularioAcao({
                 id={`upload-${acao.id}`}
                 className="hidden"
                 accept="image/png, image/jpeg"
+                aria-invalid={!!errors.arquivo}
+                aria-describedby={errors.arquivo ? `arquivo-erro-${acao.id}` : undefined}
                 onChange={(event) => {
                   handleArquivo(event);
                 }}
@@ -150,7 +193,7 @@ export default function FormularioAcao({
                   ou arraste e solte
                 </span>
                 <span className="text-[12px]">
-                  PNG ou JPG (máx. 800x400px)
+                  PNG ou JPG (máx. {ALTURA_MAXIMA}x{LARGURA_MAXIMA}px)
                 </span>
               </label>
             </>
@@ -177,7 +220,7 @@ export default function FormularioAcao({
           )}
 
           {errors.arquivo && (
-            <small className="mt-[4px] block text-[12px] text-[#d93025]" role="alert">
+            <small id={`arquivo-erro-${acao.id}`} className="mt-[4px] block text-[12px] text-[#d93025]" role="alert">
               {errors.arquivo.message}
             </small>
           )}
@@ -211,10 +254,12 @@ export default function FormularioAcao({
             id={`nome-${acao.id}`}
             placeholder={acao.exemplo}
             maxLength={100}
+            aria-invalid={!!errors.nome}
+            aria-describedby={errors.nome ? `nome-erro-${acao.id}` : undefined}
             className={`h-[40px] w-full rounded-[7px] border px-[12px] text-[14px] text-[#333] outline-none transition focus:border-[#2454de] focus:ring-[3px] focus:ring-[#2454de]/10 ${errors.nome ? "border-[#d93025]" : "border-[#ccc]"
               }`}
           />
-          <small className="mt-[4px] block min-h-[16px] text-[12px] text-[#d93025]">
+          <small id={`nome-erro-${acao.id}`} className="mt-[4px] block min-h-[16px] text-[12px] text-[#d93025]">
             {errors.nome?.message}
           </small>
         </div>
@@ -233,27 +278,29 @@ export default function FormularioAcao({
             id={`comentario-${acao.id}`}
             placeholder="Insira uma descrição"
             maxLength={500}
+            aria-invalid={!!errors.comentario}
+            aria-describedby={errors.comentario ? `comentario-erro-${acao.id}` : undefined}
             className={`min-h-[140px] w-full resize-y rounded-[7px] border p-[12px] text-[14px] text-[#333] outline-none transition focus:border-[#2454de] focus:ring-[3px] focus:ring-[#2454de]/10 ${errors.comentario ? "border-[#d93025]" : "border-[#ccc]"
               }`}
           />
-          <small className="mt-[4px] block min-h-[16px] text-[12px] text-[#d93025]">
+          <small id={`comentario-erro-${acao.id}`} className="mt-[4px] block min-h-[16px] text-[12px] text-[#d93025]">
             {errors.comentario?.message}
           </small>
         </div>
 
         {/* Erro customizado da IA, caso ocorra */}
         {erroIA && (
-          <div className="mb-[16px] rounded-[7px] bg-red-50 p-[12px] text-[13px] text-[#d93025]">
+          <div role="alert" className="mb-[16px] rounded-[7px] bg-red-50 p-[12px] text-[13px] text-[#d93025]">
             {erroIA}
           </div>
         )}
 
         <button
           type="submit"
-          disabled={carregandoIA}
+          disabled={carregandoIA || enviando}
           className="w-full cursor-pointer rounded-[7px] bg-[#2454de] p-[14px] text-[15px] font-bold text-white transition hover:-translate-y-[1px] hover:bg-[#1d43b4] disabled:bg-gray-400"
         >
-          {carregandoIA ? "Imagem sendo Avaliada..." : "Enviar para avaliação"}
+          {enviando ? "Enviando..." : carregandoIA ? "Imagem sendo Avaliada..." : "Enviar para avaliação"}
         </button>
       </form>
     </div>

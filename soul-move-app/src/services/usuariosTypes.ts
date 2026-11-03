@@ -37,5 +37,7 @@ export interface UsuarioLoginRequest {
  */
 export interface UsuarioUpdateRequest {
   nome: string;
+  email: string;
   fotoUsuario?: string | null;
+  senha?: string;
 }

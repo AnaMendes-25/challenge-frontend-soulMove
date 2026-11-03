@@ -1,10 +1,6 @@
-import { api } from "./api";
-import type {
-  Usuario,
-  UsuarioCadastroRequest,
-  UsuarioLoginRequest,
-  UsuarioUpdateRequest,
-} from "./usuariosTypes";
+import { api, exigirObjeto } from "./api";
+import type { RequestOptions } from "./api";
+import type { Usuario, UsuarioCadastroRequest, UsuarioLoginRequest, UsuarioUpdateRequest } from "./usuariosTypes";
 
 export const usuariosService = {
   /**
@@ -17,7 +13,7 @@ export const usuariosService = {
    */
   async cadastrar(payload: UsuarioCadastroRequest): Promise<Usuario> {
     const { data } = await api.post("/usuarios", payload);
-    const usuario = data as Usuario;
+    const usuario = exigirObjeto<Usuario>(data, "usuário");
     if (usuario?.id) {
       localStorage.setItem("usuarioId", String(usuario.id));
     }
@@ -35,8 +31,8 @@ export const usuariosService = {
    */
   async login(payload: UsuarioLoginRequest): Promise<Usuario> {
     const { data } = await api.post("/usuarios/login", payload);
-    const usuario = data as Usuario;
-    if (usuario?.id) {
+    const usuario = exigirObjeto<Usuario>(data, "usuário");
+    if (usuario.id != null) {
       localStorage.setItem("usuarioId", String(usuario.id));
     }
     return usuario;
@@ -51,21 +47,20 @@ export const usuariosService = {
    * - Resgatar uma recompensa (`POST /recompensas/resgatar`)
    * Motivo: As rotas de registro/resgate NÃO retornam os saldos novos no payload de resposta.
    */
-  async buscarPorId(id: number): Promise<Usuario> {
-    const { data } = await api.get(`/usuarios/${id}`);
-    return data as Usuario;
-  },
+    async buscarPorId(id: number, options?: RequestOptions): Promise<Usuario> {
+      const { data } = await api.get(`/usuarios/${id}`, options);
+      return exigirObjeto<Usuario>(data, "usuário");
+    },
 
   /**
-   * Atualiza o nome e/ou foto do perfil do usuário.
+   * Atualiza os dados do perfil do usuário.
    * Rota: PUT /usuarios/{id}
-   * 
-   * NOTA: O PUT é substitutivo completo para esses dois campos. E-mail, senha e pontos
-   * não são alterados nesta rota.
+   *
+   * O e-mail e a senha são opcionais conforme o contrato de atualização.
    */
   async atualizarPerfil(id: number, payload: UsuarioUpdateRequest): Promise<Usuario> {
     const { data } = await api.put(`/usuarios/${id}`, payload);
-    return data as Usuario;
+    return exigirObjeto<Usuario>(data, "usuário");
   },
 
   /**
@@ -82,7 +77,10 @@ export const usuariosService = {
    */
   getUsuarioIdGuardado(): number | null {
     const id = localStorage.getItem("usuarioId");
-    return id ? Number(id) : null;
+    if (!id) { return null; }
+
+    const usuarioId = Number(id);
+    return Number.isInteger(usuarioId) && usuarioId > 0 ? usuarioId : null;
   },
 
   /**

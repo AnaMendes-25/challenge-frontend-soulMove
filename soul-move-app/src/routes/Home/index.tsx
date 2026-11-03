@@ -188,7 +188,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Header />
+      <Header mostrarAutenticacao />
 
       {/* Estrutura central da página com gap uniforme de 64px no mobile e 96px em telas médias/grandes */}
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 flex flex-col gap-16 md:gap-24">

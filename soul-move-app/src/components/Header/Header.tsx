@@ -31,7 +31,11 @@ function NavItem({ to, children, onClick }: NavItemProps) {
   );
 }
 
-export default function Header() {
+interface HeaderProps {
+  mostrarAutenticacao?: boolean;
+}
+
+export default function Header({ mostrarAutenticacao = false }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -121,11 +125,31 @@ export default function Header() {
       <div
         className={`w-full lg:w-auto flex justify-center ${isOpen ? "flex" : "hidden"} lg:flex shrink-0`}
       >
-        <div className="transition-transform duration-200 hover:scale-105 active:scale-95">
-          <ButtonBase onClick={() => navigate("/solucao")}>
-            Começar agora
-          </ButtonBase>
-        </div>
+        {mostrarAutenticacao ? (
+          <div className="flex items-center gap-2">
+            <ButtonBase
+              variant="secondary"
+              size="md"
+              onClick={() => navigate("/login")}
+              className="rounded-3xl border-0 bg-transparent px-4 py-2 text-sm text-neutral-600 outline outline-1 outline-slate-200 hover:bg-[#f0efff] hover:text-[#6253c7] hover:outline-[#e4e1ff]"
+            >
+              Login
+            </ButtonBase>
+            <ButtonBase
+              size="md"
+              onClick={() => navigate("/cadastro")}
+              className="rounded-3xl px-4 py-2 text-sm"
+            >
+              Cadastre-se
+            </ButtonBase>
+          </div>
+        ) : (
+          <div className="transition-transform duration-200 hover:scale-105 active:scale-95">
+            <ButtonBase onClick={() => navigate("/solucao")}>
+              Começar agora
+            </ButtonBase>
+          </div>
+        )}
       </div>
     </header>
   );
