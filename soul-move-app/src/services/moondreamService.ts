@@ -52,14 +52,12 @@ ETAPAS DE ANÁLISE INTERNA:
 3. **Falsificações ou Fraudes:** Verifique se há indícios óbvios de imagens aleatórias da internet, fotos de telas tiradas por outra câmera (se aplicável) ou imagens que não guardam relação com o tema.
 
 DIRETRIZ DE DECISÃO:
-- **APROVE** se a imagem comprovar de maneira satisfatória e coerente o "Critério de Validação Exigido" em conjunto com a descrição da atividade. Seja flexível com pequenas variações visuais ou de interface, desde que o objetivo central esteja evidente.
-- **REPROVE** se a imagem for totalmente desconexa, se mostrar algo genérico que não prova a atividade ou se violar o formato de comprovação esperado.
+- **APROVADA** se a imagem comprovar de maneira satisfatória e coerente o "Critério de Validação Exigido" em conjunto com a descrição da atividade. Seja flexível com pequenas variações visuais ou de interface, desde que o objetivo central esteja evidente.
+- **REPROVADA** se a imagem for totalmente desconexa, se mostrar algo genérico que não prova a atividade ou se violar o formato de comprovação esperado.
 
 SAÍDA OBRIGATÓRIA:
-Responda estritamente com apenas uma palavra, sem markdown, sem pontuação extra e sem explicações:
-APROVADA
-ou
-REPROVADA
+Responda estritamente com uma única decisão na primeira linha, sem markdown, pontuação ou explicações.
+Não repita as opções de resposta. Use apenas uma destas palavras: APROVADA ou REPROVADA.
 `.trim();
 }
 
@@ -127,12 +125,21 @@ export async function validarImagemSustentavel(
 
         console.log("Resposta original da IA:", resultadoIA.answer);
 
-        // Extrai as decisões encontradas na resposta.
-        const decisoes = texto.match(/\b(APROVADA|REPROVADA)\b/g) ?? [];
+        const normalizarDecisao = (decisao: string) => {
+            return decisao === "APPROVED" || decisao === "APROVE"
+                ? "APROVADA"
+                : decisao === "REJECTED" || decisao === "REPROVE"
+                    ? "REPROVADA"
+                    : decisao;
+        };
 
-        // Aceita somente uma decisão inequívoca.
+        // A primeira linha contém a decisão; alguns modelos repetem as opções depois dela.
+        const primeiraLinha = texto.split(/\r?\n/).find((linha) => linha.trim()) ?? "";
+        const decisoesNaPrimeiraLinha =
+            primeiraLinha.match(/\b(APROVADA|REPROVADA|APPROVED|REJECTED|APROVE|REPROVE)\b/g) ?? [];
+        const decisoesNormalizadas = decisoesNaPrimeiraLinha.map(normalizarDecisao);
         const decisaoUnica =
-            decisoes.length === 1 ? decisoes[0] : null;
+            decisoesNormalizadas.length === 1 ? decisoesNormalizadas[0] : null;
 
         if (!decisaoUnica) {
             console.warn("Resposta inesperada da IA:", texto);
