@@ -1,0 +1,63 @@
+.modal-sucesso-fogos {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.modal-sucesso-particula {
+  position: absolute;
+  left: var(--origem-x);
+  top: var(--origem-y);
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: var(--cor-particula);
+  
+ 
+  will-change: transform, opacity;
+
+ 
+  box-shadow:
+    0 0 16px var(--cor-particula),
+    0 0 35px var(--cor-particula),
+    0 0 60px var(--cor-particula); /* Removi uma camada excessiva de sombra para aliviar o processador */
+    
+  filter: brightness(1.8);
+
+  animation: modal-sucesso-explosao 2.4s cubic-bezier(0.16, 1, 0.3, 1)
+    var(--atraso) both;
+}
+
+@keyframes modal-sucesso-explosao {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.01);
+  }
+
+  12% {
+    opacity: 1;
+    filter: brightness(2.2);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(
+        calc(-50% + var(--distancia-x) * 1.4),
+        calc(-50% + var(--distancia-y) * 1.4)
+      )
+      scale(1.6);
+    filter: brightness(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-sucesso-particula {
+    animation: none;
+    opacity: 0;
+  }
+}

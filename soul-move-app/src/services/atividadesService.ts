@@ -1,10 +1,10 @@
-import { api } from "./api";
-import type {
-  AtividadeBackend,
-  RegistrarAtividadeRequest,
-  TipoAtividade,
-  UsuarioAtividadeResponse,
-} from "./atividadesTypes";
+import { api, exigirArray, exigirObjeto } from "./api";
+import type { RequestOptions } from "./api";
+import type { AtividadeBackend, RegistrarAtividadeRequest, TipoAtividade, UsuarioAtividadeResponse } from "./atividadesTypes";
+
+const registrosEmAndamento = new Map<string, Promise<UsuarioAtividadeResponse>>();
+const ultimoRegistro = new Map<string, number>();
+const JANELA_ANTI_DUPLICACAO_MS = 2000;
 
 export const atividadesService = {
   /**
@@ -15,10 +15,10 @@ export const atividadesService = {
    * - A API não garante uma ordem específica de retorno; ordene no front-end se necessário.
    * - O catálogo é global e não traz dados específicos do utilizador (ex.: se já atingiu o limite hoje).
    */
-  async listarAtividades(tipo?: TipoAtividade): Promise<AtividadeBackend[]> {
+  async listarAtividades(tipo?: TipoAtividade, options?: RequestOptions): Promise<AtividadeBackend[]> {
     const query = tipo ? `?tipo=${tipo}` : "";
-    const { data } = await api.get(`/atividades${query}`);
-    return (data as AtividadeBackend[]) || [];
+    const { data } = await api.get(`/atividades${query}`, options);
+    return exigirArray<AtividadeBackend>(data, "atividades");
   },
 
   /**
@@ -29,16 +29,16 @@ export const atividadesService = {
    */
   async listarTipos(): Promise<TipoAtividade[]> {
     const { data } = await api.get("/atividades/tipos");
-    return (data as TipoAtividade[]) || [];
+    return exigirArray<TipoAtividade>(data, "tipos de atividade");
   },
 
   /**
    * Obtém os detalhes de uma atividade específica pelo ID.
    * Rota: GET /atividades/{id}
    */
-  async buscarPorId(id: number): Promise<AtividadeBackend> {
-    const { data } = await api.get(`/atividades/${id}`);
-    return data as AtividadeBackend;
+  async buscarPorId(id: number, options?: RequestOptions): Promise<AtividadeBackend> {
+    const { data } = await api.get(`/atividades/${id}`, options);
+    return exigirObjeto<AtividadeBackend>(data, "atividade");
   },
 
   /**
@@ -54,9 +54,37 @@ export const atividadesService = {
    *    invoque `usuariosService.buscarPorId(usuarioId)` para atualizar os pontos na ecrã/UI.
    */
   async registrarAtividade(payload: RegistrarAtividadeRequest): Promise<UsuarioAtividadeResponse> {
-    const { data } = await api.post("/atividades/registrar", payload);
-    return data as UsuarioAtividadeResponse;
-  },
+     const chave = `${payload.usuarioId}:${payload.atividadeId}`;
+     const agora = Date.now();
+     const registradoEm = ultimoRegistro.get(chave);
+
+     if (registradoEm !== undefined && agora - registradoEm < JANELA_ANTI_DUPLICACAO_MS) {
+       throw new Error("Este envio já foi processado. Aguarde antes de enviar novamente.");
+     }
+
+     const registroExistente = registrosEmAndamento.get(chave);
+
+     if (registroExistente) return registroExistente;
+
+     const requisicao = (async () => {
+       const { data } = await api.post("/atividades/registrar", payload);
+       return exigirObjeto<UsuarioAtividadeResponse>(data, "registro de atividade");
+     })();
+
+     registrosEmAndamento.set(chave, requisicao);
+
+     try {
+       const resposta = await requisicao;
+       ultimoRegistro.set(chave, Date.now());
+       return resposta;
+     } finally {
+       if (registrosEmAndamento.get(chave) === requisicao) {
+         registrosEmAndamento.delete(chave);
+       }
+     }
+   },
+
+
 
   /**
    * Obtém o histórico de atividades realizadas pelo utilizador.
@@ -66,10 +94,17 @@ export const atividadesService = {
    * - Retorna os registros ordenados do mais recente para o mais antigo.
    * - A propriedade `dataAtividade` vem no formato "yyyy-MM-dd" (sem horário).
    */
-  async obterHistorico(usuarioId: number): Promise<UsuarioAtividadeResponse[]> {
-    const { data } = await api.get(`/atividades/historico/${usuarioId}`);
-    return (data as UsuarioAtividadeResponse[]) || [];
+  async obterHistorico(usuarioId: number, options?: RequestOptions): Promise<UsuarioAtividadeResponse[]> {
+    const { data } = await api.get(`/atividades/historico/${usuarioId}`, options);
+    return exigirArray<UsuarioAtividadeResponse>(data, "histórico de atividades");
   },
+
+  /*
+   * EXCLUSÃO DE REGISTRO DO HISTÓRICO - NÃO IMPLEMENTADA:
+   * O Swagger atual (/v3/api-docs) não expõe DELETE para registros de /atividades/historico.
+   * (Só existe DELETE /usuarios/{id}.) Quando o backend criar a rota, adicionar aqui a chamada
+   * `api.delete(...)` e habilitar a lixeira em HistoricoAtividades (ver #14).
+   */
 
   /*
    * ROTA ADMINISTRATIVA - NÃO CHAMAR NO APP DO UTILIZADOR FINAL:

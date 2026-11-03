@@ -1,15 +1,11 @@
 
 import type { AtividadeBackend } from "../types/ValidacaoTypes";
 
-const MOONDREAM_API_URL = "https://api.moondream.ai/v1/query";
+const MOONDREAM_API_URL = "https://api.moondream.ai/v1/chat/completions";
 
 export interface ResultadoValidacaoIA {
     aprovada: boolean;
     mensagem: string;
-}
-
-interface MoondreamResponse {
-    answer?: string;
 }
 
 function converterParaBase64(arquivo: File): Promise<string> {
@@ -33,51 +29,24 @@ function converterParaBase64(arquivo: File): Promise<string> {
 }
 
 
-function gerarPerguntaDinamica(
-  atividade: AtividadeBackend
-): string {
-  return `
-Você é um avaliador de evidências visuais.
+function gerarPerguntaDinamica(atividade: AtividadeBackend): string {
+    const validacaoLower = atividade.validacao.toLowerCase();
+    
+    // Mapeia os critérios do banco para perguntas visuais nativas em inglês (VQA)
+    let perguntaVisual = `the required evidence: ${atividade.validacao}`;
 
-Sua tarefa é verificar se a imagem comprova a realização de UMA
-atividade específica. Não avalie apenas se a imagem é sustentável.
+    if (validacaoLower.includes("gps") || validacaoLower.includes("trajeto")) {
+        perguntaVisual = "a GPS navigation map or route track screenshot";
+    } else if (validacaoLower.includes("conta") || validacaoLower.includes("energia") || validacaoLower.includes("luz")) {
+        perguntaVisual = "an electricity utility bill or document";
+    } else if (validacaoLower.includes("recicla") || validacaoLower.includes("coleta")) {
+        perguntaVisual = "recyclable materials like plastic, glass, or paper in a recycling bin";
+    } else if (validacaoLower.includes("bilhete") || validacaoLower.includes("transporte")) {
+        perguntaVisual = "a public transit ticket or bus/subway receipt";
+    }
 
-ATIVIDADE SOLICITADA:
-Nome: ${atividade.nome}
-Descrição: ${atividade.descricao}
-
-Analise a imagem e responda mentalmente:
-
-1. Qual ação está sendo realizada na imagem?
-2. Essa ação corresponde diretamente à atividade solicitada?
-3. Existem evidências visuais suficientes para sustentar essa relação?
-
-REGRAS DE DECISÃO:
-
-APROVADA:
-Somente se a imagem apresentar evidências visuais relevantes
-e diretamente relacionadas à atividade solicitada, mas pode incluir certo grau de tolerancia.
-
-REPROVADA:
-Se a imagem mostrar uma ação diferente, mesmo que seja sustentável.
-Se mostrar apenas objetos relacionados ao tema, sem comprovar a ação.
-Se a relação com a atividade depender de suposições.
-
-
-IMPORTANTE:
-Avalie a ação visível, não a intenção presumida da pessoa.
-Não aprove uma imagem apenas porque ela contém elementos
-relacionados à sustentabilidade.
-
-Responda com exatamente uma palavra:
-APROVADA
-ou
-REPROVADA
-
-Não repita as instruções, não apresente as duas opções e não explique.
-`.trim();
+    return `Does this image clearly show ${perguntaVisual}? Answer strictly with YES or NO.`;
 }
-
 
 export async function validarImagemSustentavel(
     arquivo: File,
@@ -105,12 +74,27 @@ export async function validarImagemSustentavel(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Moondream-Auth": apiKey,
+                "Authorization": `Bearer ${apiKey}`, // Atualizado para Bearer token
             },
             body: JSON.stringify({
                 model: "moondream3.1-9B-A2B",
-                image_url: imagemBase64,
-                question: gerarPerguntaDinamica(atividade),
+                messages: [
+                    {
+                        role: "user",
+                        content: [
+                            {
+                                type: "image_url",
+                                image_url: { url: imagemBase64 }
+                            },
+                            {
+                                type: "text",
+                                text: gerarPerguntaDinamica(atividade)
+                            }
+                        ]
+                    }
+                ],
+                reasoning: true, // Obriga a IA a pensar antes de decidir
+                temperature: 0.1  // Mantém a resposta rígida e determinística
             }),
             signal: controller.signal,
         });
@@ -119,47 +103,29 @@ export async function validarImagemSustentavel(
             if (respostaIA.status === 401) {
                 throw new Error("Falha na autenticação da API Moondream.");
             }
-
             if (respostaIA.status === 413) {
                 throw new Error("A imagem é muito pesada.");
             }
-
             if (respostaIA.status === 429) {
                 throw new Error("Limite de requisições atingido.");
             }
-
-            throw new Error(
-                `Erro na API Moondream: HTTP ${respostaIA.status}.`
-            );
+            throw new Error(`Erro na API Moondream: HTTP ${respostaIA.status}.`);
         }
 
-        const resultadoIA: MoondreamResponse =
-            await respostaIA.json();
+        const data = await respostaIA.json();
+        const message = data.choices?.[0]?.message;
 
-        const texto = (resultadoIA.answer ?? "")
-            .trim()
-            .toUpperCase();
+        const raciocinio = message?.reasoning || "";
+        const textoResposta = (message?.content || "").trim().toUpperCase();
 
-        console.log("Resposta original da IA:", resultadoIA.answer);
+        console.log("=== RACIOCÍNIO DA IA ===");
+        console.log(raciocinio);
+        console.log("=== VEREDITO DA IA ===");
+        console.log(textoResposta);
+        console.log("============================");
 
-        // Extrai as decisões encontradas na resposta.
-        const decisoes = texto.match(/\b(APROVADA|REPROVADA)\b/g) ?? [];
-
-        // Aceita somente uma decisão inequívoca.
-        const decisaoUnica =
-            decisoes.length === 1 ? decisoes[0] : null;
-
-        if (!decisaoUnica) {
-            console.warn("Resposta inesperada da IA:", texto);
-
-            return {
-                aprovada: false,
-                mensagem:
-                    "Não foi possível determinar se a imagem comprova a atividade. Tente novamente.",
-            };
-        }
-
-        const aprovada = decisaoUnica === "APROVADA";
+        // A IA agora vai responder YES ou NO. 
+        const aprovada = textoResposta.startsWith("YES") || textoResposta.startsWith("SIM");
 
         return {
             aprovada,
@@ -167,6 +133,7 @@ export async function validarImagemSustentavel(
                 ? "Imagem aprovada com base nas evidências visuais."
                 : "A imagem não apresentou evidências visuais suficientes para comprovar esta atividade.",
         };
+
     } catch (erro: unknown) {
         if (erro instanceof Error && erro.name === "AbortError") {
             throw new Error(
@@ -174,10 +141,8 @@ export async function validarImagemSustentavel(
                 { cause: erro }
             );
         }
-
         throw erro;
-    }
-    finally {
+    } finally {
         clearTimeout(timeoutId);
     }
 }
