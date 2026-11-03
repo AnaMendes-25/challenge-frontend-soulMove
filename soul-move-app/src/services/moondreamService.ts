@@ -1,15 +1,11 @@
 
 import type { AtividadeBackend } from "../types/ValidacaoTypes";
 
-const MOONDREAM_API_URL = "https://api.moondream.ai/v1/query";
+const MOONDREAM_API_URL = "https://api.moondream.ai/v1/chat/completions";
 
 export interface ResultadoValidacaoIA {
     aprovada: boolean;
     mensagem: string;
-}
-
-interface MoondreamResponse {
-    answer?: string;
 }
 
 function converterParaBase64(arquivo: File): Promise<string> {
@@ -33,34 +29,24 @@ function converterParaBase64(arquivo: File): Promise<string> {
 }
 
 
-function gerarPerguntaDinamica(
-  atividade: AtividadeBackend
-): string {
-  return `
-Você é um auditor automatizado de evidências para um aplicativo de sustentabilidade.
+function gerarPerguntaDinamica(atividade: AtividadeBackend): string {
+    const validacaoLower = atividade.validacao.toLowerCase();
+    
+    // Mapeia os critérios do banco para perguntas visuais nativas em inglês (VQA)
+    let perguntaVisual = `the required evidence: ${atividade.validacao}`;
 
-Sua tarefa é analisar a imagem enviada pelo usuário e determinar se ela cumpre rigorosamente o requisito de comprovação da atividade realizada.
+    if (validacaoLower.includes("gps") || validacaoLower.includes("trajeto")) {
+        perguntaVisual = "a GPS navigation map or route track screenshot";
+    } else if (validacaoLower.includes("conta") || validacaoLower.includes("energia") || validacaoLower.includes("luz")) {
+        perguntaVisual = "an electricity utility bill or document";
+    } else if (validacaoLower.includes("recicla") || validacaoLower.includes("coleta")) {
+        perguntaVisual = "recyclable materials like plastic, glass, or paper in a recycling bin";
+    } else if (validacaoLower.includes("bilhete") || validacaoLower.includes("transporte")) {
+        perguntaVisual = "a public transit ticket or bus/subway receipt";
+    }
 
-DADOS DA ATIVIDADE:
-- Nome da Atividade: ${atividade.nome}
-- Descrição: ${atividade.descricao}
-- Critério de Validação Exigido: ${atividade.validacao}
-
-ETAPAS DE ANÁLISE INTERNA:
-1. **Tipo de Evidência:** A imagem corresponde ao formato esperado pelo critério (${atividade.validacao})? (Ex: se exige print de GPS, a imagem deve ser uma interface de mapa/aplicativo de rota; se exige foto, deve ser uma foto real do mundo físico).
-2. **Coerência com a Ação:** Os elementos visuais presentes na imagem provam de forma lógica e direta que o usuário executou a ação "${atividade.nome}" descrita no sistema?
-3. **Falsificações ou Fraudes:** Verifique se há indícios óbvios de imagens aleatórias da internet, fotos de telas tiradas por outra câmera (se aplicável) ou imagens que não guardam relação com o tema.
-
-DIRETRIZ DE DECISÃO:
-- **APROVADA** se a imagem comprovar de maneira satisfatória e coerente o "Critério de Validação Exigido" em conjunto com a descrição da atividade. Seja flexível com pequenas variações visuais ou de interface, desde que o objetivo central esteja evidente.
-- **REPROVADA** se a imagem for totalmente desconexa, se mostrar algo genérico que não prova a atividade ou se violar o formato de comprovação esperado.
-
-SAÍDA OBRIGATÓRIA:
-Responda estritamente com uma única decisão na primeira linha, sem markdown, pontuação ou explicações.
-Não repita as opções de resposta. Use apenas uma destas palavras: APROVADA ou REPROVADA.
-`.trim();
+    return `Does this image clearly show ${perguntaVisual}? Answer strictly with YES or NO.`;
 }
-
 
 export async function validarImagemSustentavel(
     arquivo: File,
@@ -88,12 +74,27 @@ export async function validarImagemSustentavel(
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Moondream-Auth": apiKey,
+                "Authorization": `Bearer ${apiKey}`, // Atualizado para Bearer token
             },
             body: JSON.stringify({
                 model: "moondream3.1-9B-A2B",
-                image_url: imagemBase64,
-                question: gerarPerguntaDinamica(atividade),
+                messages: [
+                    {
+                        role: "user",
+                        content: [
+                            {
+                                type: "image_url",
+                                image_url: { url: imagemBase64 }
+                            },
+                            {
+                                type: "text",
+                                text: gerarPerguntaDinamica(atividade)
+                            }
+                        ]
+                    }
+                ],
+                reasoning: true, // Obriga a IA a pensar antes de decidir
+                temperature: 0.1  // Mantém a resposta rígida e determinística
             }),
             signal: controller.signal,
         });
@@ -102,56 +103,29 @@ export async function validarImagemSustentavel(
             if (respostaIA.status === 401) {
                 throw new Error("Falha na autenticação da API Moondream.");
             }
-
             if (respostaIA.status === 413) {
                 throw new Error("A imagem é muito pesada.");
             }
-
             if (respostaIA.status === 429) {
                 throw new Error("Limite de requisições atingido.");
             }
-
-            throw new Error(
-                `Erro na API Moondream: HTTP ${respostaIA.status}.`
-            );
+            throw new Error(`Erro na API Moondream: HTTP ${respostaIA.status}.`);
         }
 
-        const resultadoIA: MoondreamResponse =
-            await respostaIA.json();
+        const data = await respostaIA.json();
+        const message = data.choices?.[0]?.message;
 
-        const texto = (resultadoIA.answer ?? "")
-            .trim()
-            .toUpperCase();
+        const raciocinio = message?.reasoning || "";
+        const textoResposta = (message?.content || "").trim().toUpperCase();
 
-        console.log("Resposta original da IA:", resultadoIA.answer);
+        console.log("=== RACIOCÍNIO DA IA ===");
+        console.log(raciocinio);
+        console.log("=== VEREDITO DA IA ===");
+        console.log(textoResposta);
+        console.log("============================");
 
-        const normalizarDecisao = (decisao: string) => {
-            return decisao === "APPROVED" || decisao === "APROVE"
-                ? "APROVADA"
-                : decisao === "REJECTED" || decisao === "REPROVE"
-                    ? "REPROVADA"
-                    : decisao;
-        };
-
-        // A primeira linha contém a decisão; alguns modelos repetem as opções depois dela.
-        const primeiraLinha = texto.split(/\r?\n/).find((linha) => linha.trim()) ?? "";
-        const decisoesNaPrimeiraLinha =
-            primeiraLinha.match(/\b(APROVADA|REPROVADA|APPROVED|REJECTED|APROVE|REPROVE)\b/g) ?? [];
-        const decisoesNormalizadas = decisoesNaPrimeiraLinha.map(normalizarDecisao);
-        const decisaoUnica =
-            decisoesNormalizadas.length === 1 ? decisoesNormalizadas[0] : null;
-
-        if (!decisaoUnica) {
-            console.warn("Resposta inesperada da IA:", texto);
-
-            return {
-                aprovada: false,
-                mensagem:
-                    "Não foi possível determinar se a imagem comprova a atividade. Tente novamente.",
-            };
-        }
-
-        const aprovada = decisaoUnica === "APROVADA";
+        // A IA agora vai responder YES ou NO. 
+        const aprovada = textoResposta.startsWith("YES") || textoResposta.startsWith("SIM");
 
         return {
             aprovada,
@@ -159,6 +133,7 @@ export async function validarImagemSustentavel(
                 ? "Imagem aprovada com base nas evidências visuais."
                 : "A imagem não apresentou evidências visuais suficientes para comprovar esta atividade.",
         };
+
     } catch (erro: unknown) {
         if (erro instanceof Error && erro.name === "AbortError") {
             throw new Error(
@@ -166,10 +141,8 @@ export async function validarImagemSustentavel(
                 { cause: erro }
             );
         }
-
         throw erro;
-    }
-    finally {
+    } finally {
         clearTimeout(timeoutId);
     }
 }
