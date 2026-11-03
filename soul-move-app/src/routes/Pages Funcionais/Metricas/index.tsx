@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AsideBar from "../../../components/AsideBar/AsideBar";
 import { atividadesService } from "../../../services/atividadesService";
 import { rankingService } from "../../../services/rankingService";
@@ -6,9 +6,10 @@ import { recompensasService } from "../../../services/recompensasService";
 import { usuariosService } from "../../../services/usuariosService";
 import { estatisticas } from "../../../data/MetricasData";
 import type { RankingItem } from "../../../services/rankingTypes";
-import type { Recompensa } from "../../../services/recompensasTypes";
+import type { Recompensa, UsuarioRecompensaResponse } from "../../../services/recompensasTypes";
 import { ApiError } from "../../../services/api";
-import ModalSucesso from "../../../components/ModalSucesso/ModalSucesso";
+import ModalResgate from "../../../components/ModalResgate/ModalResgate";
+import { concluirResgate } from "../../../services/concluirResgate";
 import ButtonBase from "../../../components/ButtonBase/ButtonBase";
 import { FiGift } from "react-icons/fi";
 
@@ -41,7 +42,7 @@ function NumeroAnimado({ valorFinal }: NumeroAnimadoProps) {
     return () => window.clearInterval(intervalo);
   }, [valorFinal]);
 
-  return <>{Math.max(0, numero).toLocaleString("pt-BR")}</>;
+  return <>{Math.max(0, valorFinal <= 0 ? 0 : numero).toLocaleString("pt-BR")}</>;
 }
 
 function obterIniciais(nome: string): string {
@@ -64,7 +65,13 @@ export default function Metricas() {
   const [recompensaEmResgate, setRecompensaEmResgate] = useState<number | null>(null);
   const [recompensaSelecionada, setRecompensaSelecionada] = useState<Recompensa | null>(null);
   const [erroResgate, setErroResgate] = useState("");
-  const [resgateConcluido, setResgateConcluido] = useState(false);
+  const [resultadoResgate, setResultadoResgate] = useState<UsuarioRecompensaResponse | null>(null);
+  const [ultimoResgate, setUltimoResgate] = useState<UsuarioRecompensaResponse | null>(null);
+  const [saldoConfiavel, setSaldoConfiavel] = useState(false);
+  const [resgateIncerto, setResgateIncerto] = useState(false);
+  const [atualizandoSaldo, setAtualizandoSaldo] = useState(false);
+  const [historicoResgates, setHistoricoResgates] = useState<UsuarioRecompensaResponse[] | null>(null);
+  const envioEmAndamento = useRef(false);
   const [carregandoResumo, setCarregandoResumo] = useState(Boolean(usuarioId));
   const [erroResumo, setErroResumo] = useState(
     usuarioId ? "" : "Não foi possível identificar o usuário autenticado.",
@@ -101,6 +108,7 @@ export default function Metricas() {
 
         if (usuarioResultado.status === "fulfilled") {
           setMovePoints(usuarioResultado.value.pontuacaoSoul);
+          setSaldoConfiavel(true);
         }
 
         if (historicoResultado.status === "fulfilled") {
@@ -150,31 +158,76 @@ export default function Metricas() {
     return () => controlador.abort();
   }, [usuarioId]);
 
-  async function resgatar(recompensa: Recompensa) {
-    if (!usuarioId || recompensaEmResgate !== null || movePoints < recompensa.valor) {
-      return;
+  async function consultarHistoricoResgates() {
+    if (!usuarioId || envioEmAndamento.current) return;
+    envioEmAndamento.current = true;
+    setAtualizandoSaldo(true);
+    try {
+      setHistoricoResgates(await recompensasService.obterHistorico(usuarioId));
+    } catch {
+      setErroResgate("Não foi possível consultar seus resgates. Nenhum novo pedido foi enviado.");
+    } finally {
+      envioEmAndamento.current = false;
+      setAtualizandoSaldo(false);
     }
+  }
 
+  async function atualizarSaldo() {
+    if (!usuarioId || envioEmAndamento.current) return;
+    envioEmAndamento.current = true;
+    setAtualizandoSaldo(true);
+    setErroResgate("");
+    try {
+      const usuario = await usuariosService.buscarPorId(usuarioId);
+      setMovePoints(usuario.pontuacaoSoul);
+      setSaldoConfiavel(true);
+    } catch {
+      setErroResgate("Não foi possível atualizar seu saldo. Tente consultar novamente.");
+    } finally {
+      envioEmAndamento.current = false;
+      setAtualizandoSaldo(false);
+    }
+  }
+
+  async function resgatar(recompensa: Recompensa) {
+    if (!usuarioId || envioEmAndamento.current || !saldoConfiavel || resgateIncerto || resultadoResgate || movePoints < recompensa.valor) return;
+    // O ref bloqueia o segundo clique antes de o React renderizar o estado de carregamento.
+    envioEmAndamento.current = true;
     setErroResgate("");
     setRecompensaEmResgate(recompensa.id);
-
     try {
-      await recompensasService.resgatar({
-        usuarioId,
-        recompensaId: recompensa.id,
-      });
-
-      const usuarioAtualizado = await usuariosService.buscarPorId(usuarioId);
-      setMovePoints(usuarioAtualizado.pontuacaoSoul);
-      setRecompensaSelecionada(null);
-      setResgateConcluido(true);
-    } catch (erro) {
-      setErroResgate(
-        erro instanceof Error
-          ? erro.message
-          : "Não foi possível resgatar esta recompensa.",
+      const resultado = await concluirResgate(
+        () => recompensasService.resgatar({ usuarioId, recompensaId: recompensa.id }),
+        async () => (await usuariosService.buscarPorId(usuarioId)).pontuacaoSoul,
       );
+      setResultadoResgate(resultado.resgate);
+      setUltimoResgate(resultado.resgate);
+      setSaldoConfiavel(resultado.saldo !== null);
+      if (resultado.saldo !== null) setMovePoints(resultado.saldo);
+    } catch (erro) {
+      const rejeicaoConfirmada = erro instanceof ApiError && erro.status !== null && [400, 401, 403, 404, 409, 422].includes(erro.status);
+      if (!rejeicaoConfirmada) {
+        // Um timeout não prova que o servidor deixou de emitir o benefício. Não reenviar.
+        setResgateIncerto(true);
+        setSaldoConfiavel(false);
+        setErroResgate("Não foi possível confirmar o resultado do resgate. Não envie novamente: confira o histórico de resgates antes de uma nova tentativa.");
+      } else {
+        setErroResgate(erro.message);
+        if (erro.status === 409) {
+          setSaldoConfiavel(false);
+          try {
+            const usuario = await usuariosService.buscarPorId(usuarioId);
+            setMovePoints(usuario.pontuacaoSoul);
+            setSaldoConfiavel(true);
+          } catch { /* Manter novos resgates bloqueados até consultar o saldo. */ }
+        }
+        if (erro.status === 404) {
+          setRecompensas((atuais) => atuais.filter((item) => item.id !== recompensa.id));
+          setErroResgate("Esta recompensa não está mais disponível.");
+        }
+      }
     } finally {
+      envioEmAndamento.current = false;
       setRecompensaEmResgate(null);
     }
   }
@@ -316,14 +369,14 @@ export default function Metricas() {
 
           <section className="mt-6" aria-labelledby="rewards-title">
             <div className="mb-3 flex items-end justify-between">
-              <h2 id="rewards-title" className="text-sm font-medium text-slate-700">
+              <h2 tabIndex={-1} id="rewards-title" className="text-sm font-medium text-slate-700">
                 Recompensas para você
               </h2>
             </div>
 
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {recompensas.map((recompensa) => {
-                const podeResgatar = movePoints >= recompensa.valor;
+                const podeResgatar = saldoConfiavel && !resgateIncerto && movePoints >= recompensa.valor;
                 const carregandoResgate = recompensaEmResgate === recompensa.id;
 
                 return (
@@ -347,14 +400,17 @@ export default function Metricas() {
                     type="button"
                     onClick={() => {
                       setErroResgate("");
+                      setResultadoResgate(null);
                       setRecompensaSelecionada(recompensa);
                     }}
-                    disabled={!podeResgatar || recompensaEmResgate !== null}
+                    disabled={!podeResgatar || recompensaEmResgate !== null || atualizandoSaldo}
                     size="md"
                     className="mt-2 w-full rounded-md px-3 py-2 text-[11px] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:outline-slate-200 disabled:hover:translate-y-0"
                   >
                     {carregandoResgate
                       ? "Resgatando..."
+                      : resgateIncerto || !saldoConfiavel
+                        ? "Resgate indisponível"
                       : podeResgatar
                         ? "Resgatar"
                         : `Faltam ${(recompensa.valor - movePoints).toLocaleString("pt-BR")} pts`}
@@ -363,6 +419,18 @@ export default function Metricas() {
                 );
               })}
             </div>
+            {resgateIncerto && <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              <p>Há uma tentativa com resultado desconhecido. Os novos resgates estão bloqueados nesta sessão para evitar uma cobrança repetida.</p>
+              <button type="button" disabled={atualizandoSaldo} onClick={() => void consultarHistoricoResgates()} className="mt-2 min-h-11 font-semibold underline focus-visible:outline-2 focus-visible:outline-blue-600">Consultar histórico de resgates</button>
+              {historicoResgates && <div className="mt-3" role="status">
+                <h3 className="font-semibold">Registros retornados pelo histórico</h3>
+                {historicoResgates.length === 0 ? <p>Nenhum resgate foi encontrado. Isso não confirma o resultado da tentativa; confira com o responsável antes de repetir.</p> : <ul className="mt-2 space-y-2">{historicoResgates.map((registro) => <li key={registro.id}>#{registro.id} — {registro.descricaoRecompensa} — {registro.dataRecebimento.split("-").reverse().join("/")}</li>)}</ul>}
+              </div>}
+            </div>}
+            {ultimoResgate && <p role="status" className="mt-4 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-900">
+              Último resgate confirmado: <strong>#{ultimoResgate.id}</strong> — {ultimoResgate.descricaoRecompensa}. Benefício demonstrativo, sem validade comercial.
+            </p>}
+            {!saldoConfiavel && !carregandoResumo && !resgateIncerto && <button type="button" onClick={() => void atualizarSaldo()} disabled={atualizandoSaldo || recompensaEmResgate !== null} className="mt-4 min-h-11 text-sm font-semibold text-blue-700 underline focus-visible:outline-2 focus-visible:outline-blue-600">{atualizandoSaldo ? "Atualizando saldo..." : "Atualizar saldo para liberar resgates"}</button>}
             {erroResgate && (
               <p role="alert" className="mt-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                 {erroResgate}
@@ -372,102 +440,18 @@ export default function Metricas() {
         </div>
       </main>
       {recompensaSelecionada && (
-        <div
-          className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/45 p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="titulo-confirmacao-resgate"
-          onClick={() => setRecompensaSelecionada(null)}
-        >
-          <div
-            className="w-full max-w-md rounded-xl bg-white p-5 shadow-2xl sm:p-6"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h2
-                  id="titulo-confirmacao-resgate"
-                  className="text-lg font-bold text-slate-900"
-                >
-                  Confirmar resgate
-                </h2>
-              </div>
-              <ButtonBase
-                type="button"
-                onClick={() => setRecompensaSelecionada(null)}
-                variant="secondary"
-                size="md"
-                className="rounded-md border-0 px-2 py-1 text-xs text-slate-500 outline-none hover:bg-slate-100 hover:text-slate-900 hover:translate-y-0"
-              >
-                Fechar
-              </ButtonBase>
-            </div>
-
-            <p className="mt-3 text-xs text-slate-500">
-              Revise a recompensa e o custo em MOVE Points antes de confirmar.
-            </p>
-
-            <div className="mt-3 rounded-lg border border-blue-200 bg-blue-50/30 p-4">
-              <p className="text-[11px] text-slate-500">Recompensa</p>
-              <h3 className="mt-2 text-sm font-bold text-slate-900">
-                {recompensaSelecionada.descricao}
-              </h3>
-              <strong className="mt-2 block text-sm font-bold text-blue-700">
-                {recompensaSelecionada.valor.toLocaleString("pt-BR")} MOVE Points
-              </strong>
-            </div>
-
-            <div className="mt-3 space-y-2 text-xs">
-              <div className="flex justify-between gap-4 text-slate-600">
-                <span>Seu saldo</span>
-                <strong className="text-slate-900">
-                  {movePoints.toLocaleString("pt-BR")} pts
-                </strong>
-              </div>
-              <div className="flex justify-between gap-4 text-slate-600">
-                <span>Saldo após o resgate</span>
-                <strong className="text-blue-700">
-                  {(movePoints - recompensaSelecionada.valor).toLocaleString("pt-BR")} pts
-                </strong>
-              </div>
-            </div>
-
-            <p className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-800">
-              Protótipo: o resgate e o desconto de pontos são demonstrativos
-              nesta etapa.
-            </p>
-
-            <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <ButtonBase
-                type="button"
-                onClick={() => setRecompensaSelecionada(null)}
-                variant="secondary"
-                size="md"
-                className="rounded-md border-red-200 text-red-600 outline-red-200 hover:bg-red-50 hover:text-red-700 sm:min-w-32"
-              >
-                Cancelar
-              </ButtonBase>
-              <ButtonBase
-                type="button"
-                onClick={() => void resgatar(recompensaSelecionada)}
-                disabled={recompensaEmResgate !== null}
-                size="md"
-                className="rounded-md px-4 py-2.5 text-xs disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-36"
-              >
-                {recompensaEmResgate === recompensaSelecionada.id
-                  ? "Resgatando..."
-                  : "Confirmar resgate"}
-              </ButtonBase>
-            </div>
-          </div>
-        </div>
+        <ModalResgate
+          recompensa={recompensaSelecionada}
+          saldo={saldoConfiavel ? movePoints : null}
+          confirmando={recompensaEmResgate !== null || atualizandoSaldo}
+          erro={erroResgate}
+          resultado={resultadoResgate}
+          incerto={resgateIncerto}
+          aoConfirmar={() => void resgatar(recompensaSelecionada)}
+          aoFechar={() => setRecompensaSelecionada(null)}
+          aoAtualizarSaldo={() => void atualizarSaldo()}
+        />
       )}
-      <ModalSucesso
-        aberto={resgateConcluido}
-        titulo="Resgate realizado!"
-        texto="Sua recompensa foi resgatada com sucesso."
-        fecharModal={() => setResgateConcluido(false)}
-      />
     </div>
   );
 }
