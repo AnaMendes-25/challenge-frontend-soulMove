@@ -173,7 +173,7 @@ npm install
 
 4. Configure as variáveis de ambiente
 
-Crie `soul-move-app/.env` a partir do exemplo:
+Dentro de `soul-move-app`, crie o arquivo `.env` a partir de `.env.example`:
 
 ```bash
 copy .env.example .env
@@ -185,7 +185,7 @@ Preencha a URL pública da API sem adicionar tokens ou senhas ao repositório:
 VITE_API_SOULMOVE_URL=https://soulmove-api-springboot.onrender.com
 ```
 
-`VITE_MOONDREAM_API_KEY` é opcional para a funcionalidade que utiliza o serviço Moondream. Nunca publique uma chave real; use uma variável local. 
+Para utilizar a validação de imagens, configure também `VITE_MOONDREAM_API_KEY` no arquivo `.env` com a chave fornecida pelo responsável pelo serviço. Sem essa chave, a validação de imagens não funciona; as demais funcionalidades dependem da configuração e disponibilidade da API SoulMove. Não inclua chaves reais no repositório.
 
 5. Execute o projeto
 
@@ -230,6 +230,14 @@ Executar dentro de `soul-move-app/`:
 ---
 
 ## 🖼️ Imagens e Ícones do Projeto
+
+### Aplicação publicada
+
+![Página inicial do SoulMove publicada na Vercel](./soul-move-app/src/assets/markdown-img/home-publicada.png)
+
+Página inicial da aplicação, com navegação para as páginas públicas e acesso ao login e cadastro.
+
+### Organização dos recursos visuais
 
 Os recursos visuais do SoulMove estão armazenados na pasta `src/assets`, organizados por categoria:
 
