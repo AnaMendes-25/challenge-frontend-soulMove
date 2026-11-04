@@ -142,11 +142,12 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
 
 ### Links da entrega
 
+- API SoulMove: [RENDER](https://soulmove-api-springboot.onrender.com)
+
 - Repositório: [github.com/AnaMendes-25/challenge-frontend-soulMove](https://github.com/AnaMendes-25/challenge-frontend-soulMove)
 - Vídeo de apresentação: [YouTube](https://www.youtube.com/watch?v=6yTrXKErPHQ)
 - Aplicação publicada na Vercel: [Deploy-Frontend](https://challenge-frontend-soul-move.vercel.app/)
 
-O vídeo acima é o material atualmente registrado no projeto. Ele deve ser substituído quando houver um novo vídeo que demonstre a versão final.
 
 ### Executar localmente
 
@@ -181,10 +182,10 @@ copy .env.example .env
 Preencha a URL pública da API sem adicionar tokens ou senhas ao repositório:
 
 ```env
-VITE_API_SOULMOVE_URL=https://sua-api.example.com
+VITE_API_SOULMOVE_URL=https://soulmove-api-springboot.onrender.com
 ```
 
-`VITE_MOONDREAM_API_KEY` é opcional para a funcionalidade que utiliza o serviço Moondream. Nunca publique uma chave real; use uma variável local.
+`VITE_MOONDREAM_API_KEY` é opcional para a funcionalidade que utiliza o serviço Moondream. Nunca publique uma chave real; use uma variável local. 
 
 5. Execute o projeto
 
@@ -248,7 +249,7 @@ Esses ativos são utilizados diretamente pelos componentes e rotas da aplicaçã
 O código-fonte do projeto está disponível no GitHub.
 
 - Repositório oficial: [github.com/AnaMendes-25/challenge-frontend-soulMove](https://github.com/AnaMendes-25/challenge-frontend-soulMove)
-- Link apresentando solução: [YouTube](https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS)
+- Link apresentando solução:  [YouTube](https://www.youtube.com/watch?v=6yTrXKErPHQ)
 
 ---
 
