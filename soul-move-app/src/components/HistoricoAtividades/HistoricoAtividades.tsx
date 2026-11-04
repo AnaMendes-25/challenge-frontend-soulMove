@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import { ApiError } from "../../services/api";
 import { atividadesService } from "../../services/atividadesService";
@@ -46,6 +46,10 @@ export default function HistoricoAtividades({ usuarioId, recarregarKey = 0 }: Hi
   const [tentativa, setTentativa] = useState(0);
   const [detalhe, setDetalhe] = useState<EstadoDetalhe | null>(null);
   const [catalogo, setCatalogo] = useState<AtividadeBackend[] | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const fecharRef = useRef<HTMLButtonElement>(null);
+  const tituloDetalheId = useId();
+  const detalheAberto = detalhe !== null;
 
   // GET /atividades/historico/{usuarioId}
   useEffect(() => {
@@ -90,11 +94,11 @@ export default function HistoricoAtividades({ usuarioId, recarregarKey = 0 }: Hi
 
         const correspondente = lista.find((item) => item.nome === registro.nomeAtividade);
         if (!correspondente) {
-          setDetalhe({
+          setDetalhe((atual) => atual?.registro.id === registro.id ? {
             registro,
             status: "removido",
             mensagem: "Esta atividade não está mais disponível no catálogo.",
-          });
+          } : atual);
           return;
         }
 
@@ -104,11 +108,11 @@ export default function HistoricoAtividades({ usuarioId, recarregarKey = 0 }: Hi
         );
       } catch (erro) {
         if (erro instanceof ApiError && erro.status === 404) {
-          setDetalhe({
+          setDetalhe((atual) => atual?.registro.id === registro.id ? {
             registro,
             status: "removido",
             mensagem: "Esta atividade não está mais disponível no catálogo.",
-          });
+          } : atual);
           return;
         }
 
@@ -123,15 +127,28 @@ export default function HistoricoAtividades({ usuarioId, recarregarKey = 0 }: Hi
   );
 
   useEffect(() => {
-    if (!detalhe) return;
+    const dialog = dialogRef.current;
+    if (!detalheAberto || !dialog) return;
 
-    function fecharComEsc(evento: KeyboardEvent) {
-      if (evento.key === "Escape") setDetalhe(null);
+    const disparador = document.activeElement;
+    const overflowAnterior = document.body.style.overflow;
+    dialog.showModal();
+    fecharRef.current?.focus();
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      if (dialog.open) dialog.close();
+      document.body.style.overflow = overflowAnterior;
+      if (disparador instanceof HTMLElement && disparador.isConnected) disparador.focus();
+    };
+  }, [detalheAberto]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (dialog?.open && !dialog.contains(document.activeElement)) {
+      fecharRef.current?.focus();
     }
-
-    window.addEventListener("keydown", fecharComEsc);
-    return () => window.removeEventListener("keydown", fecharComEsc);
-  }, [detalhe]);
+  }, [detalhe?.status]);
 
   return (
     <section className="flex flex-col">
@@ -208,25 +225,48 @@ export default function HistoricoAtividades({ usuarioId, recarregarKey = 0 }: Hi
       )}
 
       {detalhe && (
-        <div
-          className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-[16px]"
-          onClick={() => setDetalhe(null)}
+        <dialog
+          ref={dialogRef}
+          aria-modal="true"
+          aria-labelledby={tituloDetalheId}
+          className="fixed inset-0 z-50 m-0 h-dvh max-h-none w-screen max-w-none place-items-center border-0 bg-black/40 p-[16px] open:grid backdrop:bg-transparent"
+          onCancel={(evento) => {
+            evento.preventDefault();
+            setDetalhe(null);
+          }}
+          onClick={(evento) => {
+            if (evento.target === evento.currentTarget) setDetalhe(null);
+          }}
+          onKeyDown={(evento) => {
+            if (evento.key !== "Tab") return;
+            const focaveis = Array.from(
+              evento.currentTarget.querySelectorAll<HTMLElement>(
+                'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]',
+              ),
+            ).filter((elemento) => elemento.tabIndex >= 0 && elemento.getClientRects().length > 0);
+            const primeiro = focaveis[0];
+            const ultimo = focaveis[focaveis.length - 1];
+            if (!primeiro) {
+              evento.preventDefault();
+            } else if (evento.shiftKey && document.activeElement === primeiro) {
+              evento.preventDefault();
+              ultimo.focus();
+            } else if (!evento.shiftKey && document.activeElement === ultimo) {
+              evento.preventDefault();
+              primeiro.focus();
+            }
+          }}
         >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="titulo-detalhe-atividade"
-            className="w-full max-w-[420px] rounded-[12px] bg-white p-[20px]"
-            onClick={(evento) => evento.stopPropagation()}
-          >
+          <div className="max-h-[85dvh] w-full max-w-[420px] overflow-y-auto rounded-[12px] bg-white p-[20px]">
             <div className="mb-[12px] flex items-start justify-between gap-[12px]">
-              <h3 id="titulo-detalhe-atividade" className="text-[16px] font-bold text-[#111]">
+              <h3 id={tituloDetalheId} className="text-[16px] font-bold text-[#111]">
                 {detalhe.registro.nomeAtividade}
               </h3>
               <button
+                ref={fecharRef}
                 type="button"
                 onClick={() => setDetalhe(null)}
-                className="cursor-pointer text-[18px] leading-none text-[#555]"
+                className="cursor-pointer rounded text-[18px] leading-none text-[#555] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2454de]"
                 aria-label="Fechar detalhes"
               >
                 ×
@@ -272,7 +312,7 @@ export default function HistoricoAtividades({ usuarioId, recarregarKey = 0 }: Hi
               </div>
             )}
           </div>
-        </div>
+        </dialog>
       )}
     </section>
   );
