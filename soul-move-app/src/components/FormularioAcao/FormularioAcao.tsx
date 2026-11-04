@@ -2,7 +2,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { acaoSchema, type FormularioValidacao } from "../../types/acaoSchema";
-import type { AcaoSustentavel, AtividadeBackend } from "../../types/ValidacaoTypes";
+import type { AcaoSustentavel } from "../../types/ValidacaoTypes";
+import type { AtividadeBackend } from "../../services/atividadesTypes";
 import { validarImagemSustentavel } from "../../services/moondreamService";
 
 
