@@ -35,7 +35,7 @@ interface HeaderProps {
   mostrarAutenticacao?: boolean;
 }
 
-export default function Header({ mostrarAutenticacao = false }: HeaderProps) {
+export default function Header({ mostrarAutenticacao = true }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 

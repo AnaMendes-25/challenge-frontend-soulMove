@@ -303,12 +303,11 @@ export default function Cadastro() {
                     </div>
                 </footer>
             </div>
-
-            <div className="relative hidden min-h-0 overflow-hidden bg-slate-100 lg:block">
+            <div className="relative hidden h-full w-full overflow-hidden lg:block">
                 <img
                     src={imagemMobilidade}
-                    alt="Pessoa com uma bicicleta, representando mobilidade sustentável"
-                    className="absolute inset-0 h-full w-full object-cover object-center"
+                    alt="Pessoas a andar de bicicleta, representando mobilidade sustentável"
+                    className="h-full w-full object-cover object-center"
                 />
             </div>
         </main>
