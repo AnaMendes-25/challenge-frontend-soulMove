@@ -1,5 +1,5 @@
 import { startTransition, useEffect, useState, useRef } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router";
 import type { IconType } from "react-icons";
 import { FiTruck } from "react-icons/fi";
 import { PiRecycleLight, PiPersonSimpleBikeLight, PiPersonSimpleWalkThin  } from "react-icons/pi";
@@ -44,6 +44,8 @@ function IconeAcao({ tipo }: { tipo: string }) {
 
 export default function Validacao() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const usuarioId = usuariosService.getUsuarioIdGuardado();
   const { acaoId } = useParams<{ acaoId?: string }>();
 
 
@@ -73,13 +75,13 @@ export default function Validacao() {
   }, [acaoId]);
 
   useEffect(() => {
+    if (usuarioId === null) return;
+    const idUsuario = usuarioId;
     const controller = new AbortController();
 
     async function carregarPontuacaoUsuario() {
       try {
-        const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
-
-        const usuario = await usuariosService.buscarPorId(usuarioId, { signal: controller.signal });
+        const usuario = await usuariosService.buscarPorId(idUsuario, { signal: controller.signal });
 
         setMovePoints(usuario.pontuacaoSoul);
       } catch (erro) {
@@ -92,18 +94,18 @@ export default function Validacao() {
     void carregarPontuacaoUsuario();
 
     return () => controller.abort();
-  }, []);
+  }, [usuarioId]);
 
   useEffect(() => {
+    if (usuarioId === null) return;
+    const idUsuario = usuarioId;
     const controller = new AbortController();
 
     async function carregarRanking() {
       try {
-        const usuarioId = usuariosService.getUsuarioIdGuardado() ?? 1;
-
         const [dadosRanking, dadosUsuario] = await Promise.all([
           rankingService.obterRankingGeral(5, { signal: controller.signal, }),
-          rankingService.obterPosicaoUsuario(usuarioId, { signal: controller.signal, }),
+          rankingService.obterPosicaoUsuario(idUsuario, { signal: controller.signal, }),
         ]);
 
         if (controller.signal.aborted) return;
@@ -120,7 +122,7 @@ export default function Validacao() {
     void carregarRanking();
 
     return () => controller.abort();
-  }, []);
+  }, [usuarioId]);
 
   // Abre o card selecionado e fecha os outros.
   function abrirOuFecharCard(id: string) {
@@ -137,6 +139,7 @@ export default function Validacao() {
 
 
   useEffect(() => {
+    if (usuarioId === null) return;
     const controller = new AbortController();
 
     async function carregarAtividades() {
@@ -193,7 +196,7 @@ export default function Validacao() {
     void carregarAtividades();
 
     return () => controller.abort();
-  }, []);
+  }, [usuarioId]);
 
   async function handleEnviarAtividade(idDaAtividade: string) {
 
@@ -201,7 +204,12 @@ export default function Validacao() {
     enviandoBackend.current = true;
 
     try {
-      const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado() ?? 1;
+      // A sessão pode ter sido encerrada ou trocada enquanto o formulário estava aberto.
+      const idUtilizadorLogado = usuariosService.getUsuarioIdGuardado();
+      if (idUtilizadorLogado === null || idUtilizadorLogado !== usuarioId) {
+        navigate("/login", { replace: true, state: { from: location } });
+        throw new Error("Sua sessão mudou. Entre novamente antes de registrar uma atividade.");
+      }
 
       await atividadesService.registrarAtividade({
         usuarioId: idUtilizadorLogado,
@@ -238,6 +246,10 @@ export default function Validacao() {
     } finally {
       enviandoBackend.current = false;
     }
+  }
+
+  if (usuarioId === null) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   return (
@@ -437,7 +449,7 @@ export default function Validacao() {
 
               {/* Atividades registradas (histórico real da API) */}
               <HistoricoAtividades
-                usuarioId={usuariosService.getUsuarioIdGuardado() ?? 1}
+                usuarioId={usuarioId}
                 recarregarKey={recarregarHistorico}
               />
             </aside>
