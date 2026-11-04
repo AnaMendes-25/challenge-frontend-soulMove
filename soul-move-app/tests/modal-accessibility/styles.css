@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@source "../../src/components/ModalSucesso";
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f5f5f5;
+}
