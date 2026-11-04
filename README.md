@@ -142,7 +142,7 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
 
 - Repositório: [github.com/AnaMendes-25/challenge-frontend-soulMove](https://github.com/AnaMendes-25/challenge-frontend-soulMove)
 - Vídeo de apresentação: [YouTube](https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS)
-- Aplicação publicada na Vercel: **URL pendente de confirmação**
+- Aplicação publicada na Vercel: [Deploy-Frontend](https://challenge-frontend-soul-move.vercel.app/)
 
 O vídeo acima é o material atualmente registrado no projeto. Ele deve ser substituído quando houver um novo vídeo que demonstre a versão final.
 
