@@ -81,19 +81,15 @@ export default function ModalResgate({
     }
   }
 
-  // Focos espalhados de forma a lançar partículas para fora dos limites do card
-  const focos = [
-    { x: 10, y: 15, escala: 1.3 }, // Canto superior esquerdo
-    { x: 90, y: 15, escala: 1.3 }, // Canto superior direito
-    { x: 50, y: 50, escala: 1.5 }, // Centro
-    { x: 10, y: 85, escala: 1.3 }, // Canto inferior esquerdo
-    { x: 90, y: 85, escala: 1.3 }, // Canto inferior direito
+ const focos = [
+    { x: 18, y: 30, escala: 1.1 },
+    { x: 50, y: 54, escala: 1.35 },
+    { x: 82, y: 32, escala: 1.05 },
   ];
-
   const particulas = focos.flatMap((foco, focoIndice) =>
-    Array.from({ length: 35 }, (_, indice) => {
-      const angulo = (indice / 35) * Math.PI * 2;
-      const distancia = (indice % 2 === 0 ? 55 : 38) * foco.escala;
+    Array.from({ length: 42 }, (_, indice) => {
+      const angulo = (indice / 42) * Math.PI * 2;
+      const distancia = (indice % 2 === 0 ? 48 : 36) * foco.escala;
 
       return {
         id: `${focoIndice}-${indice}`,
@@ -101,8 +97,8 @@ export default function ModalResgate({
         origemY: foco.y,
         distanciaX: Math.cos(angulo) * distancia,
         distanciaY: Math.sin(angulo) * distancia,
-        atraso: focoIndice * 0.08 + (indice % 5) * 0.02,
-        cor: indice % 3 === 0 ? "#4f46e5" : indice % 3 === 1 ? "#2563eb" : "#38bdf8",
+        atraso: focoIndice * 0.1 + (indice % 7) * 0.018,
+        cor: indice % 3 === 0 ? "#4f46e5" : indice % 3 === 1 ? "#2563eb" : "#818cf8",
       };
     }),
   );
