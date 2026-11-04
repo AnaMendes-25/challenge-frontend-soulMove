@@ -1,51 +1,61 @@
-import type { AcaoSustentavel, MissaoValidacao } from "../types/ValidacaoTypes";
+import type { MissaoValidacao } from "../types/ValidacaoTypes";
+import reciclagemIcone from "../assets/icones/reciclagem-correta.png";
+import transporteIcone from "../assets/icones/transporte-publico.png";
+import bikeIcone from "../assets/icones/bike.png";
+import caminhadaIcone from "../assets/icones/andando-pé.png";
 
-export const acoesSustentaveis: AcaoSustentavel[] = [
+export interface AcaoSustentavel {
+  id: string; // Agora usa os Enums exatos do Java
+  icone: string;
+  titulo: string;
+  pontos: number;
+  comprovacao: string;
+  exemplo: string;
+}
+
+export interface DicionarioVisual {
+  id: string; // Vai cruzar com o "tipoAtividade" (ex: "RECICLAGEM")
+  icone: string;
+  iconeImg?: string; // Imagem aprovada; o emoji fica de reserva (ex.: energia)
+  comprovacao: string;
+  exemplo: string;
+}
+
+export const acoesSustentaveis: DicionarioVisual[] = [
   {
-    id: "reciclagem",
+    id: "RECICLAGEM",
     icone: "♻",
-    titulo: "Reciclagem",
-    pontos: 50,
-    comprovacao:
-      "Envie uma foto ou comprovante mostrando a separação correta dos resíduos, reciclagem ou descarte consciente.",
+    iconeImg: reciclagemIcone,
+    comprovacao: "Envie uma foto ou comprovante mostrando a separação correta dos resíduos, reciclagem ou descarte consciente.",
     exemplo: "Ex.: Separei o lixo reciclável",
   },
   {
-    id: "energia",
+    id: "REDUCAO_ENERGIA",
     icone: "💡",
-    titulo: "Economia de energia",
-    pontos: 50,
-    comprovacao:
-      "Envie prints, fotos ou relatos mostrando ações como apagar luzes, desligar aparelhos ou reduzir o consumo de energia.",
+    comprovacao: "Envie prints, fotos ou relatos mostrando ações como apagar luzes, desligar aparelhos ou reduzir o consumo de energia.",
     exemplo: "Ex.: Desliguei aparelhos da tomada",
   },
   {
-    id: "transporte",
+    id: "TRANSPORTE_PUBLICO",
     icone: "🚊",
-    titulo: "Transporte público",
-    pontos: 35,
-    comprovacao:
-      "Envie foto, print do trajeto, bilhete ou comprovante mostrando o uso de ônibus, metrô, trem ou outro transporte público.",
+    iconeImg: transporteIcone,
+    comprovacao: "Envie foto, print do trajeto, bilhete ou comprovante mostrando o uso de ônibus, metrô, trem ou outro transporte público.",
     exemplo: "Ex.: Fui de metrô para a faculdade",
   },
   {
-    id: "bike",
+    id: "TRAJETO_BIKE",
     icone: "🗺",
-    titulo: "Trajeto de bike",
-    pontos: 20,
-    comprovacao:
-      "O trajeto precisa ser de, no mínimo, 3 km. Você pode enviar prints do mapa, aplicativos ou fotos.",
+    iconeImg: bikeIcone,
+    comprovacao: "O trajeto precisa ser de, no mínimo, 3 km. Você pode enviar prints do mapa, aplicativos ou fotos.",
     exemplo: "Ex.: Pedalada até o mercado",
   },
   {
-    id: "pe",
+    id: "TRAJETO_CAMINHADA",
     icone: "⌁",
-    titulo: "Trajeto a pé",
-    pontos: 20,
-    comprovacao:
-      "O trajeto precisa ser de, no mínimo, 3 km. Você pode enviar links, prints e fotos como comprovante.",
+    iconeImg: caminhadaIcone,
+    comprovacao: "O trajeto precisa ser de, no mínimo, 3 km. Você pode enviar links, prints e fotos como comprovante.",
     exemplo: "Ex.: Caminhada para o trabalho",
-  },
+  }
 ];
 
 export const missoesValidacao: MissaoValidacao[] = [

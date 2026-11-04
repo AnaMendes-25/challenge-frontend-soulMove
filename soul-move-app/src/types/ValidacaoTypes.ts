@@ -1,10 +1,14 @@
+import type { AtividadeBackend } from "../services/atividadesTypes";
+
 export interface AcaoSustentavel {
   id: string;
   icone: string;
+  iconeImg?: string;
   titulo: string;
   pontos: number;
   comprovacao: string;
   exemplo: string;
+  dadoOriginalJava?: AtividadeBackend;
 }
 
 export interface PessoaRankingValidacao {
@@ -23,4 +27,3 @@ export interface MissaoValidacao {
   total: number;
   diasRestantes: number;
 }
-
