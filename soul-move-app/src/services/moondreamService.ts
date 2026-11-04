@@ -1,5 +1,4 @@
-
-import type { AtividadeBackend } from "../types/ValidacaoTypes";
+import type { AtividadeBackend } from "../services/atividadesTypes";
 
 const MOONDREAM_API_URL = "https://api.moondream.ai/v1/chat/completions";
 

@@ -13,14 +13,17 @@ export type TipoAtividade =
  * Interface da Atividade (item do catálogo retornado pelo Spring Boot).
  * Utilizada nas rotas: GET /atividades, GET /atividades/{id}
  */
-export interface AtividadeBackend {
-  id: number;
+export interface EntidadeIdentificavel { id: number; }
+
+export interface DadosAtividadeCatalogo {
   nome: string;
   descricao: string;
   validacao: string;
   pontuacao: number;
   tipoAtividade: TipoAtividade;
 }
+
+export type AtividadeBackend = EntidadeIdentificavel & DadosAtividadeCatalogo;
 
 /**
  * Payload enviado para registrar uma atividade realizada.

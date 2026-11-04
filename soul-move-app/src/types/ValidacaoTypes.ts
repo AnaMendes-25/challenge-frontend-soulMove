@@ -1,4 +1,4 @@
-
+import type { AtividadeBackend } from "../services/atividadesTypes";
 
 export interface AcaoSustentavel {
   id: string;
@@ -27,13 +27,3 @@ export interface MissaoValidacao {
   total: number;
   diasRestantes: number;
 }
-
-//precisei desse type por causa da rota get/atividades ... resumindo gambiarra + reslve o B.O...
-export interface AtividadeBackend {
-    id: number;
-    nome: string;
-    descricao: string;
-    validacao: string;
-    pontuacao: number;
-    tipoAtividade: string;
-  }

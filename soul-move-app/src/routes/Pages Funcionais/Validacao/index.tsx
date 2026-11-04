@@ -1,9 +1,7 @@
 import { startTransition, useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import type { IconType } from "react-icons";
-import {
-  FiTruck,
-} from "react-icons/fi";
+import { FiTruck } from "react-icons/fi";
 import { PiRecycleLight, PiPersonSimpleBikeLight, PiPersonSimpleWalkThin  } from "react-icons/pi";
 import { SlEnergy } from "react-icons/sl";
 
@@ -19,8 +17,9 @@ import HistoricoAtividades from "../../../components/HistoricoAtividades/Histori
 import { acoesSustentaveis } from "../../../data/ValidacaoData";
 
 import type { AcaoSustentavel } from "../../../types/ValidacaoTypes";
-import type { AtividadeBackend } from "../../../types/ValidacaoTypes";
+import type { AtividadeBackend } from "../../../services/atividadesTypes";
 import type { RankingItem } from "../../../services/rankingTypes";
+import type { AsyncState } from "../../../types/AsyncState";
 
 const iconesPorTipo: Record<string, IconType> = {
   RECICLAGEM: PiRecycleLight,
@@ -47,8 +46,8 @@ export default function Validacao() {
   const navigate = useNavigate();
   const { acaoId } = useParams<{ acaoId?: string }>();
 
-  const [acoes, setAcoes] = useState<AcaoSustentavel[]>([]);
-  const [carregando, setCarregando] = useState(true);
+
+  const [estadoAtividades, setEstadoAtividades] = useState<AsyncState<AcaoSustentavel[]>>({ status: "loading" });
   const [acaoAberta, setAcaoAberta] = useState<string>(acaoId || "");
   const [rankingApi, setRankingApi] = useState<RankingItem[]>([]);
   const [posicaoUsuario, setPosicaoUsuario] = useState<RankingItem | null>(null);
@@ -142,33 +141,52 @@ export default function Validacao() {
 
     async function carregarAtividades() {
       try {
-        const listaAtividades = await atividadesService.listarAtividades(undefined, { signal: controller.signal });
+        const listaAtividades = await atividadesService.listarAtividades(
+          undefined,
+          { signal: controller.signal }
+        );
 
         if (controller.signal.aborted) return;
 
         const acoesFormatadas = listaAtividades.map((item: AtividadeBackend) => {
-          const dadosVisuais = acoesSustentaveis.find((mock) => mock.id.toLowerCase() === item.tipoAtividade.toLowerCase());
+          const dadosVisuais = acoesSustentaveis.find(
+            (mock) =>
+              mock.id.toLowerCase() === item.tipoAtividade.toLowerCase()
+          );
 
           return {
-          id: String(item.id),
-          titulo: item.nome,
-          pontos: item.pontuacao,
-          icone: dadosVisuais?.icone || "📌",
-          comprovacao: dadosVisuais?.comprovacao || item.validacao || "Envie um comprovante válido.",
-          exemplo: dadosVisuais?.exemplo || item.descricao || "Ex.: Ação sustentável",
-          dadoOriginalJava: item,
+            id: String(item.id),
+            titulo: item.nome,
+            pontos: item.pontuacao,
+            icone: dadosVisuais?.icone || "📌",
+            comprovacao:
+              dadosVisuais?.comprovacao ||
+              item.validacao ||
+              "Envie um comprovante válido.",
+            exemplo:
+              dadosVisuais?.exemplo ||
+              item.descricao ||
+              "Ex.: Ação sustentável",
+            dadoOriginalJava: item,
           };
         });
 
-        setAcoes(acoesFormatadas);
+        setEstadoAtividades({
+          status: "success",
+          data: acoesFormatadas,
+        });
       } catch (erro) {
         if (controller.signal.aborted) return;
 
         console.error("Erro ao carregar o catálogo de atividades:", erro);
-      } finally {
-        if (!controller.signal.aborted) {
-          setCarregando(false);
-        }
+
+        setEstadoAtividades({
+          status: "error",
+          message:
+            erro instanceof Error
+              ? erro.message
+              : "Não foi possível carregar as atividades.",
+        });
       }
     }
 
@@ -233,15 +251,33 @@ export default function Validacao() {
             {/* Área principal com os cards das ações */}
             <div className="flex flex-col gap-[12px] min-[426px]:gap-[16px]">
 
-              {/* MENSAGEM DE CARREGANDO ADICIONADA AQUI */}
-              {carregando && (
+              {/* Carregamento */}
+              {estadoAtividades.status === "loading" && (
                 <div className="p-[22px] text-center text-[16px] font-bold text-[#2454de]">
                   Buscando atividades...
                 </div>
               )}
 
-              {/* LISTA DINÂMICA DA API EM VEZ DO MOCK */}
-              {!carregando && acoes.map((acao) => (
+              {/* Erro */}
+              {estadoAtividades.status === "error" && (
+                <div
+                  role="alert"
+                  className="rounded-[8px] bg-white p-[22px] text-center text-[14px] text-[#b42318]"
+                >
+                  {estadoAtividades.message}
+                </div>
+              )}
+
+              {/* Lista vazia */}
+              {estadoAtividades.status === "success" &&
+                estadoAtividades.data.length === 0 && (
+                  <div className="rounded-[8px] bg-white p-[22px] text-center text-[14px] text-[#444]">
+                    Nenhuma atividade disponível no momento.
+                  </div>
+                )}
+
+              {/* Atividades carregadas */}
+              {estadoAtividades.status === "success" && estadoAtividades.data.map((acao) => (
                 <article
                   key={acao.id}
                   className="overflow-hidden rounded-[8px] border border-[#b7d4ff] bg-white"

@@ -120,15 +120,17 @@ A estrutura atual reflete o estado real do projeto, com páginas, componentes e 
 
 O projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
 
-- React 19 — construção da interface e dos componentes
-- TypeScript — tipagem e maior segurança no desenvolvimento
-- Vite — ferramenta de build e desenvolvimento
-- React Router — navegação entre páginas
-- Tailwind CSS — estilização da interface
-- React Hook Form — gerenciamento de formulários
-- React Icons — ícones reutilizáveis
-- ESLint — análise estática do código
-- Git e GitHub — versionamento e colaboração
+- **React 19** — construção da interface e dos componentes
+- **TypeScript** — tipagem estática e maior segurança no desenvolvimento
+- **Vite** — ferramenta de build e ambiente de desenvolvimento rápido
+- **React Router (v8)** — roteamento e navegação entre páginas
+- **Tailwind CSS (v4)** — estilização moderna e responsiva da interface
+- **React Hook Form & Zod** — gerenciamento e validação de formulários com esquemas seguros
+- **React Icons** — conjunto de ícones reutilizáveis para a interface
+- **API Moondream** — integração de visão computacional e inteligência artificial para análise visual de imagens e validações.
+- **Render** — hospedagem e implantação do serviço de backend em spring boot.
+- **ESLint** — análise estática para padronização e qualidade do código
+- **Git e GitHub** — versionamento de código e fluxo de trabalho colaborativo
 
 ### Referência visual
 
@@ -142,7 +144,7 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
 
 - Repositório: [github.com/AnaMendes-25/challenge-frontend-soulMove](https://github.com/AnaMendes-25/challenge-frontend-soulMove)
 - Vídeo de apresentação: [YouTube](https://youtu.be/Ei2GPaGCYqc?si=9C8pB9BBJgJSMzYS)
-- Aplicação publicada na Vercel: **URL pendente de confirmação**
+- Aplicação publicada na Vercel: [Deploy-Frontend](https://challenge-frontend-soul-move.vercel.app/)
 
 O vídeo acima é o material atualmente registrado no projeto. Ele deve ser substituído quando houver um novo vídeo que demonstre a versão final.
 

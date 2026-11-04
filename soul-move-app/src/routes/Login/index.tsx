@@ -75,7 +75,7 @@ export default function Login() {
                         <img
                             src={logoSoulMove}
                             alt="SoulMove"
-                            className="h-auto w-40"
+                            className="h-10 w-auto object-contain"
                             width={160}
                         />
                     </Link>
@@ -250,11 +250,19 @@ export default function Login() {
                 </footer>
             </div>
 
-            <div className="relative hidden min-h-0 overflow-hidden bg-slate-100 lg:block">
+            <div className="relative hidden min-h-0 overflow-hidden bg-slate-200 lg:block">
+                {/* Imagem de fundo desfocada para preencher as sobras */}
+                <img
+                    src={imagemMobilidade}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 h-full w-full object-cover blur-md opacity-40"
+                />
+                {/* Imagem principal sem cortes */}
                 <img
                     src={imagemMobilidade}
                     alt="Pessoa com uma bicicleta, representando mobilidade sustentável"
-                    className="absolute inset-0 h-full w-full object-cover object-center"
+                    className="relative z-10 h-full w-full object-contain object-center"
                 />
             </div>
         </main>
